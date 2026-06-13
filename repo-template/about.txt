@@ -1,0 +1,9 @@
+================================
+  ABOUT ME
+================================
+
+Name: [Your Name]
+Role: DevOps Student
+Goal: To master Git, GitHub, and CI/CD
+
+This portfolio tracks my learning journey.

@@ -1,0 +1,15 @@
+================================
+  MY DEVOPS PORTFOLIO
+================================
+
+Hi, I'm [Your Name]!
+
+I'm learning DevOps and this is my first Git project.
+
+Visit the About page to learn more.
+
+---
+Navigation: Home | About | Projects | Contact
+---
+
+Built with Git.

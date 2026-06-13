@@ -1,0 +1,32 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Secrets (NEVER commit these)
+.env
+.env.local
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.exe
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
