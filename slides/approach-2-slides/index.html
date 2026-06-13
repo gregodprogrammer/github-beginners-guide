@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approach 2 Slides — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="../" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="../" class="topbar-home">🏠 Home</a>
+<a href="bible/" class="">📖 Bible</a>
+<a href="approach-1-linear/" class="">🎓 Linear</a>
+<a href="approach-2-project-driven/" class="">🚀 Project</a>
+<a href="approach-3-story-mode/" class="">📖 Story</a>
+<a href="handout/" class="">📝 Exercises</a>
+<a href="quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Approach 2 Slides</h1>
+    
+    <h1 id="approach-2-project-driven-build-along-slide-deck">Approach 2: Project-Driven (Build-Along) — Slide Deck</h1>
+<p><em>One Continuous Project Across 5 Sessions</em></p>
+<hr />
+<h2 id="how-to-use-these-slides">How to Use These Slides</h2>
+<ul>
+<li>Each session opens with "Project Status" and "Today's Goal"</li>
+<li>Demos should happen in real time as students follow</li>
+<li>By Session 5, every student has a real portfolio with CI/CD</li>
+</ul>
+<hr />
+<hr />
+<h1 id="session-1-foundation-home-page-and-first-commits">SESSION 1: Foundation — Home Page and First Commits</h1>
+<hr />
+<h2 id="slide-1-welcome-to-the-build-along">Slide 1: Welcome to the Build-Along</h2>
+<p><strong>You will build <code>my-devops-portfolio</code>.</strong></p>
+<p>By Session 5 it will have:<br />
+- ✅ <code>home.txt</code> — Home page<br />
+- ✅ <code>about.txt</code> — About page<br />
+- ✅ <code>projects.txt</code> — Projects page<br />
+- ✅ <code>contact.txt</code> — Contact page<br />
+- ✅ <code>skills.txt</code> — Skills list<br />
+- ✅ A CI robot that auto-checks everything<br />
+- ✅ Branch protection on <code>main</code></p>
+<p><strong>This repo goes on your GitHub. Show it in interviews.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Motivation is everything. Students need to see the finish line.</p>
+</blockquote>
+<hr />
+<h2 id="slide-2-todays-goal">Slide 2: Today's Goal</h2>
+<p>Build the <code>home.txt</code> file and save it with Git.</p>
+<p><strong>By the end, you'll know:</strong><br />
+- <code>git init</code> — hire the security guard<br />
+- <code>git add</code> — put files in the box<br />
+- <code>git commit</code> — take the photo<br />
+- <code>git log --oneline</code> — view the album</p>
+<blockquote>
+<p><strong>Speaker note:</strong> Tie every command to the project.</p>
+</blockquote>
+<hr />
+<h2 id="slide-3-the-build">Slide 3: The Build</h2>
+<pre><code class="language-bash">$ mkdir my-devops-portfolio
+$ cd my-devops-portfolio
+$ git init
+</code></pre>
+<p>Create <code>home.txt</code>:</p>
+<pre><code>================================
+  MY DEVOPS PORTFOLIO
+================================
+
+Hi, I'm [Your Name]!
+I'm learning DevOps.
+
+Navigation: Home | About | Projects | Contact
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add home.txt
+$ git commit -m &quot;Add homepage&quot;
+</code></pre>
+<blockquote>
+<p><strong>Speaker note:</strong> Students type this. Their project is born.</p>
+</blockquote>
+<hr />
+<h2 id="slide-4-what-just-happened">Slide 4: What Just Happened?</h2>
+<ol>
+<li><code>git init</code> — Git started watching this folder</li>
+<li><code>git add</code> — Told Git to include <code>home.txt</code> in the next photo</li>
+<li><code>git commit</code> — Took the photo</li>
+<li><code>git log</code> — Looked at the album</li>
+</ol>
+<p><strong>These 4 commands are 80% of Git.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Repeat until it's muscle memory.</p>
+</blockquote>
+<hr />
+<hr />
+<h1 id="session-2-two-new-pages-branching">SESSION 2: Two New Pages — Branching</h1>
+<hr />
+<h2 id="slide-1-project-status">Slide 1: Project Status</h2>
+<p>✅ <code>home.txt</code> — Done</p>
+<p>⏳ <code>about.txt</code> — Today</p>
+<p>⏳ <code>projects.txt</code> — Today</p>
+<p><strong>Rule:</strong> We never edit <code>main</code> directly. Create branches.</p>
+<blockquote>
+<p><strong>Speaker note:</strong> Reinforce the safety rule.</p>
+</blockquote>
+<hr />
+<h2 id="slide-2-branch-parallel-universe">Slide 2: Branch = Parallel Universe</h2>
+<p>You're writing a book. The published version is <code>main</code>.</p>
+<ul>
+<li>Photocopy the book</li>
+<li>Write a new chapter in the copy</li>
+<li>If it's good → paste it into the real book</li>
+<li>If it's bad → throw away the copy</li>
+</ul>
+<p><strong>The copy = a branch.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Draw a book being photocopied.</p>
+</blockquote>
+<hr />
+<h2 id="slide-3-todays-build">Slide 3: Today's Build</h2>
+<ol>
+<li><code>git branch feature-about-page</code></li>
+<li><code>git switch feature-about-page</code></li>
+<li>Create <code>about.txt</code> with your bio</li>
+<li>Commit</li>
+<li><code>git switch main</code> — verify unchanged</li>
+<li><code>git merge feature-about-page</code></li>
+<li>Repeat for <code>projects.txt</code></li>
+<li><code>git branch -d feature-about-page</code></li>
+</ol>
+<blockquote>
+<p><strong>Speaker note:</strong> Two features in one session. Pace it.</p>
+</blockquote>
+<hr />
+<h2 id="slide-4-check-before-you-merge">Slide 4: Check Before You Merge</h2>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p>On <code>main</code> (before merge): only <code>home.txt</code></p>
+<p>On <code>feature-about-page</code>: <code>home.txt</code> + <code>about.txt</code></p>
+<p><strong>The original is safe the entire time.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> This is the "aha!" moment.</p>
+</blockquote>
+<hr />
+<hr />
+<h1 id="session-3-going-online-github-and-prs">SESSION 3: Going Online — GitHub and PRs</h1>
+<hr />
+<h2 id="slide-1-project-status_1">Slide 1: Project Status</h2>
+<p>✅ <code>home.txt</code></p>
+<p>✅ <code>about.txt</code></p>
+<p>✅ <code>projects.txt</code></p>
+<p>✅ <code>skills.txt</code></p>
+<p>⏳ Push to GitHub — Today</p>
+<p>⏳ <code>contact.txt</code> via PR — Today</p>
+<blockquote>
+<p><strong>Speaker note:</strong> Show growth. 3 pages done.</p>
+</blockquote>
+<hr />
+<h2 id="slide-2-your-desk-vs-the-library">Slide 2: Your Desk vs. The Library</h2>
+<ul>
+<li><strong>Your laptop</strong> = your bedroom desk</li>
+<li><strong>GitHub</strong> = the school library</li>
+</ul>
+<p>You write on your desk. Then you bring it to the library so everyone can see it.</p>
+<p><strong>Your homework on GitHub = your portfolio.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Tie GitHub to career goals.</p>
+</blockquote>
+<hr />
+<h2 id="slide-3-todays-build_1">Slide 3: Today's Build</h2>
+<ol>
+<li>Create <code>my-devops-portfolio</code> on GitHub</li>
+<li><code>git remote add origin ...</code></li>
+<li><code>git push -u origin main</code></li>
+<li>Create branch <code>feature-contact-page</code></li>
+<li>Build <code>contact.txt</code></li>
+<li>Commit and push</li>
+<li>Open Pull Request on GitHub</li>
+<li>Review, merge, delete branch</li>
+<li><code>git pull</code> locally</li>
+</ol>
+<blockquote>
+<p><strong>Speaker note:</strong> The PR workflow is the core skill. Go slow.</p>
+</blockquote>
+<hr />
+<h2 id="slide-4-by-the-end-of-today">Slide 4: By the End of Today</h2>
+<p>Go to <code>https://github.com/YOURNAME/my-devops-portfolio</code></p>
+<p><strong>You'll see your code on the internet.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Make students open their repo in a browser. Celebrate.</p>
+</blockquote>
+<hr />
+<hr />
+<h1 id="session-4-fixing-mistakes-and-the-unexpected">SESSION 4: Fixing Mistakes and The Unexpected</h1>
+<hr />
+<h2 id="slide-1-project-status_2">Slide 1: Project Status</h2>
+<p>✅ All pages built</p>
+<p>✅ On GitHub</p>
+<p>⚠️ <strong>Today we break things on purpose.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Set expectation: controlled chaos.</p>
+</blockquote>
+<hr />
+<h2 id="slide-2-the-revert">Slide 2: The Revert</h2>
+<p>You committed a bad change.</p>
+<p>Don't panic. Don't delete history.</p>
+<p>Use <code>git revert</code> — it adds a NEW commit that undoes the bad one.</p>
+<p><strong>Safe. Traceable. Professional.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> This is how real engineers fix production at 3 AM.</p>
+</blockquote>
+<hr />
+<h2 id="slide-3-the-merge-conflict">Slide 3: The Merge Conflict</h2>
+<p>Two branches changed the same line.</p>
+<p>Git shows:</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+main version
+=======
+branch version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch
+</code></pre>
+<p><strong>Fix it, remove markers, stage, commit.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Normalize conflicts. Students panic otherwise.</p>
+</blockquote>
+<hr />
+<h2 id="slide-4-git-stash">Slide 4: Git Stash</h2>
+<p>Mid-task, boss says production is down.</p>
+<ol>
+<li><code>git stash</code> — save work in backpack</li>
+<li>Fix the fire</li>
+<li><code>git stash pop</code> — unpack backpack</li>
+</ol>
+<blockquote>
+<p><strong>Speaker note:</strong> The most practical command for interruptions.</p>
+</blockquote>
+<hr />
+<h2 id="slide-5-todays-challenges">Slide 5: Today's Challenges</h2>
+<ol>
+<li>Break <code>home.txt</code> on purpose → commit → revert</li>
+<li>Create two branches that edit <code>about.txt</code> differently</li>
+<li>Merge both → conflict → resolve</li>
+<li><code>git stash</code> a work-in-progress</li>
+</ol>
+<blockquote>
+<p><strong>Speaker note:</strong> This is problem-solving practice.</p>
+</blockquote>
+<hr />
+<hr />
+<h1 id="session-5-robots-do-the-work-cicd">SESSION 5: Robots Do the Work — CI/CD</h1>
+<hr />
+<h2 id="slide-1-project-status_3">Slide 1: Project Status</h2>
+<p>✅ Full website</p>
+<p>✅ On GitHub</p>
+<p>✅ PR workflow mastered</p>
+<p>⚡ <strong>Final step: Add a robot.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> This is the graduation moment.</p>
+</blockquote>
+<hr />
+<h2 id="slide-2-the-robot-chef">Slide 2: The Robot Chef</h2>
+<p>Every time a chef puts a dish on the menu, a robot:<br />
+1. Tastes it<br />
+2. Checks temperature<br />
+3. Photographs it<br />
+4. Approves or rejects it</p>
+<p><strong>GitHub Actions = that robot.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> Students love the robot analogy.</p>
+</blockquote>
+<hr />
+<h2 id="slide-3-what-the-robot-does-for-us">Slide 3: What the Robot Does for Us</h2>
+<p>Our robot will:<br />
+1. Check that all pages exist<br />
+2. Verify the navigation section is present<br />
+3. Report ✅ or ❌</p>
+<p><strong>If it fails, we can't merge.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> This is quality gates in action.</p>
+</blockquote>
+<hr />
+<h2 id="slide-4-the-recipe-yaml">Slide 4: The Recipe (YAML)</h2>
+<pre><code class="language-yaml">name: Portfolio CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          for file in home.txt about.txt projects.txt contact.txt; do
+            test -f &quot;$file&quot; || exit 1
+          done
+          echo &quot;All pages present!&quot;
+</code></pre>
+<blockquote>
+<p><strong>Speaker note:</strong> Walk through line by line.</p>
+</blockquote>
+<hr />
+<h2 id="slide-5-branch-protection">Slide 5: Branch Protection</h2>
+<p>Lock <code>main</code>:<br />
+- No direct pushes<br />
+- Must use PR<br />
+- Robot must pass</p>
+<p><strong>This is how real companies protect production.</strong></p>
+<blockquote>
+<p><strong>Speaker note:</strong> The padlock on <code>main</code>.</p>
+</blockquote>
+<hr />
+<h2 id="slide-6-todays-build">Slide 6: Today's Build</h2>
+<ol>
+<li>Create <code>.github/workflows/portfolio-ci.yml</code></li>
+<li>Commit and push</li>
+<li>Watch it pass ✅</li>
+<li>Break something on a branch</li>
+<li>See it fail ❌</li>
+<li>Set branch protection</li>
+<li>Try direct push → blocked</li>
+</ol>
+<blockquote>
+<p><strong>Speaker note:</strong> Make students do the final push themselves.</p>
+</blockquote>
+<hr />
+<h2 id="slide-7-graduation">Slide 7: Graduation</h2>
+<p>You now have:<br />
+- A real GitHub repo<br />
+- Commits with good messages<br />
+- Merged PRs<br />
+- A passing CI pipeline<br />
+- Branch protection</p>
+<p><strong>Add this to your resume:</strong></p>
+<blockquote>
+<p>"Proficient in Git, GitHub, CI/CD pipelines, and branch protection."</p>
+<p><strong>Speaker note:</strong> This is the payoff. Make students proud.</p>
+</blockquote>
+<hr />
+<p><em>End of Approach 2 Slide Deck</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

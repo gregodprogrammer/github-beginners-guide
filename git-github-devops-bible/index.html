@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The DevOps Bible — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">The DevOps Bible</h1>
+    <p class="page-subtitle">12-part reference manual from beginner to advanced</p>
+    <h1 id="the-git-github-devops-reference-manual">The Git &amp; GitHub DevOps Reference Manual</h1>
+<h2 id="a-complete-bible-for-devops-engineers">A Complete Bible for DevOps Engineers</h2>
+<p><strong>Version:</strong> 1.0<br />
+<strong>Audience:</strong> DevOps engineers from absolute beginner to advanced<br />
+<strong>Philosophy:</strong> Every concept explained simply enough for a five-year-old, then scaled to production-grade engineering.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Topic</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Part 0</td>
+<td><a href="#part-0-before-you-start-environment-setup">Before You Start: Environment Setup</a></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Part 1</td>
+<td><a href="#part-1-core-concepts">Core Concepts</a></td>
+<td>2</td>
+</tr>
+<tr>
+<td>Part 2</td>
+<td><a href="#part-2-the-essential-daily-workflow">The Essential Daily Workflow</a></td>
+<td>4</td>
+</tr>
+<tr>
+<td>Part 3</td>
+<td><a href="#part-3-branching--merging">Branching &amp; Merging</a></td>
+<td>7</td>
+</tr>
+<tr>
+<td>Part 4</td>
+<td><a href="#part-4-github-workflow-push-pull-prs">GitHub Workflow: Push, Pull, PRs</a></td>
+<td>10</td>
+</tr>
+<tr>
+<td>Part 5</td>
+<td><a href="#part-5-history-undoing--recovery">History, Undoing &amp; Recovery</a></td>
+<td>13</td>
+</tr>
+<tr>
+<td>Part 6</td>
+<td><a href="#part-6-collaboration-conflicts-stash--rebase">Collaboration: Conflicts, Stash &amp; Rebase</a></td>
+<td>16</td>
+</tr>
+<tr>
+<td>Part 7</td>
+<td><a href="#part-7-devops-branching-patterns">DevOps Branching Patterns</a></td>
+<td>19</td>
+</tr>
+<tr>
+<td>Part 8</td>
+<td><a href="#part-8-cicd-with-github-actions">CI/CD with GitHub Actions</a></td>
+<td>21</td>
+</tr>
+<tr>
+<td>Part 9</td>
+<td><a href="#part-9-release-management-tags--releases">Release Management: Tags &amp; Releases</a></td>
+<td>24</td>
+</tr>
+<tr>
+<td>Part 10</td>
+<td><a href="#part-10-advanced-topics">Advanced Topics</a></td>
+<td>26</td>
+</tr>
+<tr>
+<td>Part 11</td>
+<td><a href="#part-11-troubleshooting-guide">Troubleshooting Guide</a></td>
+<td>28</td>
+</tr>
+<tr>
+<td>Part 12</td>
+<td><a href="#part-12-command-cheat-sheet">Command Cheat Sheet</a></td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="how-to-use-this-manual">How to Use This Manual</h2>
+<ol>
+<li><strong>New to Git?</strong> Start at <a href="#part-0-before-you-start-environment-setup">Part 0</a> and go in order.</li>
+<li><strong>Know the basics?</strong> Jump to <a href="#part-5-history-undoing--recovery">Part 5</a> for undoing, or <a href="#part-6-collaboration-conflicts-stash--rebase">Part 6</a> for team collaboration.</li>
+<li><strong>Setting up CI/CD?</strong> Go straight to <a href="#part-8-cicd-with-github-actions">Part 8</a>.</li>
+<li><strong>Something broke?</strong> Check <a href="#part-11-troubleshooting-guide">Part 11</a>.</li>
+<li><strong>Need a quick reminder?</strong> Flip to <a href="#part-12-command-cheat-sheet">Part 12</a>.</li>
+</ol>
+<p>Every command in this manual shows:<br />
+- <strong>Environment:</strong> Where to run it (Terminal / Browser / GitHub UI)<br />
+- <strong>Expected Output:</strong> Exactly what you should see<br />
+- <strong>Common Errors:</strong> What goes wrong and how to fix it<br />
+- <strong>DevOps Context:</strong> Why this matters in production</p>
+<hr />
+<hr />
+<h2 id="part-0-before-you-start-environment-setup">Part 0: Before You Start — Environment Setup</h2>
+<blockquote>
+<p><strong>Analogy:</strong> Before you can drive a car, you need a driver's license, keys, and to know which pedal is which. This section gets you licensed and seated.</p>
+</blockquote>
+<h3 id="01-install-git">0.1 Install Git</h3>
+<h4 id="environment-windows">Environment: Windows</h4>
+<ol>
+<li>Visit <code>https://git-scm.com/download/win</code></li>
+<li>Download the installer</li>
+<li>Run it. Accept all defaults (click <strong>Next</strong> repeatedly)</li>
+<li>Open <strong>Git Bash</strong> (Start menu → search "Git Bash")</li>
+</ol>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.43.0.windows.1
+</code></pre>
+<p><em>(Your version number may differ)</em></p>
+<h4 id="environment-macos">Environment: macOS</h4>
+<p>Open <strong>Terminal</strong> (Cmd+Space, type <code>terminal</code>):</p>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.39.3
+</code></pre>
+<p>If not found, macOS will prompt to install <strong>Command Line Developer Tools</strong>. Click <strong>Install</strong>.</p>
+<h4 id="environment-linux-ubuntu-debian">Environment: Linux (Ubuntu / Debian)</h4>
+<pre><code class="language-bash">$ sudo apt update &amp;&amp; sudo apt install git -y
+$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.34.1
+</code></pre>
+<h4 id="environment-linux-fedora-centos-rhel">Environment: Linux (Fedora / CentOS / RHEL)</h4>
+<pre><code class="language-bash">$ sudo dnf install git -y
+$ git --version
+</code></pre>
+<h3 id="02-configure-your-identity">0.2 Configure Your Identity</h3>
+<p>Git needs to know who you are so it can label your work.</p>
+<p><strong>Environment: Any terminal</strong></p>
+<pre><code class="language-bash">$ git config --global user.name &quot;Your Full Name&quot;
+$ git config --global user.email &quot;your.email@example.com&quot;
+</code></pre>
+<blockquote>
+<p><strong>Why?</strong> Every commit is signed with your name and email. In a company, this creates an audit trail.</p>
+</blockquote>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git config --global user.name
+$ git config --global user.email
+</code></pre>
+<p><strong>IMPORTANT:</strong> Use the <strong>same email</strong> for GitHub.</p>
+<h3 id="03-create-a-github-account">0.3 Create a GitHub Account</h3>
+<p><strong>Environment: Web Browser</strong></p>
+<ol>
+<li>Go to <code>https://github.com</code></li>
+<li>Click <strong>Sign up</strong></li>
+<li>Enter your email, create a password and username</li>
+<li>Complete email verification</li>
+</ol>
+<h3 id="04-set-up-ssh-authentication">0.4 Set Up SSH Authentication</h3>
+<p>SSH lets your computer talk to GitHub securely without typing your password every time.</p>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ ssh-keygen -t ed25519 -C &quot;your.email@example.com&quot;
+</code></pre>
+<p>Press <strong>Enter</strong> three times (accept default location, no passphrase).</p>
+<p>Copy your public key:</p>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-bash">$ pbcopy &lt; ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><strong>Windows (Git Bash):</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub | clip
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><em>(Select and copy the output)</em></p>
+<p>Add to GitHub:<br />
+1. <code>https://github.com</code> → Click your profile picture → <strong>Settings</strong><br />
+2. Left sidebar: <strong>SSH and GPG keys</strong><br />
+3. Click <strong>New SSH key</strong><br />
+4. Title: <code>My Laptop</code><br />
+5. Key: Paste what you copied<br />
+6. Click <strong>Add SSH key</strong></p>
+<p>Test the connection:</p>
+<pre><code class="language-bash">$ ssh -T git@github.com
+</code></pre>
+<p>Type <code>yes</code> when asked about authenticity.</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Hi yourusername! You've successfully authenticated...
+</code></pre>
+<h3 id="05-install-a-text-editor">0.5 Install a Text Editor</h3>
+<ul>
+<li><strong>Recommended:</strong> VS Code (<code>https://code.visualstudio.com</code>)</li>
+<li><strong>Alternatives:</strong> Notepad++ (Windows), TextEdit (Mac), Nano/Vim (Linux)</li>
+</ul>
+<h3 id="06-configure-default-branch-name">0.6 Configure Default Branch Name</h3>
+<p>Modern Git and GitHub use <code>main</code> instead of <code>master</code>. Ensure consistency:</p>
+<pre><code class="language-bash">$ git config --global init.defaultBranch main
+</code></pre>
+<h3 id="07-configure-line-endings-windows-only">0.7 Configure Line Endings (Windows Only)</h3>
+<p>Windows uses different line endings than Linux/Mac. Fix this:</p>
+<p><strong>Environment: Windows (Git Bash)</strong></p>
+<pre><code class="language-bash">$ git config --global core.autocrlf true
+</code></pre>
+<p><strong>Environment: macOS / Linux</strong></p>
+<pre><code class="language-bash">$ git config --global core.autocrlf input
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-1-core-concepts">Part 1: Core Concepts</h2>
+<h3 id="11-what-is-version-control">1.1 What is Version Control?</h3>
+<blockquote>
+<p><strong>5-Year-Old Analogy:</strong> Imagine a magic camera. You build something with blocks, then take a photo. If your baby brother knocks it over, you show the photo to the magic camera and say "Put it back like this!" The camera restores your blocks exactly.</p>
+<p><strong>DevOps Translation:</strong> Version control tracks every change to files, who made it, when, and why. If production breaks, you can restore the exact code from before the break.</p>
+</blockquote>
+<h3 id="12-key-concepts-dictionary">1.2 Key Concepts Dictionary</h3>
+<table>
+<thead>
+<tr>
+<th>Simple Term</th>
+<th>Technical Term</th>
+<th>What It Actually Is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The folder with the camera inside</td>
+<td><strong>Repository (Repo)</strong></td>
+<td>A directory containing a <code>.git</code> folder that tracks everything</td>
+</tr>
+<tr>
+<td>A photo of your work</td>
+<td><strong>Commit</strong></td>
+<td>A permanent snapshot of your files at one moment in time</td>
+</tr>
+<tr>
+<td>The box where you put things before the photo</td>
+<td><strong>Staging Area (Index)</strong></td>
+<td>A temporary holding area for files you want to include in the next commit</td>
+</tr>
+<tr>
+<td>Your messy desk</td>
+<td><strong>Working Directory</strong></td>
+<td>Your actual files as they exist right now</td>
+</tr>
+<tr>
+<td>The photo album</td>
+<td><strong>History</strong></td>
+<td>All commits, connected like a timeline</td>
+</tr>
+<tr>
+<td>A copy of the photo album</td>
+<td><strong>Remote</strong></td>
+<td>A version of the repo stored on another server (GitHub)</td>
+</tr>
+<tr>
+<td>A parallel universe</td>
+<td><strong>Branch</strong></td>
+<td>An independent line of development</td>
+</tr>
+<tr>
+<td>Combining two universes</td>
+<td><strong>Merge</strong></td>
+<td>Joining one branch's changes into another</td>
+</tr>
+<tr>
+<td>Permission slip</td>
+<td><strong>Pull Request (PR)</strong></td>
+<td>Requesting to merge your branch into main, with code review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-the-three-states-of-git">1.3 The Three States of Git</h3>
+<p>Every file in Git is in one of three states:</p>
+<pre><code>Working Directory  --git add--&gt;  Staging Area  --git commit--&gt;  Git Repository (History)
+   (modified)        stage          (staged)       commit        (committed)
+</code></pre>
+<ol>
+<li><strong>Working Directory:</strong> You edit files here. Git notices changes but doesn't save them yet.</li>
+<li><strong>Staging Area:</strong> You choose which changes to include in your next snapshot.</li>
+<li><strong>Repository:</strong> Committed snapshots live here forever.</li>
+</ol>
+<blockquote>
+<p><strong>Restaurant Analogy:</strong><br />
+- Working Directory = The prep table where you're chopping vegetables<br />
+- Staging Area = The plate the chef arranged and is about to serve<br />
+- Commit = The photo that goes on the menu (permanent record)</p>
+</blockquote>
+<h3 id="14-the-lifecycle-of-a-file">1.4 The Lifecycle of a File</h3>
+<pre><code>Untracked  --git add--&gt;  Staged  --git commit--&gt;  Unmodified  --edit--&gt;  Modified  --git add--&gt;  Staged
+   (new)                    (ready)              (saved)       (change)     (updated)    (ready again)
+</code></pre>
+<h3 id="15-understanding-git">1.5 Understanding <code>.git</code></h3>
+<p>When you run <code>git init</code>, Git creates a hidden folder called <code>.git</code>.</p>
+<blockquote>
+<p><strong>This is Git's brain.</strong> It stores:<br />
+- Every commit ever made<br />
+- Every branch<br />
+- Configuration<br />
+- The staging area</p>
+</blockquote>
+<p><strong>NEVER delete <code>.git</code> unless you want to erase all history.</strong></p>
+<p>To see it:</p>
+<pre><code class="language-bash">$ ls -la
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>drwxr-xr-x  .git
+-rw-r--r--  yourfile.txt
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-2-the-essential-daily-workflow">Part 2: The Essential Daily Workflow</h2>
+<p>These are the commands you will use every single day as a DevOps engineer.</p>
+<h3 id="21-creating-a-new-repository">2.1 Creating a New Repository</h3>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ mkdir my-project
+$ cd my-project
+$ git init
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Initialized empty Git repository in /home/you/my-project/.git/
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> You run <code>git init</code> when starting a new project, creating a new deployment script repo, or setting up infrastructure-as-code.</p>
+</blockquote>
+<h3 id="22-checking-your-status">2.2 Checking Your Status</h3>
+<p>This is the single most important command. Run it constantly.</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output (clean repo):</strong></p>
+<pre><code>On branch main
+nothing to commit, working tree clean
+</code></pre>
+<p><strong>Expected Output (untracked file):</strong></p>
+<pre><code>On branch main
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+    new-file.txt
+</code></pre>
+<p><strong>Expected Output (modified file):</strong></p>
+<pre><code>On branch main
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+    modified:   existing-file.txt
+</code></pre>
+<p><strong>Expected Output (staged file):</strong></p>
+<pre><code>On branch main
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+    new file:   new-file.txt
+</code></pre>
+<h3 id="23-adding-files-to-the-staging-area">2.3 Adding Files to the Staging Area</h3>
+<p><strong>Add one file:</strong></p>
+<pre><code class="language-bash">$ git add filename.txt
+</code></pre>
+<p><strong>Add all files in current directory:</strong></p>
+<pre><code class="language-bash">$ git add .
+</code></pre>
+<p><strong>Add all modified files:</strong></p>
+<pre><code class="language-bash">$ git add -A
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Stage files intentionally. Don't blindly <code>git add .</code> — review what you're committing first.</p>
+</blockquote>
+<h3 id="24-unstaging-files">2.4 Unstaging Files</h3>
+<p>Oops, you staged the wrong file:</p>
+<pre><code class="language-bash">$ git restore --staged filename.txt
+</code></pre>
+<p><strong>Before (staged):</strong></p>
+<pre><code>Changes to be committed:
+    new file:   filename.txt
+</code></pre>
+<p><strong>After:</strong></p>
+<pre><code>Untracked files:
+    filename.txt
+</code></pre>
+<h3 id="25-committing-your-work">2.5 Committing Your Work</h3>
+<pre><code class="language-bash">$ git commit -m &quot;Describe what you changed&quot;
+</code></pre>
+<p><strong>Example — Good messages:</strong></p>
+<pre><code class="language-bash">$ git commit -m &quot;Add nginx configuration for production&quot;
+$ git commit -m &quot;Fix database connection timeout in staging&quot;
+$ git commit -m &quot;Update Terraform module to v3.2.1&quot;
+</code></pre>
+<p><strong>Example — Bad messages:</strong></p>
+<pre><code class="language-bash">$ git commit -m &quot;asdf&quot;              # Meaningless
+$ git commit -m &quot;stuff&quot;             # What stuff?
+$ git commit -m &quot;fixed bug&quot;         # Which bug?
+$ git commit -m &quot;update&quot;            # Update what?
+</code></pre>
+<p><strong>Multi-line commit (for detailed changes):</strong></p>
+<pre><code class="language-bash">$ git commit -m &quot;Subject line under 50 chars&quot; -m &quot;Body: detailed explanation of what changed and why.&quot;
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> In incident response, clear commit messages save hours. "Fix load balancer health check" is infinitely more useful than "fix stuff."</p>
+</blockquote>
+<h3 id="26-viewing-history">2.6 Viewing History</h3>
+<p><strong>Full log:</strong></p>
+<pre><code class="language-bash">$ git log
+</code></pre>
+<p><strong>Compact one-line format (most useful):</strong></p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>With graph (shows branch structure):</strong></p>
+<pre><code class="language-bash">$ git log --oneline --graph --all
+</code></pre>
+<p><strong>Last 5 commits:</strong></p>
+<pre><code class="language-bash">$ git log --oneline -5
+</code></pre>
+<p><strong>Show what changed in each commit:</strong></p>
+<pre><code class="language-bash">$ git log --oneline --stat
+</code></pre>
+<p><strong>Show file-by-file patch:</strong></p>
+<pre><code class="language-bash">$ git log --oneline --patch
+</code></pre>
+<p><strong>Search commits by message:</strong></p>
+<pre><code class="language-bash">$ git log --oneline --grep=&quot;nginx&quot;
+</code></pre>
+<p><strong>View commits by a specific author:</strong></p>
+<pre><code class="language-bash">$ git log --oneline --author=&quot;Your Name&quot;
+</code></pre>
+<h3 id="27-seeing-what-changed-before-committing">2.7 Seeing What Changed (Before Committing)</h3>
+<p><strong>Show unstaged changes:</strong></p>
+<pre><code class="language-bash">$ git diff
+</code></pre>
+<p><strong>Show staged changes (what will be committed):</strong></p>
+<pre><code class="language-bash">$ git diff --staged
+</code></pre>
+<p><strong>Show changes in a specific file:</strong></p>
+<pre><code class="language-bash">$ git diff filename.txt
+</code></pre>
+<h3 id="28-ignoring-files-gitignore">2.8 Ignoring Files (<code>.gitignore</code>)</h3>
+<p>Create a <code>.gitignore</code> file to tell Git "never track these files."</p>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ cat &gt; .gitignore &lt;&lt; 'EOF'
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.exe
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+EOF
+
+$ git add .gitignore
+$ git commit -m &quot;Add .gitignore for common files&quot;
+</code></pre>
+<blockquote>
+<p><strong>CRITICAL DevOps Rule:</strong> Never commit passwords, API keys, <code>.env</code> files, or Terraform state files. Use <code>.gitignore</code> to protect yourself.</p>
+</blockquote>
+<h3 id="29-removing-files">2.9 Removing Files</h3>
+<p><strong>Remove from Git AND delete from disk:</strong></p>
+<pre><code class="language-bash">$ git rm old-file.txt
+$ git commit -m &quot;Remove deprecated configuration&quot;
+</code></pre>
+<p><strong>Remove from Git but KEEP on disk:</strong></p>
+<pre><code class="language-bash">$ git rm --cached secret-file.txt
+$ git commit -m &quot;Remove accidentally committed secret&quot;
+</code></pre>
+<p>Then add it to <code>.gitignore</code> immediately.</p>
+<hr />
+<hr />
+<h2 id="part-3-branching-merging">Part 3: Branching &amp; Merging</h2>
+<h3 id="31-what-is-a-branch">3.1 What is a Branch?</h3>
+<blockquote>
+<p><strong>5-Year-Old Analogy:</strong> You're reading a choose-your-own-adventure book. The main story is one path. You put a bookmark at page 50, try a different adventure, and if it's good, you rewrite the main story to include it. The bookmarked path = a branch.</p>
+<p><strong>DevOps Translation:</strong> Branches let you experiment safely. You NEVER edit production (<code>main</code>) directly. You create a branch, test your changes, then merge.</p>
+</blockquote>
+<h3 id="32-basic-branch-commands">3.2 Basic Branch Commands</h3>
+<p><strong>List branches:</strong></p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>  feature-auth
+  hotfix-timeout
+* main
+</code></pre>
+<p><code>*</code> = You are currently on this branch.</p>
+<p><strong>Create a new branch:</strong></p>
+<pre><code class="language-bash">$ git branch feature-new-thing
+</code></pre>
+<p><strong>Switch to a branch:</strong></p>
+<pre><code class="language-bash">$ git switch feature-new-thing
+</code></pre>
+<p><strong>Create AND switch (shortcut):</strong></p>
+<pre><code class="language-bash">$ git switch -c feature-new-thing
+</code></pre>
+<p><em>(The <code>-c</code> flag means "create")</em></p>
+<p><strong>Delete a merged branch:</strong></p>
+<pre><code class="language-bash">$ git branch -d feature-new-thing
+</code></pre>
+<p><strong>Delete an unmerged branch (force):</strong></p>
+<pre><code class="language-bash">$ git branch -D feature-new-thing
+</code></pre>
+<p><strong>Rename current branch:</strong></p>
+<pre><code class="language-bash">$ git branch -m better-name
+</code></pre>
+<h3 id="33-understanding-head">3.3 Understanding HEAD</h3>
+<p><code>HEAD</code> is a pointer to your current commit.</p>
+<ul>
+<li><code>HEAD</code> = "You are here"</li>
+<li><code>HEAD~1</code> = "One commit before where you are"</li>
+<li><code>HEAD~3</code> = "Three commits before where you are"</li>
+</ul>
+<h3 id="34-merging-branches">3.4 Merging Branches</h3>
+<p><strong>Fast-forward merge</strong> (main hasn't changed since you branched):</p>
+<pre><code class="language-bash">$ git switch main
+$ git merge feature-new-thing
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Updating abc123..def456
+Fast-forward
+ newfile.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Fast-forward is clean and simple. No merge commit needed.</p>
+</blockquote>
+<p><strong>Three-way merge</strong> (main has new commits):</p>
+<pre><code class="language-bash">$ git switch main
+$ git merge feature-new-thing
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Merge made by the 'ort' strategy.
+ newfile.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+</code></pre>
+<p>This creates a <strong>merge commit</strong> — a new commit that has two parents.</p>
+<p><strong>Avoid merge commits with rebase (see Part 6).</strong></p>
+<h3 id="35-branch-naming-conventions">3.5 Branch Naming Conventions</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Example</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feature/description</code></td>
+<td><code>feature/user-auth</code></td>
+<td>New features</td>
+</tr>
+<tr>
+<td><code>bugfix/description</code></td>
+<td><code>bugfix/login-timeout</code></td>
+<td>Bug fixes</td>
+</tr>
+<tr>
+<td><code>hotfix/description</code></td>
+<td><code>hotfix/critical-db-fix</code></td>
+<td>Production emergencies</td>
+</tr>
+<tr>
+<td><code>release/version</code></td>
+<td><code>release/v2.1.0</code></td>
+<td>Release preparation</td>
+</tr>
+<tr>
+<td><code>docs/description</code></td>
+<td><code>docs/api-examples</code></td>
+<td>Documentation updates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="36-comparing-branches">3.6 Comparing Branches</h3>
+<p><strong>See what <code>feature</code> has that <code>main</code> doesn't:</strong></p>
+<pre><code class="language-bash">$ git log main..feature --oneline
+</code></pre>
+<p><strong>See differences between branches:</strong></p>
+<pre><code class="language-bash">$ git diff main..feature
+</code></pre>
+<h3 id="37-the-complete-branch-workflow">3.7 The Complete Branch Workflow</h3>
+<pre><code class="language-bash"># 1. Start from latest main
+$ git switch main
+$ git pull
+
+# 2. Create feature branch
+$ git switch -c feature/my-change
+
+# 3. Do your work
+# ... edit files ...
+
+# 4. Commit
+$ git add .
+$ git commit -m &quot;Add my feature&quot;
+
+# 5. Push branch
+$ git push -u origin feature/my-change
+
+# 6. (On GitHub) Open Pull Request → Review → Merge
+
+# 7. Pull latest main
+$ git switch main
+$ git pull
+
+# 8. Delete local branch
+$ git branch -d feature/my-change
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-4-github-workflow-push-pull-prs">Part 4: GitHub Workflow — Push, Pull, PRs</h2>
+<h3 id="41-connecting-to-a-remote">4.1 Connecting to a Remote</h3>
+<p><strong>Add a remote (typically done once per repo):</strong></p>
+<pre><code class="language-bash">$ git remote add origin git@github.com:USERNAME/REPO.git
+</code></pre>
+<p><strong>Verify remotes:</strong></p>
+<pre><code class="language-bash">$ git remote -v
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>origin  git@github.com:USERNAME/REPO.git (fetch)
+origin  git@github.com:USERNAME/REPO.git (push)
+</code></pre>
+<p><strong>Change remote URL:</strong></p>
+<pre><code class="language-bash">$ git remote set-url origin git@github.com:NEW-USER/NEW-REPO.git
+</code></pre>
+<h3 id="42-pushing-code">4.2 Pushing Code</h3>
+<p><strong>Push current branch to remote:</strong></p>
+<pre><code class="language-bash">$ git push
+</code></pre>
+<p><strong>Push a new branch for the first time:</strong></p>
+<pre><code class="language-bash">$ git push -u origin feature-name
+</code></pre>
+<blockquote>
+<p>The <code>-u</code> flag (short for <code>--set-upstream</code>) links your local branch to the remote branch. After this, just <code>git push</code> works.</p>
+</blockquote>
+<p><strong>Force push (DANGEROUS — rewrites history):</strong></p>
+<pre><code class="language-bash">$ git push --force
+</code></pre>
+<blockquote>
+<p><strong>DevOps Warning:</strong> Only force push on personal feature branches. Never force push to <code>main</code> or shared branches.</p>
+</blockquote>
+<p><strong>Force push with lease (safer):</strong></p>
+<pre><code class="language-bash">$ git push --force-with-lease
+</code></pre>
+<h3 id="43-pulling-code">4.3 Pulling Code</h3>
+<p><strong>Pull (fetch + merge):</strong></p>
+<pre><code class="language-bash">$ git pull
+</code></pre>
+<p><strong>Fetch only (download without merging):</strong></p>
+<pre><code class="language-bash">$ git fetch
+</code></pre>
+<p><strong>Fetch a specific branch:</strong></p>
+<pre><code class="language-bash">$ git fetch origin feature-name
+</code></pre>
+<p><strong>Pull with rebase (cleaner history):</strong></p>
+<pre><code class="language-bash">$ git pull --rebase
+</code></pre>
+<h3 id="44-cloning-a-repository">4.4 Cloning a Repository</h3>
+<p><strong>Clone a remote repo to your local machine:</strong></p>
+<pre><code class="language-bash">$ git clone git@github.com:USERNAME/REPO.git
+</code></pre>
+<p><strong>Clone into a specific folder:</strong></p>
+<pre><code class="language-bash">$ git clone git@github.com:USERNAME/REPO.git custom-folder-name
+</code></pre>
+<p><strong>Clone only the latest commit (faster for CI):</strong></p>
+<pre><code class="language-bash">$ git clone --depth 1 git@github.com:USERNAME/REPO.git
+</code></pre>
+<h3 id="45-the-pull-request-pr-workflow">4.5 The Pull Request (PR) Workflow</h3>
+<p>The PR workflow is the backbone of professional DevOps. No one pushes directly to <code>main</code>.</p>
+<p><strong>Step-by-Step:</strong></p>
+<ol>
+<li>
+<p><strong>Push your branch:</strong><br />
+<code>bash
+   $ git push -u origin feature-name</code></p>
+</li>
+<li>
+<p><strong>Open PR on GitHub:</strong><br />
+   - Go to repo on <code>https://github.com</code><br />
+   - Click <strong>"Compare &amp; pull request"</strong><br />
+   - Add title and description<br />
+   - Click <strong>Create pull request</strong></p>
+</li>
+<li>
+<p><strong>Code review</strong> happens:<br />
+   - Team members review the <strong>Files changed</strong> tab<br />
+   - They leave comments on specific lines<br />
+   - You make fixes, commit, push (PR updates automatically)</p>
+</li>
+<li>
+<p><strong>CI runs</strong> (GitHub Actions):<br />
+   - Tests must pass<br />
+   - Linting must pass</p>
+</li>
+<li>
+<p><strong>Approve and merge:</strong><br />
+   - Reviewer clicks <strong>Approve</strong><br />
+   - Click <strong>Merge pull request</strong><br />
+   - Choose merge strategy:</p>
+<ul>
+<li><strong>Create a merge commit</strong> (preserves branch history)</li>
+<li><strong>Squash and merge</strong> (combines all commits into one)</li>
+<li><strong>Rebase and merge</strong> (replays commits on main)</li>
+</ul>
+</li>
+<li>
+<p><strong>Clean up:</strong><br />
+   - Delete the remote branch<br />
+   - Pull locally:<br />
+<code>bash
+     $ git switch main
+     $ git pull
+     $ git branch -d feature-name</code></p>
+</li>
+</ol>
+<h3 id="46-forking-vs-cloning">4.6 Forking vs. Cloning</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Clone</th>
+<th>Fork</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What</strong></td>
+<td>Copy to your laptop</td>
+<td>Copy on GitHub to your account</td>
+</tr>
+<tr>
+<td><strong>When</strong></td>
+<td>Working on your team's repo</td>
+<td>Contributing to open source</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td><code>git clone git@github.com:mycompany/project.git</code></td>
+<td>Click "Fork" on <code>github.com/kubernetes/kubernetes</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>After forking, clone your fork:</strong></p>
+<pre><code class="language-bash">$ git clone git@github.com:YOUR-NAME/original-repo.git
+</code></pre>
+<h3 id="47-syncing-a-fork">4.7 Syncing a Fork</h3>
+<pre><code class="language-bash"># Add the original repo as &quot;upstream&quot;
+$ git remote add upstream git@github.com:original-owner/original-repo.git
+
+# Fetch latest from original
+$ git fetch upstream
+
+# Merge into your main
+$ git switch main
+$ git merge upstream/main
+
+# Push to your fork
+$ git push
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-5-history-undoing-recovery">Part 5: History, Undoing &amp; Recovery</h2>
+<h3 id="51-viewing-history-in-detail">5.1 Viewing History in Detail</h3>
+<p><strong>Show commit with changes:</strong></p>
+<pre><code class="language-bash">$ git show COMMIT_ID
+</code></pre>
+<p><strong>Show only files changed:</strong></p>
+<pre><code class="language-bash">$ git show COMMIT_ID --stat
+</code></pre>
+<p><strong>Show who changed each line of a file:</strong></p>
+<pre><code class="language-bash">$ git blame filename.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>abc1234 (Your Name  2024-01-15 09:00:00 +0000  1) Line one content
+def5678 (Teammate    2024-01-16 14:30:00 +0000  2) Line two content
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> <code>git blame</code> is essential during incidents. "Who changed this config line 3 days ago?"</p>
+</blockquote>
+<p><strong>Search all commits for a string:</strong></p>
+<pre><code class="language-bash">$ git log --all --grep=&quot;timeout&quot;
+$ git log --all -S &quot;database_url&quot;  # Search code content, not just messages
+</code></pre>
+<h3 id="52-reverting-a-commit-safe-undo">5.2 Reverting a Commit (Safe Undo)</h3>
+<blockquote>
+<p><strong>Rule:</strong> Revert is always safe. It creates a NEW commit that undoes an OLD commit. History is preserved.</p>
+</blockquote>
+<p><strong>Revert the most recent commit:</strong></p>
+<pre><code class="language-bash">$ git revert HEAD
+</code></pre>
+<p><strong>Revert a specific commit:</strong></p>
+<pre><code class="language-bash">$ git revert abc1234
+</code></pre>
+<p>An editor opens for the commit message. Save and exit.</p>
+<p><strong>Revert without editing commit message:</strong></p>
+<pre><code class="language-bash">$ git revert HEAD --no-edit
+</code></pre>
+<p><strong>Revert a merge commit:</strong></p>
+<pre><code class="language-bash">$ git revert -m 1 MERGE_COMMIT_ID
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Revert is your go-to for production incidents. It undoes a bad deploy instantly while keeping the audit trail.</p>
+</blockquote>
+<h3 id="53-resetting-use-with-caution">5.3 Resetting (Use With Caution)</h3>
+<p>Reset moves the branch pointer. It can erase commits.</p>
+<p><strong>Soft reset (keep changes staged):</strong></p>
+<pre><code class="language-bash">$ git reset --soft HEAD~1
+</code></pre>
+<p><strong>Mixed reset (keep changes unstaged):</strong></p>
+<pre><code class="language-bash">$ git reset --mixed HEAD~1
+</code></pre>
+<p><strong>Hard reset (DESTROY changes — DANGEROUS):</strong></p>
+<pre><code class="language-bash">$ git reset --hard HEAD~1
+</code></pre>
+<blockquote>
+<p><strong>DevOps Warning:</strong> <code>git reset --hard</code> permanently deletes uncommitted work. Never use on shared history.</p>
+</blockquote>
+<h3 id="54-the-reflog-your-safety-net">5.4 The Reflog — Your Safety Net</h3>
+<blockquote>
+<p><strong>Analogy:</strong> The reflog is like a backup camera that recorded everything, even things you thought you deleted.</p>
+</blockquote>
+<p><strong>View all actions (even after reset):</strong></p>
+<pre><code class="language-bash">$ git reflog
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>abc1234 HEAD@{0}: commit: Add feature
+def5678 HEAD@{1}: commit: Fix bug
+1234567 HEAD@{2}: reset: moving to HEAD~1
+</code></pre>
+<p><strong>Recover a lost commit:</strong></p>
+<pre><code class="language-bash">$ git reset --hard HEAD@{2}
+</code></pre>
+<p><strong>View reflog for a specific branch:</strong></p>
+<pre><code class="language-bash">$ git reflog show main
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> <code>git reflog</code> has saved many engineers. If you accidentally reset <code>main</code>, the reflog remembers.</p>
+</blockquote>
+<h3 id="55-cherry-picking">5.5 Cherry-Picking</h3>
+<p>Apply a specific commit from one branch to another.</p>
+<pre><code class="language-bash"># On main, apply a commit from feature
+$ git switch main
+$ git cherry-pick abc1234
+</code></pre>
+<p><strong>Cherry-pick without committing (just apply):</strong></p>
+<pre><code class="language-bash">$ git cherry-pick -n abc1234
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Cherry-pick a hotfix from <code>main</code> to a <code>release</code> branch without merging everything.</p>
+</blockquote>
+<h3 id="56-amending-the-last-commit">5.6 Amending the Last Commit</h3>
+<p>Oops, typo in the commit message:</p>
+<pre><code class="language-bash">$ git commit --amend -m &quot;Correct message&quot;
+</code></pre>
+<p>Forgot to add a file:</p>
+<pre><code class="language-bash">$ git add forgotten-file.txt
+$ git commit --amend --no-edit
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Only amend unpushed commits. Amending pushed commits rewrites public history.</p>
+</blockquote>
+<hr />
+<hr />
+<h2 id="part-6-collaboration-conflicts-stash-rebase">Part 6: Collaboration — Conflicts, Stash &amp; Rebase</h2>
+<h3 id="61-merge-conflicts">6.1 Merge Conflicts</h3>
+<h4 id="what-causes-a-conflict">What Causes a Conflict?</h4>
+<p>When two branches change the <strong>same line</strong> of the <strong>same file</strong>, Git doesn't know which version to keep.</p>
+<p><strong>Example conflict markers:</strong></p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+This is what YOUR branch has
+=======
+This is what THE OTHER branch has
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; other-branch-name
+</code></pre>
+<h4 id="how-to-resolve">How to Resolve</h4>
+<ol>
+<li>
+<p>Find conflicts:<br />
+<code>bash
+   $ git status</code><br />
+   Look for: "Unmerged paths"</p>
+</li>
+<li>
+<p>Open the file and edit it. Remove the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers.</p>
+</li>
+<li>
+<p>Stage the resolved file:<br />
+<code>bash
+   $ git add filename.txt</code></p>
+</li>
+<li>
+<p>Complete the merge:<br />
+<code>bash
+   $ git commit -m "Resolve merge conflict in filename.txt"</code></p>
+</li>
+</ol>
+<p><strong>Search for conflict markers:</strong></p>
+<pre><code class="language-bash">$ grep -r &quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&quot; .
+</code></pre>
+<p><strong>Abort a merge in progress:</strong></p>
+<pre><code class="language-bash">$ git merge --abort
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Conflicts are normal. Communicate with teammates about who owns which files.</p>
+</blockquote>
+<h3 id="62-git-stash">6.2 Git Stash</h3>
+<p>Temporarily save work without committing.</p>
+<p><strong>Stash current changes:</strong></p>
+<pre><code class="language-bash">$ git stash
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Saved working directory and index state ...
+</code></pre>
+<p><strong>Stash with a message:</strong></p>
+<pre><code class="language-bash">$ git stash push -m &quot;WIP: updating terraform config&quot;
+</code></pre>
+<p><strong>List stashes:</strong></p>
+<pre><code class="language-bash">$ git stash list
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>stash@{0}: WIP on main: abc1234 Add feature
+stash@{1}: On main: WIP terraform migration
+</code></pre>
+<p><strong>Apply and remove latest stash:</strong></p>
+<pre><code class="language-bash">$ git stash pop
+</code></pre>
+<p><strong>Apply but keep stash:</strong></p>
+<pre><code class="language-bash">$ git stash apply
+</code></pre>
+<p><strong>Apply specific stash:</strong></p>
+<pre><code class="language-bash">$ git stash apply stash@{1}
+</code></pre>
+<p><strong>Drop a stash:</strong></p>
+<pre><code class="language-bash">$ git stash drop stash@{0}
+</code></pre>
+<p><strong>Clear all stashes:</strong></p>
+<pre><code class="language-bash">$ git stash clear
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Stash when someone says "Production is down, fix it NOW" but you're in the middle of a refactor.</p>
+</blockquote>
+<h3 id="63-rebasing">6.3 Rebasing</h3>
+<p>Rebase replays your commits on top of another branch. It creates a cleaner, linear history.</p>
+<p><strong>Basic rebase:</strong></p>
+<pre><code class="language-bash"># On your feature branch
+$ git switch feature-name
+$ git rebase main
+</code></pre>
+<p><strong>Interactive rebase (rewrite history):</strong></p>
+<pre><code class="language-bash"># Rebase the last 3 commits
+$ git rebase -i HEAD~3
+</code></pre>
+<p>An editor opens. You can:<br />
+- <code>pick</code> — keep commit (default)<br />
+- <code>reword</code> — edit commit message<br />
+- <code>squash</code> — combine with previous commit<br />
+- <code>drop</code> — remove commit<br />
+- <code>fixup</code> — combine and discard message</p>
+<p><strong>Continue rebase after resolving conflicts:</strong></p>
+<pre><code class="language-bash">$ git rebase --continue
+</code></pre>
+<p><strong>Abort rebase:</strong></p>
+<pre><code class="language-bash">$ git rebase --abort
+</code></pre>
+<blockquote>
+<p><strong>DevOps Context:</strong> Rebase feature branches before opening a PR. This eliminates unnecessary merge commits. <strong>NEVER rebase shared branches like <code>main</code>.</strong></p>
+</blockquote>
+<h3 id="64-interactive-rebase-example">6.4 Interactive Rebase Example</h3>
+<p>Clean up messy commits before a PR:</p>
+<pre><code class="language-bash">$ git rebase -i HEAD~4
+</code></pre>
+<p>Editor shows:</p>
+<pre><code>pick abc1234 Fix typo
+pick def5678 Add config
+pick ghi901 Add tests
+pick jkl234 Update docs
+</code></pre>
+<p>Edit to:</p>
+<pre><code>reword abc1234 Fix typo
+squash def5678 Add config
+pick ghi901 Add tests
+fixup jkl234 Update docs
+</code></pre>
+<p>Result: Clean commits with good messages.</p>
+<hr />
+<hr />
+<h2 id="part-7-devops-branching-patterns">Part 7: DevOps Branching Patterns</h2>
+<h3 id="71-feature-branch-workflow">7.1 Feature Branch Workflow</h3>
+<p><strong>Best for:</strong> Small teams, startups, most modern DevOps.</p>
+<pre><code>main (always deployable)
+ ├─── feature/login
+ ├─── feature/dashboard
+ └─── bugfix/memory-leak
+</code></pre>
+<p><strong>Rules:</strong><br />
+- <code>main</code> is sacred — always works<br />
+- All work happens on feature branches<br />
+- Every merge goes through PR + code review</p>
+<h3 id="72-gitflow">7.2 GitFlow</h3>
+<p><strong>Best for:</strong> Large teams with scheduled releases.</p>
+<pre><code>main          (production)
+develop       (integration)
+ ├─── feature/...
+ ├─── feature/...
+hotfix/...    (emergency fixes for production)
+release/...   (release preparation)
+</code></pre>
+<p><strong>Rules:</strong><br />
+- <code>main</code> = production only<br />
+- <code>develop</code> = integration branch<br />
+- Features branch from <code>develop</code><br />
+- Releases branch from <code>develop</code>, merge to <code>main</code><br />
+- Hotfixes branch from <code>main</code>, merge back to both</p>
+<h3 id="73-trunk-based-development">7.3 Trunk-Based Development</h3>
+<p><strong>Best for:</strong> CI/CD-heavy teams deploying multiple times daily.</p>
+<pre><code>main (trunk)
+ ├─── short-lived feature branches (hours, not days)
+</code></pre>
+<p><strong>Rules:</strong><br />
+- Everyone commits to <code>main</code> or very short-lived branches<br />
+- Feature flags hide incomplete work<br />
+- Requires robust CI</p>
+<h3 id="74-forking-workflow">7.4 Forking Workflow</h3>
+<p><strong>Best for:</strong> Open source projects.</p>
+<ol>
+<li>Fork the official repo to your GitHub account</li>
+<li>Clone YOUR fork locally</li>
+<li>Push branches to YOUR fork</li>
+<li>Open PR from your fork → official repo</li>
+</ol>
+<hr />
+<hr />
+<h2 id="part-8-cicd-with-github-actions">Part 8: CI/CD with GitHub Actions</h2>
+<h3 id="81-what-is-github-actions">8.1 What is GitHub Actions?</h3>
+<p>GitHub Actions is a built-in CI/CD platform. It runs code (workflows) in response to Git events (push, PR, schedule).</p>
+<blockquote>
+<p><strong>Analogy:</strong> A robot watches your mailbox. Every time you put a letter in, the robot opens it, checks the spelling, rewrites it if needed, and approves or rejects it.</p>
+</blockquote>
+<h3 id="82-workflow-structure">8.2 Workflow Structure</h3>
+<p>Workflow files live in <code>.github/workflows/</code> and use YAML.</p>
+<pre><code class="language-yaml">name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: make test
+</code></pre>
+<p><strong>Key Components:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>name</strong></td>
+<td>Display name in GitHub UI</td>
+</tr>
+<tr>
+<td><strong>on</strong></td>
+<td>Events that trigger the workflow</td>
+</tr>
+<tr>
+<td><strong>jobs</strong></td>
+<td>Groups of steps</td>
+</tr>
+<tr>
+<td><strong>runs-on</strong></td>
+<td>Type of virtual machine</td>
+</tr>
+<tr>
+<td><strong>steps</strong></td>
+<td>Individual commands</td>
+</tr>
+<tr>
+<td><strong>uses</strong></td>
+<td>Reusable action from GitHub Marketplace</td>
+</tr>
+<tr>
+<td><strong>run</strong></td>
+<td>Shell command</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-common-triggers">8.3 Common Triggers</h3>
+<pre><code class="language-yaml">on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight
+  workflow_dispatch:  # Manual trigger button
+</code></pre>
+<h3 id="84-complete-devops-workflow-example">8.4 Complete DevOps Workflow Example</h3>
+<pre><code class="language-yaml">name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to server
+        run: |
+          echo &quot;Deploying to production...&quot;
+          # Your deploy scripts here
+</code></pre>
+<h3 id="85-branch-protection-with-required-status-checks">8.5 Branch Protection with Required Status Checks</h3>
+<ol>
+<li>GitHub repo → <strong>Settings</strong> → <strong>Branches</strong></li>
+<li>Add rule for <code>main</code></li>
+<li>Enable:<br />
+   - Require pull request before merging<br />
+   - Require status checks to pass<br />
+   - Select your workflow name (e.g., <code>CI Pipeline</code>)<br />
+   - Require code review</li>
+</ol>
+<h3 id="86-secrets-and-environment-variables">8.6 Secrets and Environment Variables</h3>
+<p>Store sensitive data in GitHub settings, NOT in code.</p>
+<ol>
+<li>Repo → <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong></li>
+<li>Click <strong>New repository secret</strong></li>
+<li>Name: <code>PROD_API_KEY</code></li>
+<li>Value: Your actual secret</li>
+</ol>
+<p>Access in workflow:</p>
+<pre><code class="language-yaml">      - name: Deploy
+        run: |
+          curl -H &quot;Authorization: Bearer ${{ secrets.PROD_API_KEY }}&quot; ...
+</code></pre>
+<h3 id="87-caching-for-speed">8.7 Caching for Speed</h3>
+<p>Cache dependencies to speed up workflows:</p>
+<pre><code class="language-yaml">      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-9-release-management-tags-releases">Part 9: Release Management — Tags &amp; Releases</h2>
+<h3 id="91-tags">9.1 Tags</h3>
+<p>Tags mark specific commits as releases.</p>
+<p><strong>Lightweight tag (just a name):</strong></p>
+<pre><code class="language-bash">$ git tag v1.0.0
+</code></pre>
+<p><strong>Annotated tag (with message):</strong></p>
+<pre><code class="language-bash">$ git tag -a v1.0.0 -m &quot;Release version 1.0.0&quot;
+</code></pre>
+<p><strong>List tags:</strong></p>
+<pre><code class="language-bash">$ git tag
+</code></pre>
+<p><strong>Push a single tag:</strong></p>
+<pre><code class="language-bash">$ git push origin v1.0.0
+</code></pre>
+<p><strong>Push all tags:</strong></p>
+<pre><code class="language-bash">$ git push origin --tags
+</code></pre>
+<p><strong>Delete a local tag:</strong></p>
+<pre><code class="language-bash">$ git tag -d v1.0.0
+</code></pre>
+<p><strong>Delete a remote tag:</strong></p>
+<pre><code class="language-bash">$ git push --delete origin v1.0.0
+</code></pre>
+<h3 id="92-semantic-versioning">9.2 Semantic Versioning</h3>
+<p>Format: <code>MAJOR.MINOR.PATCH</code></p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.0.0</code></td>
+<td>First stable release</td>
+</tr>
+<tr>
+<td><code>1.1.0</code></td>
+<td>New features, backward compatible</td>
+</tr>
+<tr>
+<td><code>1.1.1</code></td>
+<td>Bug fixes only</td>
+</tr>
+<tr>
+<td><code>2.0.0</code></td>
+<td>Breaking changes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-creating-a-github-release">9.3 Creating a GitHub Release</h3>
+<ol>
+<li>Go to repo on GitHub → <strong>Releases</strong> (right sidebar)</li>
+<li>Click <strong>Draft a new release</strong></li>
+<li>Choose a tag (or create new)</li>
+<li>Add release title and notes</li>
+<li>Attach binaries (optional)</li>
+<li>Click <strong>Publish release</strong></li>
+</ol>
+<h3 id="94-release-branch-strategy">9.4 Release Branch Strategy</h3>
+<pre><code class="language-bash"># Create release branch
+$ git switch -c release/v2.1.0
+
+# Fix any last-minute issues
+$ git commit -m &quot;Bump version to 2.1.0&quot;
+
+# Merge to main and tag
+$ git switch main
+$ git merge release/v2.1.0
+$ git tag -a v2.1.0 -m &quot;Release 2.1.0&quot;
+$ git push origin main --tags
+
+# Merge back to develop
+$ git switch develop
+$ git merge release/v2.1.0
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-10-advanced-topics">Part 10: Advanced Topics</h2>
+<h3 id="101-git-hooks">10.1 Git Hooks</h3>
+<p>Scripts that run automatically on Git events.</p>
+<p><strong>Available hooks:</strong><br />
+- <code>pre-commit</code> — Run before each commit<br />
+- <code>prepare-commit-msg</code> — Modify commit message<br />
+- <code>post-merge</code> — Run after merge<br />
+- <code>pre-push</code> — Run before push</p>
+<p><strong>Example: Pre-commit hook to run linter</strong></p>
+<pre><code class="language-bash"># Create the hook
+$ cat &gt; .git/hooks/pre-commit &lt;&lt; 'EOF'
+#!/bin/bash
+echo &quot;Running linter...&quot;
+make lint || exit 1
+EOF
+
+$ chmod +x .git/hooks/pre-commit
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Hooks in <code>.git/hooks</code> are not shared. Use <a href="https://typicode.github.io/husky/">Husky</a> or <a href="https://pre-commit.com/">pre-commit</a> for team-wide hooks.</p>
+</blockquote>
+<h3 id="102-submodules">10.2 Submodules</h3>
+<p>Include another repo inside your repo.</p>
+<p><strong>Add a submodule:</strong></p>
+<pre><code class="language-bash">$ git submodule add git@github.com:user/shared-scripts.git scripts
+</code></pre>
+<p><strong>Clone with submodules:</strong></p>
+<pre><code class="language-bash">$ git clone --recurse-submodules git@github.com:user/repo.git
+</code></pre>
+<p><strong>Update submodules:</strong></p>
+<pre><code class="language-bash">$ git submodule update --remote
+</code></pre>
+<h3 id="103-worktrees">10.3 Worktrees</h3>
+<p>Work on multiple branches simultaneously without cloning multiple times.</p>
+<pre><code class="language-bash"># Create a new directory for feature branch work
+$ git worktree add ../my-project-feature feature-branch
+
+# Now you have two directories, each on a different branch
+$ cd ../my-project-feature
+$ git branch
+# Shows: * feature-branch
+</code></pre>
+<p><strong>List worktrees:</strong></p>
+<pre><code class="language-bash">$ git worktree list
+</code></pre>
+<p><strong>Remove a worktree:</strong></p>
+<pre><code class="language-bash">$ git worktree remove ../my-project-feature
+</code></pre>
+<h3 id="104-bisect-find-the-bug">10.4 Bisect (Find the Bug)</h3>
+<p>Binary search through history to find which commit introduced a bug.</p>
+<pre><code class="language-bash"># Start bisect
+$ git bisect start
+
+# Mark current (bad) commit
+$ git bisect bad
+
+# Mark last known good commit
+$ git bisect good v1.0.0
+
+# Git checks out a middle commit
+# Test it, then mark good or bad:
+$ git bisect good   # OR git bisect bad
+
+# Repeat until Git identifies the first bad commit
+
+# Reset when done
+$ git bisect reset
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-11-troubleshooting-guide">Part 11: Troubleshooting Guide</h2>
+<h3 id="fatal-not-a-git-repository">"fatal: not a git repository"</h3>
+<p><strong>Cause:</strong> You ran a Git command outside a repository.</p>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash">$ cd /path/to/your/repo
+# OR
+$ git init  # If you haven't initialized yet
+</code></pre>
+<h3 id="permission-denied-publickey">"Permission denied (publickey)"</h3>
+<p><strong>Cause:</strong> SSH key not set up or not added to GitHub.</p>
+<p><strong>Fix:</strong><br />
+1. Generate SSH key: <code>ssh-keygen -t ed25519 -C "email"</code><br />
+2. Add to GitHub: Settings → SSH keys<br />
+3. Test: <code>ssh -T git@github.com</code></p>
+<h3 id="merge-conflict">"Merge conflict"</h3>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash"># Find conflicted files
+$ git status
+
+# Open each file, remove &lt;&lt;&lt;&lt;&lt;&lt;&lt; ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; markers
+# Edit to desired result
+
+# Stage resolved files
+$ git add .
+
+# Complete merge
+$ git commit -m &quot;Resolve merge conflicts&quot;
+</code></pre>
+<h3 id="your-branch-is-ahead-of-originmain-by-3-commits">"Your branch is ahead of 'origin/main' by 3 commits"</h3>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash">$ git push
+</code></pre>
+<h3 id="your-branch-and-originmain-have-diverged">"Your branch and 'origin/main' have diverged"</h3>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash"># Option 1: Merge (preserves branch structure)
+$ git pull
+
+# Option 2: Rebase (cleaner history)
+$ git pull --rebase
+</code></pre>
+<h3 id="the-requested-url-returned-error-403">"The requested URL returned error: 403"</h3>
+<p><strong>Cause:</strong> Wrong permissions or using HTTPS without token.</p>
+<p><strong>Fix:</strong> Switch to SSH:</p>
+<pre><code class="language-bash">$ git remote set-url origin git@github.com:USER/REPO.git
+</code></pre>
+<h3 id="failed-to-push-some-refs">"Failed to push some refs"</h3>
+<p><strong>Cause:</strong> Remote has commits you don't have locally.</p>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash">$ git pull
+# Resolve any conflicts
+$ git push
+</code></pre>
+<h3 id="i-committed-to-the-wrong-branch">"I committed to the wrong branch"</h3>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash"># Create the correct branch (includes the commit)
+$ git switch -c correct-branch
+
+# Go back to original branch and remove commit
+$ git switch wrong-branch
+$ git reset --soft HEAD~1
+</code></pre>
+<h3 id="i-committed-a-secretpassword">"I committed a secret/password"</h3>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash"># If NOT pushed yet
+$ git reset --soft HEAD~1
+
+# If ALREADY pushed (complex — requires history rewrite)
+# Use GitHub's secret scanning or BFG Repo-Cleaner
+# Rotate the secret immediately regardless
+</code></pre>
+<p><strong>ALSO:</strong></p>
+<pre><code class="language-bash">$ git rm --cached secret-file
+$ git commit -m &quot;Remove secret&quot;
+$ echo &quot;secret-file&quot; &gt;&gt; .gitignore
+$ git add .gitignore
+$ git commit -m &quot;Add secret to .gitignore&quot;
+</code></pre>
+<h3 id="git-log-shows-a-mess-of-merge-commits">"git log shows a mess of merge commits"</h3>
+<p><strong>Fix:</strong> Use rebase before merging:</p>
+<pre><code class="language-bash">$ git switch feature
+$ git rebase main
+$ git switch main
+$ git merge feature
+</code></pre>
+<h3 id="workflow-fails-with-permission-denied">Workflow fails with "Permission denied"</h3>
+<p><strong>Cause:</strong> GitHub Actions token lacks permissions.</p>
+<p><strong>Fix:</strong> Add permissions to workflow:</p>
+<pre><code class="language-yaml">permissions:
+  contents: write
+  pull-requests: read
+</code></pre>
+<hr />
+<hr />
+<h2 id="part-12-command-cheat-sheet">Part 12: Command Cheat Sheet</h2>
+<h3 id="daily-commands">Daily Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git status</code></td>
+<td>Check what's changed</td>
+</tr>
+<tr>
+<td><code>git add filename</code></td>
+<td>Stage a file</td>
+</tr>
+<tr>
+<td><code>git add .</code></td>
+<td>Stage all changes</td>
+</tr>
+<tr>
+<td><code>git commit -m "msg"</code></td>
+<td>Commit staged changes</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>Upload commits</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Download and merge latest</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>View compact history</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>Show unstaged changes</td>
+</tr>
+<tr>
+<td><code>git diff --staged</code></td>
+<td>Show staged changes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="branch-commands">Branch Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git branch</code></td>
+<td>List branches</td>
+</tr>
+<tr>
+<td><code>git branch name</code></td>
+<td>Create branch</td>
+</tr>
+<tr>
+<td><code>git switch name</code></td>
+<td>Switch branch</td>
+</tr>
+<tr>
+<td><code>git switch -c name</code></td>
+<td>Create and switch</td>
+</tr>
+<tr>
+<td><code>git merge name</code></td>
+<td>Merge branch into current</td>
+</tr>
+<tr>
+<td><code>git branch -d name</code></td>
+<td>Delete merged branch</td>
+</tr>
+<tr>
+<td><code>git branch -D name</code></td>
+<td>Force delete branch</td>
+</tr>
+</tbody>
+</table>
+<h3 id="history-undo">History &amp; Undo</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>Compact history</td>
+</tr>
+<tr>
+<td><code>git show COMMIT</code></td>
+<td>Show commit details</td>
+</tr>
+<tr>
+<td><code>git blame FILE</code></td>
+<td>Who edited each line</td>
+</tr>
+<tr>
+<td><code>git revert COMMIT</code></td>
+<td>Undo commit safely</td>
+</tr>
+<tr>
+<td><code>git reset --soft HEAD~1</code></td>
+<td>Undo last commit, keep changes</td>
+</tr>
+<tr>
+<td><code>git reset --hard HEAD~1</code></td>
+<td>Delete last commit AND changes</td>
+</tr>
+<tr>
+<td><code>git reflog</code></td>
+<td>View all actions</td>
+</tr>
+<tr>
+<td><code>git cherry-pick COMMIT</code></td>
+<td>Apply specific commit</td>
+</tr>
+<tr>
+<td><code>git commit --amend</code></td>
+<td>Edit last commit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stashing">Stashing</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git stash</code></td>
+<td>Save current work</td>
+</tr>
+<tr>
+<td><code>git stash push -m "note"</code></td>
+<td>Save with message</td>
+</tr>
+<tr>
+<td><code>git stash list</code></td>
+<td>List stashes</td>
+</tr>
+<tr>
+<td><code>git stash pop</code></td>
+<td>Apply and remove stash</td>
+</tr>
+<tr>
+<td><code>git stash apply</code></td>
+<td>Apply but keep stash</td>
+</tr>
+<tr>
+<td><code>git stash drop</code></td>
+<td>Delete stash</td>
+</tr>
+<tr>
+<td><code>git stash clear</code></td>
+<td>Delete all stashes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rebasing">Rebasing</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git rebase main</code></td>
+<td>Replay commits on main</td>
+</tr>
+<tr>
+<td><code>git rebase -i HEAD~3</code></td>
+<td>Interactive rebase</td>
+</tr>
+<tr>
+<td><code>git rebase --continue</code></td>
+<td>Continue after conflict</td>
+</tr>
+<tr>
+<td><code>git rebase --abort</code></td>
+<td>Cancel rebase</td>
+</tr>
+</tbody>
+</table>
+<h3 id="remote">Remote</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git remote -v</code></td>
+<td>Show remotes</td>
+</tr>
+<tr>
+<td><code>git remote add NAME URL</code></td>
+<td>Add remote</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>Download from remote</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Fetch + merge</td>
+</tr>
+<tr>
+<td><code>git push -u origin BRANCH</code></td>
+<td>Push and set upstream</td>
+</tr>
+<tr>
+<td><code>git clone URL</code></td>
+<td>Copy repository</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tags-releases">Tags &amp; Releases</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git tag</code></td>
+<td>List tags</td>
+</tr>
+<tr>
+<td><code>git tag v1.0.0</code></td>
+<td>Create lightweight tag</td>
+</tr>
+<tr>
+<td><code>git tag -a v1.0.0 -m "msg"</code></td>
+<td>Create annotated tag</td>
+</tr>
+<tr>
+<td><code>git push origin v1.0.0</code></td>
+<td>Push tag</td>
+</tr>
+<tr>
+<td><code>git push origin --tags</code></td>
+<td>Push all tags</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="glossary-from-5-year-old-to-engineer">Glossary: From 5-Year-Old to Engineer</h2>
+<table>
+<thead>
+<tr>
+<th>Kid-Friendly</th>
+<th>Professional</th>
+<th>Real Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Magic Camera</td>
+<td>Version Control</td>
+<td>System that saves and restores file history</td>
+</tr>
+<tr>
+<td>Photo</td>
+<td>Commit</td>
+<td>A permanent snapshot of files</td>
+</tr>
+<tr>
+<td>Prep Box</td>
+<td>Staging Area</td>
+<td>Where you prepare files for a commit</td>
+</tr>
+<tr>
+<td>Photo Album</td>
+<td>Repository</td>
+<td>All commits, branches, and history</td>
+</tr>
+<tr>
+<td>School Library</td>
+<td>Remote (GitHub)</td>
+<td>Server copy of your repo</td>
+</tr>
+<tr>
+<td>Bookmarked Path</td>
+<td>Branch</td>
+<td>An independent line of development</td>
+</tr>
+<tr>
+<td>Combine Paths</td>
+<td>Merge</td>
+<td>Join two branches together</td>
+</tr>
+<tr>
+<td>Permission Slip</td>
+<td>Pull Request</td>
+<td>Formal request to merge into main</td>
+</tr>
+<tr>
+<td>Robot</td>
+<td>CI/CD</td>
+<td>Automated testing and deployment</td>
+</tr>
+<tr>
+<td>Recipe</td>
+<td>YAML Workflow</td>
+<td>Instructions for the robot</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>This manual is a living document. Git changes. Best practices evolve. Keep learning, commit often, and may your deploys always be green.</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

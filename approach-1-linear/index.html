@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approach 1: Linear Lecture — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Approach 1: Linear Lecture</h1>
+    
+    <h1 id="git-github-for-devops-complete-curriculum">Git &amp; GitHub for DevOps Complete Curriculum</h1>
+<h2 id="approach-1-linear-lecture-lab-5-sessions">Approach 1: Linear Lecture + Lab (5 Sessions)</h2>
+<p><em>Beginner-friendly | 1 Hour per Session | Theory First, Then Practice</em></p>
+<hr />
+<h2 id="instructor-guide">Instructor Guide</h2>
+<h3 id="philosophy">Philosophy</h3>
+<p>This curriculum uses a <strong>traditional classroom structure</strong>: present theory first, then immediately apply it. Each session is modular — if a student misses Session 2, they can still follow Session 3 because concepts are reviewed.</p>
+<p><strong>Magic Rule:</strong> Every term is introduced with an analogy before the technical definition.</p>
+<p><strong>Pacing:</strong><br />
+- 20 min: Lecture (slides + analogies)<br />
+- 25 min: Guided lab (instructor demos, students follow)<br />
+- 10 min: Independent exercise (students work alone)<br />
+- 5 min: Review + Q&amp;A</p>
+<p><strong>Student prerequisites:</strong> None.</p>
+<p><strong>Required environment:</strong> Same as all approaches — see Environment Setup below.</p>
+<h3 id="before-you-start">Before You Start</h3>
+<p>Students must complete the Environment Setup section before Session 1. Reserve 30 minutes for this, or assign as pre-class homework.</p>
+<hr />
+<h2 id="environment-setup-guide">Environment Setup Guide</h2>
+<p><em>Same setup for all approaches. Do this before Day 1.</em></p>
+<h3 id="step-1-check-your-operating-system">Step 1: Check Your Operating System</h3>
+<table>
+<thead>
+<tr>
+<th>If you see...</th>
+<th>You have</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C:\</code> drive or Windows logo</td>
+<td><strong>Windows</strong></td>
+</tr>
+<tr>
+<td>Finder or <code>~/</code></td>
+<td><strong>Mac</strong></td>
+</tr>
+<tr>
+<td><code>apt-get</code> or <code>dnf</code></td>
+<td><strong>Linux</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-2-install-git">Step 2: Install Git</h3>
+<h4 id="environment-windows">Environment: Windows</h4>
+<ol>
+<li>Visit <code>https://git-scm.com/download/win</code></li>
+<li>Download and run the installer</li>
+<li>Accept all defaults (click Next repeatedly)</li>
+<li>Open <strong>Git Bash</strong> from the Start menu</li>
+<li>Verify:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.43.0.windows.1
+</code></pre>
+<p><em>(Version number may differ — that's okay)</em></p>
+<h4 id="environment-mac">Environment: Mac</h4>
+<ol>
+<li>Open <strong>Terminal</strong> (Cmd+Space, type "Terminal")</li>
+<li>Run:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.39.3
+</code></pre>
+<p>If prompted to install Developer Tools, click <strong>Install</strong>.</p>
+<h4 id="environment-linux-ubuntudebian">Environment: Linux (Ubuntu/Debian)</h4>
+<pre><code class="language-bash">$ sudo apt update &amp;&amp; sudo apt install git -y
+$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.34.1
+</code></pre>
+<h4 id="environment-linux-fedoracentosrhel">Environment: Linux (Fedora/CentOS/RHEL)</h4>
+<pre><code class="language-bash">$ sudo dnf install git -y
+$ git --version
+</code></pre>
+<h3 id="step-3-configure-git-identity">Step 3: Configure Git Identity</h3>
+<p><strong>Environment: Any terminal (Git Bash / Terminal)</strong></p>
+<pre><code class="language-bash">$ git config --global user.name &quot;Your Full Name&quot;
+$ git config --global user.email &quot;youremail@example.com&quot;
+</code></pre>
+<blockquote>
+<p><strong>Analogy:</strong> Git needs to know who you are, like a library card needs your name.</p>
+</blockquote>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git config --global user.name
+$ git config --global user.email
+</code></pre>
+<h3 id="step-4-create-github-account">Step 4: Create GitHub Account</h3>
+<p><strong>Environment: Web Browser</strong><br />
+1. Go to <code>https://github.com</code><br />
+2. Click <strong>Sign up</strong><br />
+3. Use the same email as Step 3<br />
+4. Complete verification</p>
+<h3 id="step-5-set-up-ssh-authentication">Step 5: Set Up SSH Authentication</h3>
+<p><strong>Environment: Any terminal</strong></p>
+<pre><code class="language-bash">$ ssh-keygen -t ed25519 -C &quot;youremail@example.com&quot;
+</code></pre>
+<p>Press Enter three times to accept defaults and skip passphrase.</p>
+<p>Copy the public key:</p>
+<p><strong>Mac:</strong></p>
+<pre><code class="language-bash">$ pbcopy &lt; ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><strong>Windows (Git Bash):</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub | clip
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><em>(Select and copy the output manually)</em></p>
+<p>Add to GitHub:<br />
+1. Go to <code>https://github.com</code> → <strong>Settings</strong><br />
+2. <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong><br />
+3. Title: "My laptop"<br />
+4. Paste the key<br />
+5. Click <strong>Add SSH key</strong></p>
+<p>Test:</p>
+<pre><code class="language-bash">$ ssh -T git@github.com
+</code></pre>
+<p>Type <code>yes</code>, press Enter.</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Hi yourusername! You've successfully authenticated...
+</code></pre>
+<h3 id="step-6-install-text-editor">Step 6: Install Text Editor</h3>
+<p>Install VS Code from <code>https://code.visualstudio.com</code>. For this course, any text editor is acceptable.</p>
+<hr />
+<hr />
+<h2 id="session-1-what-is-git-your-first-repository">Session 1: What is Git? Your First Repository</h2>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<ul>
+<li>Define version control using an analogy</li>
+<li>Initialize a Git repository</li>
+<li>Understand the staging area model</li>
+<li>Create commits with meaningful messages</li>
+</ul>
+<h3 id="lecture-theory-20-minutes">Lecture: Theory (20 minutes)</h3>
+<h4 id="slide-1-the-chaos-of-no-version-control">Slide 1: The Chaos of No Version Control</h4>
+<p>Have you ever named a file:</p>
+<pre><code>report_final.doc
+report_final_v2.doc
+report_final_v2_ACTUAL.doc
+report_final_v2_ACTUAL_FOR_REAL.doc
+</code></pre>
+<p>This is <strong>manual version control</strong>. It works until you have:<br />
+- 50 files<br />
+- 3 people editing simultaneously<br />
+- A deadline in 2 hours</p>
+<h4 id="slide-2-the-analogy-the-magic-camera">Slide 2: The Analogy — The Magic Camera</h4>
+<blockquote>
+<p><strong>Analogy:</strong> Git is like a magic camera. You work on your drawing, and when you reach a good stopping point, you take a photo. If you mess up later, you can say "Take me back to Photo #3!" and everything is restored.</p>
+</blockquote>
+<p>In Git:<br />
+- The <strong>drawing</strong> = your project files<br />
+- The <strong>photo</strong> = a commit<br />
+- The <strong>photo album</strong> = the repository<br />
+- The <strong>camera itself</strong> = the <code>.git</code> folder</p>
+<h4 id="slide-3-the-staging-area-model">Slide 3: The Staging Area Model</h4>
+<p>Git does not take photos automatically. You must:<br />
+1. <strong>Create/edit files</strong> (Working Directory — your messy desk)<br />
+2. <strong>Put files in the box</strong> (Staging Area — your prep zone)<br />
+3. <strong>Take the photo</strong> (Commit — permanent snapshot)</p>
+<p>This three-stage model is the most important concept in Git.</p>
+<h4 id="slide-4-why-staging">Slide 4: Why "Staging"?</h4>
+<p>Imagine taking a family photo. You want everyone looking good, right? You don't just snap the camera when people are blinking. You:<br />
+1. Tell everyone to get ready (add to staging)<br />
+2. Check that everyone is smiling (<code>git status</code>)<br />
+3. Actually take the photo (<code>git commit</code>)</p>
+<h4 id="slide-5-commits-need-messages">Slide 5: Commits Need Messages</h4>
+<p>Every photo needs a label:<br />
+- ❌ Bad label: "stuff", "changes", "asdf"<br />
+- ✅ Good label: "Add contact form", "Fix navigation CSS"</p>
+<p>Think of it as writing on the back of the photo: "This was taken at Grandma's birthday."</p>
+<h3 id="guided-lab-your-first-repository-25-minutes">Guided Lab: Your First Repository (25 minutes)</h3>
+<p><strong>Environment: Terminal</strong></p>
+<p>Create a project folder:</p>
+<pre><code class="language-bash">$ cd ~
+$ mkdir devops-course
+$ cd devops-course
+</code></pre>
+<p>Check Git status before initialization:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>fatal: not a git repository...
+</code></pre>
+<p>Initialize Git:</p>
+<pre><code class="language-bash">$ git init
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Initialized empty Git repository in .../.git/
+</code></pre>
+<p>Check status again:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+No commits yet
+nothing to commit
+</code></pre>
+<p>Create your first file:</p>
+<pre><code class="language-bash">$ echo &quot;Welcome to DevOps!&quot; &gt; readme.txt
+$ cat readme.txt
+</code></pre>
+<p>Check Git status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Untracked files:
+    readme.txt
+</code></pre>
+<p>Stage the file:</p>
+<pre><code class="language-bash">$ git add readme.txt
+</code></pre>
+<p>Check status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Changes to be committed:
+    new file:   readme.txt
+</code></pre>
+<p>Commit:</p>
+<pre><code class="language-bash">$ git commit -m &quot;Add welcome message&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main (root-commit) abc1234] Add welcome message
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<p>View history:</p>
+<pre><code class="language-bash">$ git log
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>commit abc1234...
+Author: Your Name &lt;...&gt;
+Date: ...
+
+    Add welcome message
+</code></pre>
+<p>Make another change:</p>
+<pre><code class="language-bash">$ echo &quot;This course covers Git and GitHub.&quot; &gt;&gt; readme.txt
+$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>modified:   readme.txt
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add readme.txt
+$ git commit -m &quot;Add course description&quot;
+</code></pre>
+<p>View compact log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>def5678 Add course description
+abc1234 Add welcome message
+</code></pre>
+<h3 id="independent-exercise-10-minutes">Independent Exercise (10 minutes)</h3>
+<p>Create <code>tools.txt</code> with the text <code>Git, GitHub, CI/CD</code>. Stage and commit it.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ echo &quot;Git, GitHub, CI/CD&quot; &gt; tools.txt
+$ git add tools.txt
+$ git commit -m &quot;Add tools list&quot;
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+
+
+**Expected Output:**
+
+<pre><code>1234abc Add tools list
+def5678 Add course description
+abc1234 Add welcome message
+</code></pre>
+
+
+</details>
+
+<h3 id="review-5-minutes">Review (5 minutes)</h3>
+<p>Key questions:<br />
+1. What does <code>git init</code> do?<br />
+2. What is the staging area?<br />
+3. What is the difference between <code>git add</code> and <code>git commit</code>?<br />
+4. Why should commit messages be descriptive?</p>
+<hr />
+<hr />
+<h2 id="session-2-branching-and-merging">Session 2: Branching and Merging</h2>
+<h3 id="learning-objectives_1">Learning Objectives</h3>
+<ul>
+<li>Explain branching with a "parallel universe" analogy</li>
+<li>Create and switch branches</li>
+<li>Merge branches back to main</li>
+<li>Understand why branching matters in team environments</li>
+</ul>
+<h3 id="lecture-theory-20-minutes_1">Lecture: Theory (20 minutes)</h3>
+<h4 id="slide-1-the-problem-with-working-on-main">Slide 1: The Problem with Working on Main</h4>
+<p>If three developers edit the same file simultaneously:<br />
+- Developer A rewrites the header<br />
+- Developer B adds a footer<br />
+- Developer C deletes the sidebar</p>
+<p>They all save to <code>main</code> at the same time. Result: <strong>Chaos</strong>.</p>
+<h4 id="slide-2-the-parallel-universe-analogy">Slide 2: The Parallel Universe Analogy</h4>
+<blockquote>
+<p><strong>Analogy:</strong> A branch is a parallel universe. In Universe A, you're adding a contact form. In Universe B, your teammate is redesigning the homepage. Neither universe affects the other. When both are ready, you merge the universes together.</p>
+</blockquote>
+<h4 id="slide-3-branch-naming-conventions">Slide 3: Branch Naming Conventions</h4>
+<table>
+<thead>
+<tr>
+<th>Good Name</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feature-contact-form</code></td>
+<td>Clear what it does</td>
+</tr>
+<tr>
+<td><code>fix-broken-link</code></td>
+<td>Clear what it fixes</td>
+</tr>
+<tr>
+<td><code>update-about-page</code></td>
+<td>Clear what it updates</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Bad Name</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>branch1</code></td>
+<td>Meaningless</td>
+</tr>
+<tr>
+<td><code>temp</code></td>
+<td>Will you remember what this was in 2 weeks?</td>
+</tr>
+<tr>
+<td><code>asdf</code></td>
+<td>Seriously?</td>
+</tr>
+</tbody>
+</table>
+<h4 id="slide-4-fast-forward-vs-merge-commit">Slide 4: Fast-Forward vs. Merge Commit</h4>
+<ul>
+<li><strong>Fast-forward:</strong> The main branch hasn't changed since you branched. Git just moves the pointer forward.</li>
+<li><strong>Merge commit:</strong> The main branch has new commits. Git creates a new commit that combines both branches.</li>
+</ul>
+<h3 id="guided-lab-branching-workflow-25-minutes">Guided Lab: Branching Workflow (25 minutes)</h3>
+<p><strong>Environment: Terminal</strong> (in <code>~/devops-course</code>)</p>
+<p>Verify you're on main:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* main
+</code></pre>
+<p>Create a feature branch:</p>
+<pre><code class="language-bash">$ git branch feature-about
+$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>  feature-about
+* main
+</code></pre>
+<p>Note the <code>*</code> is still on <code>main</code>. Switch:</p>
+<pre><code class="language-bash">$ git switch feature-about
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Switched to branch 'feature-about'
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* feature-about
+  main
+</code></pre>
+<p>Create a new file on the branch:</p>
+<pre><code class="language-bash">$ echo &quot;About this course: learn Git from scratch.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Add about page&quot;
+</code></pre>
+<p>Verify commit is on this branch:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p>Check that main is unchanged:</p>
+<pre><code class="language-bash">$ git switch main
+$ ls
+</code></pre>
+<p><strong>Expected Output:</strong> (no <code>about.txt</code>)</p>
+<pre><code>readme.txt  tools.txt
+</code></pre>
+<p>Switch back and merge:</p>
+<pre><code class="language-bash">$ git switch feature-about
+$ git switch main
+$ git merge feature-about
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Fast-forward
+ about.txt | 1 +
+</code></pre>
+<p>Verify main now has the file:</p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  readme.txt  tools.txt
+</code></pre>
+<p>Delete the branch:</p>
+<pre><code class="language-bash">$ git branch -d feature-about
+</code></pre>
+<p>Check log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<h3 id="independent-exercise-10-minutes_1">Independent Exercise (10 minutes)</h3>
+<p>Create a branch <code>feature-contact</code>. Add <code>contact.txt</code> with <code>Email: team@devops.com</code>. Commit, merge to <code>main</code>, delete the branch.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch feature-contact
+$ git switch feature-contact
+$ echo &quot;Email: team@devops.com&quot; &gt; contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Add contact page&quot;
+$ git switch main
+$ git merge feature-contact
+$ git branch -d feature-contact
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ ls
+$ git log --oneline
+</code></pre>
+
+
+</details>
+
+<h3 id="review-5-minutes_1">Review (5 minutes)</h3>
+<ol>
+<li>Why do we use branches instead of editing <code>main</code> directly?</li>
+<li>What does <code>git switch</code> do?</li>
+<li>What is a fast-forward merge?</li>
+<li>Why delete branches after merging?</li>
+</ol>
+<hr />
+<hr />
+<h2 id="session-3-github-remotes-and-pull-requests">Session 3: GitHub, Remotes, and Pull Requests</h2>
+<h3 id="learning-objectives_2">Learning Objectives</h3>
+<ul>
+<li>Explain what a remote repository is</li>
+<li>Connect local repo to GitHub</li>
+<li>Push and pull code</li>
+<li>Create and merge Pull Requests</li>
+</ul>
+<h3 id="lecture-theory-20-minutes_2">Lecture: Theory (20 minutes)</h3>
+<h4 id="slide-1-local-vs-remote">Slide 1: Local vs. Remote</h4>
+<ul>
+<li><strong>Local repository:</strong> Lives on your computer (your bedroom desk)</li>
+<li><strong>Remote repository:</strong> Lives on GitHub (the school library)</li>
+</ul>
+<p>In DevOps, the remote is the "source of truth" — the official version everyone trusts.</p>
+<h4 id="slide-2-why-github">Slide 2: Why GitHub?</h4>
+<p>GitHub adds to Git:<br />
+- A web interface for viewing code<br />
+- Pull Requests (code review)<br />
+- Issues (bug tracking)<br />
+- Actions (automation/CI)<br />
+- Team collaboration tools</p>
+<h4 id="slide-3-the-workflow">Slide 3: The Workflow</h4>
+<pre><code>Local:    [create branch] → [make changes] → [commit]
+                                ↓
+Remote:                        [push]
+                                ↓
+GitHub:   [open Pull Request] → [review] → [merge]
+                                ↓
+Local:                        [pull]
+</code></pre>
+<h4 id="slide-4-pull-requests-explained">Slide 4: Pull Requests Explained</h4>
+<blockquote>
+<p><strong>Analogy:</strong> A Pull Request is like a permission slip. You say: "I want to add my homework to the class folder. Please check it first." The teacher reviews it, and if it's correct, signs it (approves). Then it gets filed (merged).</p>
+</blockquote>
+<p>In real DevOps, NO ONE pushes directly to <code>main</code>. All changes go through PR + code review.</p>
+<h3 id="guided-lab-github-workflow-25-minutes">Guided Lab: GitHub Workflow (25 minutes)</h3>
+<p><strong>Environment: Browser + Terminal</strong></p>
+<h4 id="part-a-create-github-repository">Part A: Create GitHub Repository</h4>
+<ol>
+<li>Go to <code>https://github.com</code></li>
+<li>Click <strong>+</strong> → <strong>New repository</strong></li>
+<li>Name: <code>devops-course</code></li>
+<li>Description: "DevOps course project"</li>
+<li>Public</li>
+<li>Uncheck "Add a README file"</li>
+<li>Click <strong>Create repository</strong></li>
+</ol>
+<h4 id="part-b-push-local-code">Part B: Push Local Code</h4>
+<p><strong>Environment: Terminal</strong> (in <code>~/devops-course</code>)</p>
+<pre><code class="language-bash">$ git remote add origin git@github.com:YOURUSERNAME/devops-course.git
+$ git remote -v
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>origin  git@github.com:.../devops-course.git (fetch)
+origin  git@github.com:.../devops-course.git (push)
+</code></pre>
+<pre><code class="language-bash">$ git push -u origin main
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code> * [new branch]      main -&gt; main
+</code></pre>
+<p>Refresh GitHub. Your files are there!</p>
+<h4 id="part-c-branch-push-and-pr">Part C: Branch, Push, and PR</h4>
+<p>Create and switch to a branch:</p>
+<pre><code class="language-bash">$ git branch feature-faq
+$ git switch feature-faq
+</code></pre>
+<p>Create and commit:</p>
+<pre><code class="language-bash">$ echo &quot;Q: What is DevOps?&quot; &gt; faq.txt
+$ echo &quot;A: It's the practice of combining dev and ops.&quot; &gt;&gt; faq.txt
+$ git add faq.txt
+$ git commit -m &quot;Add FAQ page&quot;
+</code></pre>
+<p>Push branch:</p>
+<pre><code class="language-bash">$ git push -u origin feature-faq
+</code></pre>
+<p><strong>Environment: Browser</strong><br />
+1. On GitHub, click <strong>"Compare &amp; pull request"</strong><br />
+2. Title: <code>Add FAQ page</code><br />
+3. Description:<br />
+<code>- Added FAQ file
+   - No breaking changes</code><br />
+4. Click <strong>Create pull request</strong><br />
+5. Click <strong>Files changed</strong> to review<br />
+6. Click <strong>Review changes</strong> → <strong>Approve</strong> → <strong>Submit review</strong><br />
+7. Click <strong>Merge pull request</strong> → <strong>Confirm merge</strong><br />
+8. Click <strong>Delete branch</strong></p>
+<h4 id="part-d-pull-changes-locally">Part D: Pull Changes Locally</h4>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git pull
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>From github.com:.../devops-course
+   ... -&gt; main
+Fast-forward
+ faq.txt | 2 ++
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p>Delete local branch:</p>
+<pre><code class="language-bash">$ git branch -d feature-faq
+</code></pre>
+<h3 id="independent-exercise-10-minutes_2">Independent Exercise (10 minutes)</h3>
+<p>Create a PR that adds <code>services.txt</code> with three services listed. Follow the full PR workflow.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch feature-services
+$ git switch feature-services
+$ cat &gt; services.txt &lt;&lt; 'EOF'
+- Web Hosting
+- CI/CD Pipelines
+- Cloud Consulting
+EOF
+$ git add services.txt
+$ git commit -m &quot;Add services page&quot;
+$ git push -u origin feature-services
+</code></pre>
+
+
+**On GitHub:**
+- Create PR, review, merge, delete branch
+
+**Back in terminal:**
+
+<pre><code class="language-bash">$ git switch main
+$ git pull
+$ git branch -d feature-services
+$ ls
+</code></pre>
+
+
+</details>
+
+<h3 id="review-5-minutes_2">Review (5 minutes)</h3>
+<ol>
+<li>What is a remote?</li>
+<li>What does <code>git push</code> do?</li>
+<li>What does <code>git pull</code> do?</li>
+<li>Why do we use Pull Requests instead of pushing directly?</li>
+</ol>
+<hr />
+<hr />
+<h2 id="session-4-undoing-changes-and-handling-conflicts">Session 4: Undoing Changes and Handling Conflicts</h2>
+<h3 id="learning-objectives_3">Learning Objectives</h3>
+<ul>
+<li>View commit history efficiently</li>
+<li>Revert commits safely</li>
+<li>Resolve merge conflicts</li>
+<li>Use git stash for temporary storage</li>
+</ul>
+<h3 id="lecture-theory-20-minutes_3">Lecture: Theory (20 minutes)</h3>
+<h4 id="slide-1-the-philosophy-of-undoing">Slide 1: The Philosophy of Undoing</h4>
+<p>Git gives you many ways to go back. Choosing the right one matters:</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Right Tool</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bad edit, not committed</td>
+<td><code>git restore</code></td>
+<td>Cleans working directory</td>
+</tr>
+<tr>
+<td>Wrong file staged</td>
+<td><code>git restore --staged</code></td>
+<td>Removes from staging</td>
+</tr>
+<tr>
+<td>Bad commit, local only</td>
+<td><code>git reset --soft HEAD~1</code></td>
+<td>Removes last commit</td>
+</tr>
+<tr>
+<td>Bad commit, already pushed</td>
+<td><code>git revert</code></td>
+<td>Creates undo commit safely</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Rule:</strong> Never rewrite history that others have seen.</p>
+</blockquote>
+<h4 id="slide-2-revert-vs-reset">Slide 2: Revert vs. Reset</h4>
+<ul>
+<li><strong>Reset:</strong> Erases commits (dangerous on shared history)</li>
+<li><strong>Revert:</strong> Adds a new commit that undoes an old one (always safe)</li>
+</ul>
+<p>In professional DevOps, you almost always use <strong>revert</strong>.</p>
+<h4 id="slide-3-what-is-a-merge-conflict">Slide 3: What is a Merge Conflict?</h4>
+<p>When two branches change the same line, Git says: "I don't know which version you want. You must tell me manually."</p>
+<p><strong>Analogy:</strong> Two people edit the same sentence in a shared document. The document can't decide which spelling to keep. A human must choose.</p>
+<h4 id="slide-4-git-stash">Slide 4: Git Stash</h4>
+<p>When you need to switch contexts quickly but aren't ready to commit:<br />
+1. <strong>Stash</strong> your current work (put it in a backpack)<br />
+2. Do the urgent thing<br />
+3. <strong>Pop</strong> the stash (unpack your backpack)</p>
+<h3 id="guided-lab-part-1-reverting-12-minutes">Guided Lab Part 1: Reverting (12 minutes)</h3>
+<p>Check current history:</p>
+<pre><code class="language-bash">$ cd ~/devops-course
+$ git log --oneline
+</code></pre>
+<p>Create a bad commit:</p>
+<pre><code class="language-bash">$ echo &quot;WRONG CONTENT&quot; &gt; readme.txt
+$ git add readme.txt
+$ git commit -m &quot;Accidentally overwrite readme&quot;
+</code></pre>
+<p>Find the bad commit ID:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Example Output:</strong></p>
+<pre><code>bad9999 Accidentally overwrite readme
+... (older commits)
+</code></pre>
+<p>Revert it:</p>
+<pre><code class="language-bash">$ git revert bad9999
+</code></pre>
+<p>An editor opens. Save and exit:<br />
+- <strong>Nano:</strong> Ctrl+O, Enter, Ctrl+X<br />
+- <strong>Vim:</strong> Esc, <code>:wq</code>, Enter</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main fix1234] Revert &quot;Accidentally overwrite readme&quot;
+</code></pre>
+<p>Verify the file:</p>
+<pre><code class="language-bash">$ cat readme.txt
+</code></pre>
+<p><strong>Expected:</strong> Original content is restored.</p>
+<p>Check log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p>Notice the bad commit is still there, plus the revert commit.</p>
+<p>Push to GitHub:</p>
+<pre><code class="language-bash">$ git push
+</code></pre>
+<h3 id="guided-lab-part-2-merge-conflict-13-minutes">Guided Lab Part 2: Merge Conflict (13 minutes)</h3>
+<p>Create a scenario where conflict happens:</p>
+<pre><code class="language-bash">$ git branch conflict-demo
+$ git switch conflict-demo
+</code></pre>
+<p>Change a line:</p>
+<pre><code class="language-bash">$ echo &quot;Branch version of readme&quot; &gt; readme.txt
+$ git add readme.txt
+$ git commit -m &quot;Update readme on branch&quot;
+</code></pre>
+<p>Switch to main and make a different change:</p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;Main version of readme&quot; &gt; readme.txt
+$ git add readme.txt
+$ git commit -m &quot;Update readme on main&quot;
+</code></pre>
+<p>Try to merge:</p>
+<pre><code class="language-bash">$ git merge conflict-demo
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed
+</code></pre>
+<p>View the conflict:</p>
+<pre><code class="language-bash">$ cat readme.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Main version of readme
+=======
+Branch version of readme
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; conflict-demo
+</code></pre>
+<p>Resolve it by editing:</p>
+<pre><code class="language-bash">$ echo &quot;Combined version of readme&quot; &gt; readme.txt
+</code></pre>
+<p>Mark resolved and commit:</p>
+<pre><code class="language-bash">$ git add readme.txt
+$ git commit -m &quot;Resolve readme conflict&quot;
+</code></pre>
+<h3 id="independent-exercise-10-minutes_3">Independent Exercise (10 minutes)</h3>
+<p>Introduce a conflict on <code>about.txt</code> between <code>main</code> and a test branch. Resolve it by keeping the best parts of both versions.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch test-conflict
+$ git switch test-conflict
+$ echo &quot;About: This is the test branch version.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Update about on test branch&quot;
+
+$ git switch main
+$ echo &quot;About: This is the main version.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Update about on main&quot;
+
+$ git merge test-conflict
+# (conflict!)
+
+$ echo &quot;About: This course teaches Git. Test branch + main combined.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Resolve about conflict&quot;
+</code></pre>
+
+
+</details>
+
+<h3 id="review-5-minutes_3">Review (5 minutes)</h3>
+<ol>
+<li>Why is <code>git revert</code> safer than <code>git reset</code>?</li>
+<li>What do conflict markers look like?</li>
+<li>After fixing a conflict, what two commands must you run?</li>
+<li>When would you use <code>git stash</code>?</li>
+</ol>
+<hr />
+<hr />
+<h2 id="session-5-devops-patterns-and-github-actions-cicd">Session 5: DevOps Patterns and GitHub Actions (CI/CD)</h2>
+<h3 id="learning-objectives_4">Learning Objectives</h3>
+<ul>
+<li>Explain CI/CD with an analogy</li>
+<li>Write a GitHub Actions workflow in YAML</li>
+<li>Understand triggers and runners</li>
+<li>Set up basic branch protection</li>
+</ul>
+<h3 id="lecture-theory-20-minutes_4">Lecture: Theory (20 minutes)</h3>
+<h4 id="slide-1-what-is-cicd">Slide 1: What is CI/CD?</h4>
+<ul>
+<li><strong>CI (Continuous Integration):</strong> Automatically test code on every change</li>
+<li><strong>CD (Continuous Deployment):</strong> Automatically deploy if tests pass</li>
+</ul>
+<p><strong>Analogy:</strong> A robot watches the mailbox. Every time a letter arrives, it:<br />
+1. Opens the letter<br />
+2. Checks spelling<br />
+3. Makes a copy for records<br />
+4. Delivers it if everything looks good</p>
+<h4 id="slide-2-why-devops-needs-cicd">Slide 2: Why DevOps Needs CI/CD</h4>
+<table>
+<thead>
+<tr>
+<th>Without CI/CD</th>
+<th>With CI/CD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Developer pushes code</td>
+<td>Developer pushes code</td>
+</tr>
+<tr>
+<td>Someone manually tests</td>
+<td>Robot automatically tests</td>
+</tr>
+<tr>
+<td>Days later, bug found</td>
+<td>Minutes later, pass/fail known</td>
+</tr>
+<tr>
+<td>Manual deployment</td>
+<td>Automatic deployment</td>
+</tr>
+</tbody>
+</table>
+<h4 id="slide-3-github-actions-basics">Slide 3: GitHub Actions Basics</h4>
+<ul>
+<li><strong>Workflow:</strong> A YAML file in <code>.github/workflows/</code></li>
+<li><strong>Trigger:</strong> Events like <code>push</code>, <code>pull_request</code>, <code>schedule</code></li>
+<li><strong>Job:</strong> A group of steps</li>
+<li><strong>Step:</strong> A single command or action</li>
+<li><strong>Runner:</strong> A VM that executes your workflow</li>
+</ul>
+<h4 id="slide-4-branch-protection">Slide 4: Branch Protection</h4>
+<p>Branch protection rules:<br />
+- Require PR before merging<br />
+- Require status checks (CI must pass)<br />
+- Require code review</p>
+<p>This prevents direct pushes to <code>main</code> and enforces quality.</p>
+<h3 id="guided-lab-build-a-ci-pipeline-25-minutes">Guided Lab: Build a CI Pipeline (25 minutes)</h3>
+<p><strong>Environment: Terminal</strong></p>
+<p>Create workflow directory:</p>
+<pre><code class="language-bash">$ cd ~/devops-course
+$ mkdir -p .github/workflows
+</code></pre>
+<p>Write a workflow:</p>
+<pre><code class="language-bash">$ cat &gt; .github/workflows/ci.yml &lt;&lt; 'EOF'
+name: CI Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check files exist
+        run: |
+          test -f readme.txt &amp;&amp; echo &quot;readme.txt OK&quot;
+          test -f about.txt &amp;&amp; echo &quot;about.txt OK&quot;
+          test -f contact.txt &amp;&amp; echo &quot;contact.txt OK&quot;
+          echo &quot;All checks passed!&quot;
+EOF
+</code></pre>
+<p>Commit and push:</p>
+<pre><code class="language-bash">$ git add .github/workflows/ci.yml
+$ git commit -m &quot;Add CI workflow&quot;
+$ git push
+</code></pre>
+<p><strong>Environment: Browser</strong><br />
+1. Go to <strong>Actions</strong> tab<br />
+2. Watch the workflow run<br />
+3. Click the run to see green checkmarks</p>
+<h4 id="test-failure-scenario">Test Failure Scenario</h4>
+<p>Create a branch:</p>
+<pre><code class="language-bash">$ git branch break-build
+$ git switch break-build
+$ rm contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Remove contact (should fail CI)&quot;
+$ git push -u origin break-build
+</code></pre>
+<p><strong>On GitHub:</strong><br />
+- Open the PR<br />
+- CI will fail with red X<br />
+- Show the failed step<br />
+- Close the PR without merging</p>
+<h4 id="set-branch-protection">Set Branch Protection</h4>
+<ol>
+<li>Repo → <strong>Settings</strong> → <strong>Branches</strong></li>
+<li>Add rule: <code>main</code></li>
+<li>Check:<br />
+   - Require pull request<br />
+   - Require status checks: <code>CI Check</code></li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p>Verify by trying direct push:</p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;test&quot; &gt;&gt; readme.txt
+$ git add readme.txt
+$ git commit -m &quot;Test direct push&quot;
+$ git push
+</code></pre>
+<p><strong>Expected:</strong> Error — protected branch.</p>
+<p>Undo the test commit:</p>
+<pre><code class="language-bash">$ git reset --soft HEAD~1
+$ git restore --staged readme.txt
+$ git checkout -- readme.txt
+</code></pre>
+<h3 id="independent-exercise-10-minutes_4">Independent Exercise (10 minutes)</h3>
+<p>Add a new status check step for <code>faq.txt</code>. Push and verify it runs on the Actions tab.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+Edit `.github/workflows/ci.yml` to add:
+
+<pre><code class="language-yaml">      - name: Check FAQ
+        run: test -f faq.txt &amp;&amp; echo &quot;faq.txt OK&quot;
+</code></pre>
+
+
+
+<pre><code class="language-bash">$ git add .github/workflows/ci.yml
+$ git commit -m &quot;Add FAQ check to CI&quot;
+$ git push
+</code></pre>
+
+
+Watch it on the Actions tab on GitHub.
+
+</details>
+
+<h3 id="review-and-capstone-5-minutes">Review and Capstone (5 minutes)</h3>
+<p>Students demonstrate:<br />
+1. All files in GitHub repo<br />
+2. At least one merged PR<br />
+3. Passing CI workflow<br />
+4. Branch protection enabled</p>
+<hr />
+<hr />
+<h2 id="appendix-a-command-quick-reference">Appendix A: Command Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>Initialize a repository</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>Check current state</td>
+</tr>
+<tr>
+<td><code>git add &lt;file&gt;</code></td>
+<td>Stage a file</td>
+</tr>
+<tr>
+<td><code>git commit -m "msg"</code></td>
+<td>Commit staged files</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>Compact history</td>
+</tr>
+<tr>
+<td><code>git branch &lt;name&gt;</code></td>
+<td>Create branch</td>
+</tr>
+<tr>
+<td><code>git switch &lt;name&gt;</code></td>
+<td>Change branch</td>
+</tr>
+<tr>
+<td><code>git merge &lt;name&gt;</code></td>
+<td>Merge branch into current</td>
+</tr>
+<tr>
+<td><code>git remote add origin &lt;url&gt;</code></td>
+<td>Add remote</td>
+</tr>
+<tr>
+<td><code>git push -u origin &lt;branch&gt;</code></td>
+<td>Push branch to remote</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Fetch and merge from remote</td>
+</tr>
+<tr>
+<td><code>git revert &lt;commit&gt;</code></td>
+<td>Undo a commit safely</td>
+</tr>
+<tr>
+<td><code>git stash</code></td>
+<td>Save temporary work</td>
+</tr>
+<tr>
+<td><code>git stash pop</code></td>
+<td>Restore stashed work</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-b-session-timing">Appendix B: Session Timing</h2>
+<table>
+<thead>
+<tr>
+<th>Session</th>
+<th>Lect</th>
+<th>Lab</th>
+<th>Exercise</th>
+<th>Review</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>20</td>
+<td>25</td>
+<td>10</td>
+<td>5</td>
+<td>60</td>
+</tr>
+<tr>
+<td>2</td>
+<td>20</td>
+<td>25</td>
+<td>10</td>
+<td>5</td>
+<td>60</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+<td>25</td>
+<td>10</td>
+<td>5</td>
+<td>60</td>
+</tr>
+<tr>
+<td>4</td>
+<td>20</td>
+<td>25</td>
+<td>10</td>
+<td>5</td>
+<td>60</td>
+</tr>
+<tr>
+<td>5</td>
+<td>20</td>
+<td>25</td>
+<td>10</td>
+<td>5</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of Approach 1: Linear Lecture + Lab</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

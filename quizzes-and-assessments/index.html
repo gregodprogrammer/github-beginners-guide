@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizzes & Assessments — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Quizzes & Assessments</h1>
+    <p class="page-subtitle">Session quizzes + final exam with answer keys</p>
+    <h1 id="quizzes-assessments-git-github-for-devops">Quizzes &amp; Assessments — Git &amp; GitHub for DevOps</h1>
+<p><em>5 Session Quizzes + 1 Final Comprehensive Exam</em></p>
+<hr />
+<h2 id="how-to-use-these-assessments">How to Use These Assessments</h2>
+<ul>
+<li><strong>Quiz time:</strong> 10 minutes per session quiz, 30 minutes for final</li>
+<li><strong>Format:</strong> Multiple choice + practical scenarios</li>
+<li><strong>Grading:</strong> Immediate self-check (answers at bottom of each section)</li>
+<li><strong>Passing:</strong> 70% on quizzes, 80% on final</li>
+</ul>
+<hr />
+<hr />
+<h1 id="session-1-quiz-your-first-repository">SESSION 1 QUIZ: Your First Repository</h1>
+<p><strong>Time:</strong> 10 minutes | <strong>Questions:</strong> 8</p>
+<hr />
+<h2 id="question-1">Question 1</h2>
+<p>What does <code>git init</code> do?</p>
+<ul>
+<li>A) Downloads code from GitHub</li>
+<li>B) Creates a new <code>.git</code> folder to start tracking a directory</li>
+<li>C) Commits all files in the folder</li>
+<li>D) Connects to a remote server</li>
+</ul>
+<hr />
+<h2 id="question-2">Question 2</h2>
+<p>What is the staging area?</p>
+<ul>
+<li>A) A folder where Git stores old commits</li>
+<li>B) A temporary holding area for files before they are committed</li>
+<li>C) The GitHub website</li>
+<li>D) A backup folder</li>
+</ul>
+<hr />
+<h2 id="question-3">Question 3</h2>
+<p>Which command puts a file into the staging area?</p>
+<ul>
+<li>A) <code>git commit</code></li>
+<li>B) <code>git push</code></li>
+<li>C) <code>git add</code></li>
+<li>D) <code>git init</code></li>
+</ul>
+<hr />
+<h2 id="question-4">Question 4</h2>
+<p>Which command permanently saves your staged files?</p>
+<ul>
+<li>A) <code>git add</code></li>
+<li>B) <code>git save</code></li>
+<li>C) <code>git commit</code></li>
+<li>D) <code>git stage</code></li>
+</ul>
+<hr />
+<h2 id="question-5">Question 5</h2>
+<p>What happens if you run <code>git status</code> in a folder that is NOT a Git repository?</p>
+<ul>
+<li>A) It shows "nothing to commit"</li>
+<li>B) It shows "fatal: not a git repository"</li>
+<li>C) It creates a repository automatically</li>
+<li>D) It lists all files in the folder</li>
+</ul>
+<hr />
+<h2 id="question-6">Question 6</h2>
+<p>Which of these is a GOOD commit message?</p>
+<ul>
+<li>A) "asdf"</li>
+<li>B) "fix stuff"</li>
+<li>C) "Add nginx configuration for production"</li>
+<li>D) "update"</li>
+</ul>
+<hr />
+<h2 id="question-7">Question 7</h2>
+<p>What does <code>git log --oneline</code> show?</p>
+<ul>
+<li>A) All deleted files</li>
+<li>B) A compact list of commits</li>
+<li>C) All branches</li>
+<li>D) All remote servers</li>
+</ul>
+<hr />
+<h2 id="question-8-practical-scenario">Question 8 (Practical Scenario)</h2>
+<p>You create a file <code>config.txt</code> and want to commit it. What is the correct sequence?</p>
+<p>Write the commands in order:</p>
+<pre><code class="language-bash">1. _________________________________
+2. _________________________________
+3. _________________________________
+</code></pre>
+<hr />
+<h2 id="answers-session-1">Answers: Session 1</h2>
+<ol>
+<li><strong>B</strong> — <code>git init</code> creates the <code>.git</code> folder and starts tracking the directory.</li>
+<li><strong>B</strong> — The staging area temporarily holds files before they are committed.</li>
+<li><strong>C</strong> — <code>git add</code> stages files.</li>
+<li><strong>C</strong> — <code>git commit</code> saves staged files permanently.</li>
+<li><strong>B</strong> — Git shows "fatal: not a git repository" if <code>.git</code> doesn't exist.</li>
+<li><strong>C</strong> — Descriptive messages explain what changed and why.</li>
+<li><strong>B</strong> — <code>git log --oneline</code> shows each commit as one line.</li>
+<li>Solution:<br />
+   ```bash</li>
+<li>git add config.txt</li>
+<li>git commit -m "Add configuration file"</li>
+<li>git log --oneline<br />
+   ```</li>
+</ol>
+<hr />
+<hr />
+<h1 id="session-2-quiz-branching-and-merging">SESSION 2 QUIZ: Branching and Merging</h1>
+<p><strong>Time:</strong> 10 minutes | <strong>Questions:</strong> 8</p>
+<hr />
+<h2 id="question-1_1">Question 1</h2>
+<p>Why do we use branches?</p>
+<ul>
+<li>A) To make Git run faster</li>
+<li>B) To protect <code>main</code> while we experiment safely</li>
+<li>C) To delete old commits</li>
+<li>D) To connect to GitHub</li>
+</ul>
+<hr />
+<h2 id="question-2_1">Question 2</h2>
+<p>Which command creates a new branch?</p>
+<ul>
+<li>A) <code>git create branch-name</code></li>
+<li>B) <code>git branch branch-name</code></li>
+<li>C) <code>git new branch-name</code></li>
+<li>D) <code>git switch branch-name</code></li>
+</ul>
+<hr />
+<h2 id="question-3_1">Question 3</h2>
+<p>Which command switches to an existing branch?</p>
+<ul>
+<li>A) <code>git branch branch-name</code></li>
+<li>B) <code>git change branch-name</code></li>
+<li>C) <code>git switch branch-name</code></li>
+<li>D) <code>git move branch-name</code></li>
+</ul>
+<hr />
+<h2 id="question-4_1">Question 4</h2>
+<p>What is a fast-forward merge?</p>
+<ul>
+<li>A) A merge that deletes the branch being merged</li>
+<li>B) A merge where <code>main</code> hasn't changed since branching — Git just moves the pointer</li>
+<li>C) A merge that runs faster than normal</li>
+<li>D) A merge that doesn't require a commit message</li>
+</ul>
+<hr />
+<h2 id="question-5_1">Question 5</h2>
+<p>What happens if you delete a branch after merging?</p>
+<ul>
+<li>A) All its commits are lost</li>
+<li>B) Its commits are safely in <code>main</code>; the branch label is deleted</li>
+<li>C) The merge is undone</li>
+<li>D) Git shows an error</li>
+</ul>
+<hr />
+<h2 id="question-6_1">Question 6</h2>
+<p>Create and switch to a branch in one command:</p>
+<ul>
+<li>A) <code>git branch --create branch-name</code></li>
+<li>B) <code>git switch -c branch-name</code></li>
+<li>C) <code>git checkout --new branch-name</code></li>
+<li>D) <code>git branch -s branch-name</code></li>
+</ul>
+<hr />
+<h2 id="question-7_1">Question 7</h2>
+<p>You switch to <code>main</code> and run <code>ls</code>. A file from your feature branch is NOT there. Why?</p>
+<ul>
+<li>A) The file was deleted</li>
+<li>B) Branches are isolated — changes on one branch don't appear on another until merged</li>
+<li>C) Git is broken</li>
+<li>D) The file is hidden</li>
+</ul>
+<hr />
+<h2 id="question-8-practical-scenario_1">Question 8 (Practical Scenario)</h2>
+<p>You need to add a new <code>contact.txt</code> page via a branch. Write the complete sequence:</p>
+<pre><code class="language-bash">1. _________________________________
+2. _________________________________
+3. _________________________________
+4. _________________________________
+5. _________________________________
+6. _________________________________
+7. _________________________________
+</code></pre>
+<hr />
+<h2 id="answers-session-2">Answers: Session 2</h2>
+<ol>
+<li><strong>B</strong> — Branches let you work safely without affecting <code>main</code>.</li>
+<li><strong>B</strong> — <code>git branch branch-name</code> creates a branch.</li>
+<li><strong>C</strong> — <code>git switch branch-name</code> changes branches.</li>
+<li><strong>B</strong> — Fast-forward happens when <code>main</code> hasn't diverged.</li>
+<li><strong>B</strong> — Commits stay in history; only the branch label is deleted.</li>
+<li><strong>B</strong> — <code>git switch -c branch-name</code> creates and switches.</li>
+<li><strong>B</strong> — Branches are isolated by design.</li>
+<li>Solution:<br />
+   ```bash</li>
+<li>git branch feature-contact</li>
+<li>git switch feature-contact</li>
+<li>echo "Email: hello@example.com" &gt; contact.txt</li>
+<li>git add contact.txt</li>
+<li>git commit -m "Add contact page"</li>
+<li>git switch main</li>
+<li>git merge feature-contact</li>
+<li>git branch -d feature-contact<br />
+   ```</li>
+</ol>
+<hr />
+<hr />
+<h1 id="session-3-quiz-github-push-pull-and-pull-requests">SESSION 3 QUIZ: GitHub, Push, Pull, and Pull Requests</h1>
+<p><strong>Time:</strong> 10 minutes | <strong>Questions:</strong> 8</p>
+<hr />
+<h2 id="question-1_2">Question 1</h2>
+<p>What is a remote?</p>
+<ul>
+<li>A) A git command that undoes changes</li>
+<li>B) A copy of your repository on another server (like GitHub)</li>
+<li>C) A branch that is far away from <code>main</code></li>
+<li>D) A deleted commit</li>
+</ul>
+<hr />
+<h2 id="question-2_2">Question 2</h2>
+<p>Which command uploads your commits to GitHub?</p>
+<ul>
+<li>A) <code>git upload</code></li>
+<li>B) <code>git send</code></li>
+<li>C) <code>git push</code></li>
+<li>D) <code>git publish</code></li>
+</ul>
+<hr />
+<h2 id="question-3_2">Question 3</h2>
+<p>Which command downloads the latest changes from GitHub?</p>
+<ul>
+<li>A) <code>git download</code></li>
+<li>B) <code>git fetch</code></li>
+<li>C) <code>git pull</code></li>
+<li>D) <code>git receive</code></li>
+</ul>
+<hr />
+<h2 id="question-4_2">Question 4</h2>
+<p>What does <code>git remote add origin ...</code> do?</p>
+<ul>
+<li>A) Deletes the remote</li>
+<li>B) Creates a nickname <code>origin</code> for your GitHub repo URL</li>
+<li>C) Pushes code to GitHub</li>
+<li>D) Creates a new branch called <code>origin</code></li>
+</ul>
+<hr />
+<h2 id="question-5_2">Question 5</h2>
+<p>What is a Pull Request?</p>
+<ul>
+<li>A) A request to delete a branch</li>
+<li>B) A formal request to merge your branch into main, with code review</li>
+<li>C) A command to download code</li>
+<li>D) An email to your manager</li>
+</ul>
+<hr />
+<h2 id="question-6_2">Question 6</h2>
+<p>Why shouldn't you push directly to <code>main</code>?</p>
+<ul>
+<li>A) It's faster to use branches</li>
+<li>B) Direct pushes bypass code review and can break production</li>
+<li>C) GitHub doesn't allow it</li>
+<li>D) Branches cost money</li>
+</ul>
+<hr />
+<h2 id="question-7_2">Question 7</h2>
+<p>What does <code>git clone</code> do?</p>
+<ul>
+<li>A) Deletes a repository</li>
+<li>B) Copies a remote repository to your local machine</li>
+<li>C) Creates a new empty repository</li>
+<li>D) Merges two branches</li>
+</ul>
+<hr />
+<h2 id="question-8-practical-scenario_2">Question 8 (Practical Scenario)</h2>
+<p>You just merged a PR on GitHub. Your local <code>main</code> doesn't have the changes yet. Write the commands to sync:</p>
+<pre><code class="language-bash">1. _________________________________
+2. _________________________________
+3. _________________________________
+</code></pre>
+<hr />
+<h2 id="answers-session-3">Answers: Session 3</h2>
+<ol>
+<li><strong>B</strong> — A remote is a copy on a server.</li>
+<li><strong>C</strong> — <code>git push</code> uploads commits.</li>
+<li><strong>C</strong> — <code>git pull</code> downloads and merges; <code>git fetch</code> only downloads.</li>
+<li><strong>B</strong> — <code>origin</code> is a nickname for the remote URL.</li>
+<li><strong>B</strong> — PRs request merging with review.</li>
+<li><strong>B</strong> — Direct pushes skip quality checks.</li>
+<li><strong>B</strong> — <code>git clone</code> copies a remote repo locally.</li>
+<li>Solution:<br />
+   ```bash</li>
+<li>git switch main</li>
+<li>git pull</li>
+<li>git branch -d feature-branch-name<br />
+   ```</li>
+</ol>
+<hr />
+<hr />
+<h1 id="session-4-quiz-undoing-and-conflicts">SESSION 4 QUIZ: Undoing and Conflicts</h1>
+<p><strong>Time:</strong> 10 minutes | <strong>Questions:</strong> 8</p>
+<hr />
+<h2 id="question-1_3">Question 1</h2>
+<p>You need to undo a bad commit that was already pushed. What do you use?</p>
+<ul>
+<li>A) <code>git reset --hard</code></li>
+<li>B) <code>git revert</code></li>
+<li>C) <code>git delete</code></li>
+<li>D) <code>git erase</code></li>
+</ul>
+<hr />
+<h2 id="question-2_3">Question 2</h2>
+<p>What does <code>git reset --soft HEAD~1</code> do?</p>
+<ul>
+<li>A) Deletes all files</li>
+<li>B) Removes the last commit but keeps the changes staged</li>
+<li>C) Deletes the repository</li>
+<li>D) Pushes to GitHub</li>
+</ul>
+<hr />
+<h2 id="question-3_3">Question 3</h2>
+<p>You see this in a file:</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+my version
+=======
+their version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; their-branch
+</code></pre>
+<p>What is this?</p>
+<ul>
+<li>A) A bug in Git</li>
+<li>B) A merge conflict that needs manual resolution</li>
+<li>C) A virus</li>
+<li>D) An encrypted message</li>
+</ul>
+<hr />
+<h2 id="question-4_3">Question 4</h2>
+<p>After fixing a merge conflict, what must you do?</p>
+<ul>
+<li>A) Delete the file</li>
+<li>B) Run <code>git restart</code></li>
+<li>C) <code>git add .</code> then <code>git commit</code></li>
+<li>D) Run <code>git fix</code></li>
+</ul>
+<hr />
+<h2 id="question-5_3">Question 5</h2>
+<p>What is <code>git stash</code> used for?</p>
+<ul>
+<li>A) Deleting branches</li>
+<li>B) Saving uncommitted work temporarily so you can switch tasks</li>
+<li>C) Pushing to GitHub</li>
+<li>D) Creating a new repository</li>
+</ul>
+<hr />
+<h2 id="question-6_3">Question 6</h2>
+<p>How do you restore stashed work?</p>
+<ul>
+<li>A) <code>git stash restore</code></li>
+<li>B) <code>git stash pop</code></li>
+<li>C) <code>git stash apply</code></li>
+<li>D) Both B and C</li>
+</ul>
+<hr />
+<h2 id="question-7_3">Question 7</h2>
+<p>What is <code>git reflog</code>?</p>
+<ul>
+<li>A) A list of remote servers</li>
+<li>B) A log of all Git actions (even deleted commits)</li>
+<li>C) A list of branches</li>
+<li>D) A log of GitHub API calls</li>
+</ul>
+<hr />
+<h2 id="question-8-practical-scenario_3">Question 8 (Practical Scenario)</h2>
+<p>You committed a bad change but haven't pushed yet. Write the safe command to undo the last commit while keeping your changes:</p>
+<pre><code class="language-bash">_________________________________
+</code></pre>
+<hr />
+<h2 id="answers-session-4">Answers: Session 4</h2>
+<ol>
+<li><strong>B</strong> — <code>git revert</code> is safe for shared history.</li>
+<li><strong>B</strong> — <code>--soft</code> removes the commit but keeps changes staged.</li>
+<li><strong>B</strong> — These markers indicate a conflict. Remove them, edit, stage, commit.</li>
+<li><strong>C</strong> — Stage resolved files and commit to complete the merge.</li>
+<li><strong>B</strong> — Stash saves work-in-progress temporarily.</li>
+<li><strong>D</strong> — <code>pop</code> applies and removes; <code>apply</code> applies but keeps it.</li>
+<li><strong>B</strong> — Reflog records everything — your safety net.</li>
+<li>Solution: <code>git reset --soft HEAD~1</code></li>
+</ol>
+<hr />
+<hr />
+<h1 id="session-5-quiz-cicd-with-github-actions">SESSION 5 QUIZ: CI/CD with GitHub Actions</h1>
+<p><strong>Time:</strong> 10 minutes | <strong>Questions:</strong> 8</p>
+<hr />
+<h2 id="question-1_4">Question 1</h2>
+<p>What does CI stand for?</p>
+<ul>
+<li>A) Code Integration</li>
+<li>B) Continuous Integration</li>
+<li>C) Computer Intelligence</li>
+<li>D) Central Integration</li>
+</ul>
+<hr />
+<h2 id="question-2_4">Question 2</h2>
+<p>GitHub Actions workflows are stored in which folder?</p>
+<ul>
+<li>A) <code>.github/actions/</code></li>
+<li>B) <code>.github/workflows/</code></li>
+<li>C) <code>.actions/</code></li>
+<li>D) <code>workflows/</code></li>
+</ul>
+<hr />
+<h2 id="question-3_4">Question 3</h2>
+<p>What file format are GitHub Actions workflows written in?</p>
+<ul>
+<li>A) JSON</li>
+<li>B) XML</li>
+<li>C) YAML</li>
+<li>D) HTML</li>
+</ul>
+<hr />
+<h2 id="question-4_4">Question 4</h2>
+<p>What does <code>runs-on: ubuntu-latest</code> mean?</p>
+<ul>
+<li>A) Your laptop must run Ubuntu</li>
+<li>B) GitHub will use a virtual machine running Ubuntu</li>
+<li>C) The workflow only works on Ubuntu</li>
+<li>D) The branch name must be <code>ubuntu-latest</code></li>
+</ul>
+<hr />
+<h2 id="question-5_4">Question 5</h2>
+<p>What does <code>actions/checkout@v4</code> do?</p>
+<ul>
+<li>A) Deletes the repository</li>
+<li>B) Downloads your code onto the runner</li>
+<li>C) Creates a new branch</li>
+<li>D) Logs into GitHub</li>
+</ul>
+<hr />
+<h2 id="question-6_4">Question 6</h2>
+<p>What is branch protection?</p>
+<ul>
+<li>A) A firewall around your code</li>
+<li>B) Rules that prevent direct pushes and enforce PRs + CI</li>
+<li>C) A password on the repository</li>
+<li>D) A backup service</li>
+</ul>
+<hr />
+<h2 id="question-7_4">Question 7</h2>
+<p>Where do you store secrets (like API keys) in GitHub Actions?</p>
+<ul>
+<li>A) In the workflow file</li>
+<li>B) In a text file in the repo</li>
+<li>C) In Repo Settings → Secrets and variables</li>
+<li>D) In the README</li>
+</ul>
+<hr />
+<h2 id="question-8-practical-scenario_4">Question 8 (Practical Scenario)</h2>
+<p>Write a workflow that triggers on every push to <code>main</code> and prints "Deploying to production!".</p>
+<pre><code class="language-yaml">name: _________________________________
+on:
+  _________________________________:
+    branches: [ _________________________________ ]
+jobs:
+  deploy:
+    runs-on: _________________________________
+    steps:
+      - run: echo &quot;Deploying to production!&quot;
+</code></pre>
+<hr />
+<h2 id="answers-session-5">Answers: Session 5</h2>
+<ol>
+<li><strong>B</strong> — Continuous Integration</li>
+<li><strong>B</strong> — <code>.github/workflows/</code></li>
+<li><strong>C</strong> — YAML</li>
+<li><strong>B</strong> — GitHub provides a VM (runner) running Ubuntu</li>
+<li><strong>B</strong> — It checks out your code onto the runner</li>
+<li><strong>B</strong> — Rules for <code>main</code>: PRs required, CI must pass</li>
+<li><strong>C</strong> — Secrets belong in Settings → Secrets, NEVER in code</li>
+<li>Solution:<br />
+<code>yaml
+   name: Deploy
+   on:
+     push:
+       branches: [ main ]
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+       steps:
+         - run: echo "Deploying to production!"</code></li>
+</ol>
+<hr />
+<hr />
+<h1 id="final-comprehensive-exam">FINAL COMPREHENSIVE EXAM</h1>
+<p><strong>Time:</strong> 30 minutes | <strong>Questions:</strong> 15 | <strong>Passing:</strong> 80%</p>
+<hr />
+<h2 id="section-a-multiple-choice-10-questions">Section A: Multiple Choice (10 questions)</h2>
+<h3 id="question-1_5">Question 1</h3>
+<p>Which command initializes a new Git repository?</p>
+<ul>
+<li>A) <code>git start</code></li>
+<li>B) <code>git init</code></li>
+<li>C) <code>git new</code></li>
+<li>D) <code>git create</code></li>
+</ul>
+<h3 id="question-2_5">Question 2</h3>
+<p>What is the correct sequence?</p>
+<ul>
+<li>A) <code>add</code> → <code>commit</code> → <code>push</code></li>
+<li>B) <code>commit</code> → <code>add</code> → <code>push</code></li>
+<li>C) <code>push</code> → <code>add</code> → <code>commit</code></li>
+<li>D) <code>init</code> → <code>push</code> → <code>commit</code></li>
+</ul>
+<h3 id="question-3_5">Question 3</h3>
+<p>You want to undo a commit that is already on GitHub. You should:</p>
+<ul>
+<li>A) <code>git reset --hard</code></li>
+<li>B) <code>git revert</code></li>
+<li>C) Delete the repository</li>
+<li>D) Email GitHub support</li>
+</ul>
+<h3 id="question-4_5">Question 4</h3>
+<p>Two branches edited the same line. What does Git do?</p>
+<ul>
+<li>A) Automatically picks the first branch</li>
+<li>B) Creates a merge conflict and waits for a human</li>
+<li>C) Deletes both changes</li>
+<li>D) Emails the team</li>
+</ul>
+<h3 id="question-5_5">Question 5</h3>
+<p>What does <code>git stash pop</code> do?</p>
+<ul>
+<li>A) Deletes all stashes</li>
+<li>B) Applies the latest stash and removes it</li>
+<li>C) Shows stash history</li>
+<li>D) Pushes code to GitHub</li>
+</ul>
+<h3 id="question-6_5">Question 6</h3>
+<p>A Pull Request is:</p>
+<ul>
+<li>A) A request to delete a branch</li>
+<li>B) A formal request to merge code with review</li>
+<li>C) A command to download code</li>
+<li>D) An email to the manager</li>
+</ul>
+<h3 id="question-7_5">Question 7</h3>
+<p>Where are GitHub Actions workflows stored?</p>
+<ul>
+<li>A) <code>.github/actions/</code></li>
+<li>B) <code>.github/workflows/</code></li>
+<li>C) <code>actions.yml</code></li>
+<li>D) <code>ci.yml</code></li>
+</ul>
+<h3 id="question-8">Question 8</h3>
+<p>What does <code>git push -u origin main</code> do?</p>
+<ul>
+<li>A) Deletes the main branch</li>
+<li>B) Pushes main and sets upstream tracking</li>
+<li>C) Creates a new repository</li>
+<li>D) Pulls code from GitHub</li>
+</ul>
+<h3 id="question-9">Question 9</h3>
+<p>Which is the safe way to undo a local commit while keeping changes?</p>
+<ul>
+<li>A) <code>git reset --hard HEAD~1</code></li>
+<li>B) <code>git reset --soft HEAD~1</code></li>
+<li>C) <code>git rm -rf .</code></li>
+<li>D) <code>git undo</code></li>
+</ul>
+<h3 id="question-10">Question 10</h3>
+<p>What does branch protection prevent?</p>
+<ul>
+<li>A) Creating branches</li>
+<li>B) Direct pushes to main without PR or CI</li>
+<li>C) Opening pull requests</li>
+<li>D) Deleting branches</li>
+</ul>
+<hr />
+<h2 id="section-b-practical-scenarios-5-questions">Section B: Practical Scenarios (5 questions)</h2>
+<h3 id="question-11">Question 11</h3>
+<p>Write the complete sequence to set up a new repo, add a file, and push it to GitHub.</p>
+<pre><code class="language-bash">_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+</code></pre>
+<h3 id="question-12">Question 12</h3>
+<p>You committed a file to <code>main</code> but meant to commit to a feature branch. Write the fix.</p>
+<pre><code class="language-bash">_________________________________
+_________________________________
+_________________________________
+</code></pre>
+<h3 id="question-13">Question 13</h3>
+<p>Write a GitHub Actions workflow that runs on every pull request to <code>main</code> and prints "Running tests...".</p>
+<pre><code class="language-yaml">_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+_________________________________
+</code></pre>
+<h3 id="question-14">Question 14</h3>
+<p>You see a merge conflict in <code>config.txt</code>. Write the exact steps to resolve it.</p>
+<pre><code class="language-bash">1. _________________________________
+2. _________________________________
+3. _________________________________
+4. _________________________________
+</code></pre>
+<h3 id="question-15-bonus">Question 15 (Bonus)</h3>
+<p>You accidentally committed a file called <code>secrets.env</code> containing a password. It has NOT been pushed. Write the complete fix.</p>
+<pre><code class="language-bash">1. _________________________________
+2. _________________________________
+3. _________________________________
+4. _________________________________
+5. _________________________________
+</code></pre>
+<hr />
+<h2 id="final-exam-answers">Final Exam Answers</h2>
+<h3 id="section-a">Section A</h3>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A</td>
+</tr>
+<tr>
+<td>3</td>
+<td>B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>B</td>
+</tr>
+<tr>
+<td>5</td>
+<td>B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>B</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B</td>
+</tr>
+<tr>
+<td>8</td>
+<td>B</td>
+</tr>
+<tr>
+<td>9</td>
+<td>B</td>
+</tr>
+<tr>
+<td>10</td>
+<td>B</td>
+</tr>
+</tbody>
+</table>
+<h3 id="section-b">Section B</h3>
+<p><strong>Question 11:</strong></p>
+<pre><code class="language-bash">git init
+git add . 
+git commit -m &quot;Initial commit&quot;
+git remote add origin git@github.com:USER/REPO.git
+git branch -M main
+git push -u origin main
+</code></pre>
+<p><strong>Question 12:</strong></p>
+<pre><code class="language-bash">git switch -c feature-branch  # Brings the commit
+git switch main
+git reset --soft HEAD~1
+</code></pre>
+<p><strong>Question 13:</strong></p>
+<pre><code class="language-yaml">name: Test
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo &quot;Running tests...&quot;
+</code></pre>
+<p><strong>Question 14:</strong></p>
+<pre><code class="language-bash">1. Open config.txt, remove &lt;&lt;&lt;&lt;&lt;&lt;&lt; ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; markers
+2. Edit to keep desired content
+3. git add config.txt
+4. git commit -m &quot;Resolve config conflict&quot;
+</code></pre>
+<p><strong>Question 15 (Bonus):</strong></p>
+<pre><code class="language-bash">1. git reset --soft HEAD~1           # Undo last commit, keep changes staged
+2. git restore --staged secrets.env  # Unstage the file
+3. echo &quot;secrets.env&quot; &gt;&gt; .gitignore  # Add to .gitignore
+4. git add .gitignore
+5. git commit -m &quot;Add .gitignore and remove secret&quot;
+# Then change the password immediately!
+</code></pre>
+<hr />
+<h2 id="scoring-guide">Scoring Guide</h2>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Grade</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15/15</td>
+<td>A+</td>
+<td>DevOps ready</td>
+</tr>
+<tr>
+<td>13-14</td>
+<td>A</td>
+<td>Strong understanding</td>
+</tr>
+<tr>
+<td>11-12</td>
+<td>B</td>
+<td>Good, review weak areas</td>
+</tr>
+<tr>
+<td>9-10</td>
+<td>C</td>
+<td>Needs more practice</td>
+</tr>
+<tr>
+<td>&lt; 9</td>
+<td>D/F</td>
+<td>Retake Session quizzes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Good luck!</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

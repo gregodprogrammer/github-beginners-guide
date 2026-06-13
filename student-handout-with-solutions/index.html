@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Handout — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Student Handout</h1>
+    <p class="page-subtitle">Every exercise with solutions and expected output</p>
+    <h1 id="student-handout-git-github-for-devops">Student Handout — Git &amp; GitHub for DevOps</h1>
+<h2 id="all-exercises-with-solutions">All Exercises with Solutions</h2>
+<p><em>Works with all three approaches (Linear, Project-Driven, Story-Mode)</em></p>
+<hr />
+<h2 id="how-to-use-this-handout">How to Use This Handout</h2>
+<ol>
+<li><strong>During class:</strong> Try each exercise on your own first.</li>
+<li><strong>When stuck:</strong> Peek at the solution. Don't copy-paste without understanding.</li>
+<li><strong>After class:</strong> Re-do the exercises without looking. That's when learning happens.</li>
+</ol>
+<p><strong>Every exercise includes:</strong><br />
+- The scenario<br />
+- The commands to run<br />
+- The expected output<br />
+- The explanation of WHY it works</p>
+<hr />
+<hr />
+<h1 id="session-1-exercises-your-first-repository">SESSION 1 EXERCISES: Your First Repository</h1>
+<hr />
+<h2 id="exercise-11-create-and-commit-a-new-file">Exercise 1.1: Create and Commit a New File</h2>
+<p><strong>Scenario:</strong> You are starting a new project. Create a file called <code>tools.txt</code> that lists your DevOps tools.</p>
+<p><strong>Environment: Terminal (Git Bash / Terminal)</strong></p>
+<p><strong>Task:</strong><br />
+1. Navigate to your project folder.<br />
+2. Create <code>tools.txt</code> with the content: <code>Git, GitHub, CI/CD</code><br />
+3. Stage it.<br />
+4. Commit it with the message: <code>Add tools list</code><br />
+5. Check your history.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ echo &quot;Git, GitHub, CI/CD&quot; &gt; tools.txt
+$ git add tools.txt
+$ git commit -m &quot;Add tools list&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main 1234abc] Add tools list
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools.txt
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>1234abc Add tools list
+def5678 Add course description
+abc1234 Add welcome message
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>echo &gt; file</code> writes text to a file.<br />
+- <code>git add</code> puts the file in the staging area (the box before the photo).<br />
+- <code>git commit -m</code> takes the photo and labels it.<br />
+- <code>git log</code> shows all photos in the album.</p>
+<hr />
+<h2 id="exercise-12-fix-a-file-and-commit-again">Exercise 1.2: Fix a File and Commit Again</h2>
+<p><strong>Scenario:</strong> You realize <code>tools.txt</code> should also include <code>Docker</code>.</p>
+<p><strong>Task:</strong><br />
+1. Append <code>Docker</code> to <code>tools.txt</code>.<br />
+2. Stage and commit with message: <code>Add Docker to tools list</code><br />
+3. Check <code>git log --oneline</code>.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ echo &quot;Docker&quot; &gt;&gt; tools.txt
+$ cat tools.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Git, GitHub, CI/CD
+Docker
+</code></pre>
+<pre><code class="language-bash">$ git add tools.txt
+$ git commit -m &quot;Add Docker to tools list&quot;
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>&gt;&gt;</code> appends (adds to the end). <code>&gt;</code> would overwrite.<br />
+- Every commit is a snapshot. Git remembers the old version AND the new version.</p>
+<hr />
+<h2 id="exercise-13-check-what-changed">Exercise 1.3: Check What Changed</h2>
+<p><strong>Scenario:</strong> You want to see what your last commit did.</p>
+<p><strong>Task:</strong><br />
+1. Show the last commit's details.<br />
+2. Show what files changed in the last commit.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git show HEAD
+</code></pre>
+<p><strong>To see only files:</strong></p>
+<pre><code class="language-bash">$ git show HEAD --stat
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>HEAD</code> means "the most recent commit."<br />
+- <code>git show</code> displays the commit message, author, date, and the diff.<br />
+- <code>--stat</code> shows only filenames and line counts.</p>
+<hr />
+<hr />
+<h1 id="session-2-exercises-branching-and-merging">SESSION 2 EXERCISES: Branching and Merging</h1>
+<hr />
+<h2 id="exercise-21-create-a-feature-branch">Exercise 2.1: Create a Feature Branch</h2>
+<p><strong>Scenario:</strong> You want to add a <code>contact.txt</code> page. Do it on a branch.</p>
+<p><strong>Task:</strong><br />
+1. Create and switch to branch <code>feature-contact</code>.<br />
+2. Create <code>contact.txt</code> with: <code>Email: team@devops.com</code><br />
+3. Stage and commit.<br />
+4. Switch back to <code>main</code>.<br />
+5. Verify <code>contact.txt</code> does NOT exist on <code>main</code>.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git branch feature-contact
+$ git switch feature-contact
+$ echo &quot;Email: team@devops.com&quot; &gt; contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Add contact page&quot;
+</code></pre>
+<p><strong>Verify main is safe:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ ls
+</code></pre>
+<p><strong>Expected Output:</strong> (NO <code>contact.txt</code>)</p>
+<pre><code>about.txt  home.txt  tools.txt
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- Branches are parallel universes. Changes on <code>feature-contact</code> do not affect <code>main</code>.<br />
+- This is the #1 reason branches exist — to protect <code>main</code>.</p>
+<hr />
+<h2 id="exercise-22-merge-the-branch">Exercise 2.2: Merge the Branch</h2>
+<p><strong>Scenario:</strong> The contact page is ready. Merge it into <code>main</code>.</p>
+<p><strong>Task:</strong><br />
+1. Merge <code>feature-contact</code> into <code>main</code>.<br />
+2. Verify <code>contact.txt</code> now exists.<br />
+3. Delete the branch.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git merge feature-contact
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Fast-forward
+ contact.txt | 1 +
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  contact.txt  home.txt  tools.txt
+</code></pre>
+<p><strong>Delete branch:</strong></p>
+<pre><code class="language-bash">$ git branch -d feature-contact
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>git merge</code> moves changes from one branch to another.<br />
+- Fast-forward means <code>main</code> was unchanged since branching — clean and simple.<br />
+- Deleting branches keeps things tidy. The commits are safely in <code>main</code>.</p>
+<hr />
+<h2 id="exercise-23-create-and-merge-multiple-branches">Exercise 2.3: Create and Merge Multiple Branches</h2>
+<p><strong>Task:</strong><br />
+1. Create branch <code>feature-skills</code> and add <code>skills.txt</code>.<br />
+2. Merge it.<br />
+3. Create branch <code>feature-services</code> and add <code>services.txt</code>.<br />
+4. Merge it.<br />
+5. Check <code>git log --oneline</code>.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git branch feature-skills
+$ git switch feature-skills
+$ echo &quot;Git, Docker, Kubernetes&quot; &gt; skills.txt
+$ git add skills.txt
+$ git commit -m &quot;Add skills page&quot;
+$ git switch main
+$ git merge feature-skills
+$ git branch -d feature-skills
+
+$ git branch feature-services
+$ git switch feature-services
+$ echo &quot;Web Hosting, CI/CD&quot; &gt; services.txt
+$ git add services.txt
+$ git commit -m &quot;Add services page&quot;
+$ git switch main
+$ git merge feature-services
+$ git branch -d feature-services
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ git log --oneline
+$ ls
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- Each branch is independent. You merge them when ready.<br />
+- This is how teams work: multiple developers, multiple branches, one <code>main</code>.</p>
+<hr />
+<hr />
+<h1 id="session-3-exercises-github-and-pull-requests">SESSION 3 EXERCISES: GitHub and Pull Requests</h1>
+<hr />
+<h2 id="exercise-31-push-to-github">Exercise 3.1: Push to GitHub</h2>
+<p><strong>Scenario:</strong> Your code is ready. Push it to GitHub.</p>
+<p><strong>Task:</strong><br />
+1. Add remote <code>origin</code> pointing to your GitHub repo.<br />
+2. Push <code>main</code>.<br />
+3. Refresh GitHub and verify files are there.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash"># Replace YOURUSERNAME with your actual username
+$ git remote add origin git@github.com:YOURUSERNAME/my-repo.git
+$ git push -u origin main
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code> * [new branch]      main -&gt; main
+</code></pre>
+<p><strong>Verify:</strong><br />
+- Open <code>https://github.com/YOURUSERNAME/my-repo</code> in your browser.<br />
+- You should see your files.</p>
+<p><strong>Why this works:</strong><br />
+- <code>origin</code> is a nickname for your GitHub repo. You only set it once.<br />
+- <code>-u</code> links your local <code>main</code> to remote <code>main</code>. After this, just <code>git push</code> works.</p>
+<hr />
+<h2 id="exercise-32-complete-pr-workflow">Exercise 3.2: Complete PR Workflow</h2>
+<p><strong>Scenario:</strong> Add a <code>faq.txt</code> file using the full Pull Request workflow.</p>
+<p><strong>Task:</strong><br />
+1. Create branch <code>feature-faq</code>.<br />
+2. Add <code>faq.txt</code> with a question and answer.<br />
+3. Commit and push.<br />
+4. Open a Pull Request on GitHub.<br />
+5. Review, approve, and merge it.<br />
+6. Pull locally.<br />
+7. Delete the branch.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git branch feature-faq
+$ git switch feature-faq
+$ cat &gt; faq.txt &lt;&lt; 'EOF'
+Q: What is this project?
+A: My DevOps portfolio.
+EOF
+$ git add faq.txt
+$ git commit -m &quot;Add FAQ page&quot;
+$ git push -u origin feature-faq
+</code></pre>
+<p><strong>On GitHub:</strong><br />
+1. Click <strong>"Compare &amp; pull request"</strong><br />
+2. Title: <code>Add FAQ page</code><br />
+3. Create PR<br />
+4. <strong>Files changed</strong> → Review<br />
+5. <strong>Review changes</strong> → Approve → Submit<br />
+6. <strong>Merge pull request</strong> → Confirm<br />
+7. <strong>Delete branch</strong></p>
+<p><strong>Back in terminal:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git pull
+$ git branch -d feature-faq
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  contact.txt  faq.txt  home.txt  services.txt  skills.txt
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- PRs are the professional way to merge code. No one pushes directly to <code>main</code>.<br />
+- Code review catches bugs before they reach production.</p>
+<hr />
+<h2 id="exercise-33-pull-updates-from-teammates">Exercise 3.3: Pull Updates from Teammates</h2>
+<p><strong>Scenario:</strong> A teammate pushed a change to <code>main</code> on GitHub.</p>
+<p><strong>Task:</strong><br />
+1. Run <code>git pull</code> to get their changes.<br />
+2. Check <code>git log --oneline</code> to see their commit.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git pull
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>git pull</code> downloads changes from GitHub AND merges them into your local <code>main</code>.<br />
+- Always pull before starting new work. Otherwise you'll work on old code.</p>
+<hr />
+<hr />
+<h1 id="session-4-exercises-undoing-and-conflicts">SESSION 4 EXERCISES: Undoing and Conflicts</h1>
+<hr />
+<h2 id="exercise-41-revert-a-bad-commit">Exercise 4.1: Revert a Bad Commit</h2>
+<p><strong>Scenario:</strong> You accidentally overwrote <code>home.txt</code> with bad content.</p>
+<p><strong>Task:</strong><br />
+1. Overwrite <code>home.txt</code> badly and commit it.<br />
+2. Find the bad commit ID.<br />
+3. Revert it.<br />
+4. Verify the original content is restored.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ echo &quot;BAD CONTENT&quot; &gt; home.txt
+$ git add home.txt
+$ git commit -m &quot;Accidentally broke homepage&quot;
+$ git log --oneline
+</code></pre>
+<p><strong>Expected:</strong> Top line is the bad commit (e.g., <code>bad1234</code>).</p>
+<pre><code class="language-bash">$ git revert bad1234
+</code></pre>
+<p>An editor opens. Save and exit.</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main revert789] Revert &quot;Accidentally broke homepage&quot;
+</code></pre>
+<p><strong>Verify:</strong></p>
+<pre><code class="language-bash">$ cat home.txt
+</code></pre>
+<p><strong>Expected:</strong> Original content is back.</p>
+<p><strong>Why this works:</strong><br />
+- <code>git revert</code> creates a NEW commit that undoes the bad one.<br />
+- The bad commit stays in history (audit trail). This is the safe way.</p>
+<hr />
+<h2 id="exercise-42-resolve-a-merge-conflict">Exercise 4.2: Resolve a Merge Conflict</h2>
+<p><strong>Scenario:</strong> Two branches both edited <code>about.txt</code>. Git can't decide which to keep.</p>
+<p><strong>Task:</strong><br />
+1. Change <code>about.txt</code> on <code>main</code>.<br />
+2. Create branch <code>update-about-1</code> from BEFORE that commit and change it differently.<br />
+3. Merge both into <code>main</code>.<br />
+4. Resolve the conflict.<br />
+5. Complete the merge.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash"># Change about.txt on main
+$ echo &quot;Updated main version&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Update about on main&quot;
+
+# Create branch from before this commit
+$ git branch update-about-1 HEAD~1
+$ git switch update-about-1
+$ echo &quot;Updated branch version&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Update about on branch&quot;
+
+# Merge into main
+$ git switch main
+$ git merge update-about-1
+</code></pre>
+<p><strong>Expected:</strong> <code>CONFLICT (content): Merge conflict in about.txt</code></p>
+<p><strong>Resolve:</strong></p>
+<pre><code class="language-bash">$ cat about.txt
+# (see conflict markers)
+</code></pre>
+<p>Edit <code>about.txt</code> — remove <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> lines, keep the content you want:</p>
+<pre><code>Main version updated with branch improvements.
+</code></pre>
+<pre><code class="language-bash">$ git add about.txt
+$ git commit -m &quot;Resolve about page conflict&quot;
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- Conflicts mean Git needs human judgment. It's not broken — it's asking for help.<br />
+- After editing, you MUST stage and commit to complete the merge.</p>
+<hr />
+<h2 id="exercise-43-use-git-stash">Exercise 4.3: Use Git Stash</h2>
+<p><strong>Scenario:</strong> You're editing a file but need to switch tasks urgently.</p>
+<p><strong>Task:</strong><br />
+1. Start editing a file (but don't commit).<br />
+2. Stash your work.<br />
+3. Do something else on <code>main</code>.<br />
+4. Pop your stash back.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;Work in progress...&quot; &gt;&gt; about.txt
+$ git stash
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Saved working directory and index state...
+</code></pre>
+<p><strong>Do something else:</strong></p>
+<pre><code class="language-bash">$ git status
+# (clean)
+</code></pre>
+<p><strong>Restore work:</strong></p>
+<pre><code class="language-bash">$ git stash pop
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+Changes not staged for commit:
+  modified:   about.txt
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- Stash saves your uncommitted work temporarily.<br />
+- The working directory becomes clean so you can switch branches or fix emergencies.</p>
+<hr />
+<hr />
+<h1 id="session-5-exercises-cicd-with-github-actions">SESSION 5 EXERCISES: CI/CD with GitHub Actions</h1>
+<hr />
+<h2 id="exercise-51-create-a-ci-workflow">Exercise 5.1: Create a CI Workflow</h2>
+<p><strong>Scenario:</strong> You want a robot to check that <code>home.txt</code> and <code>about.txt</code> exist on every push.</p>
+<p><strong>Task:</strong><br />
+1. Create <code>.github/workflows/check-files.yml</code>.<br />
+2. Write a workflow that checks files exist.<br />
+3. Commit and push.<br />
+4. Watch it pass in the Actions tab.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ mkdir -p .github/workflows
+$ cat &gt; .github/workflows/check-files.yml &lt;&lt; 'EOF'
+name: Check Files
+on:
+  push:
+    branches: [ main ]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check required files
+        run: |
+          test -f home.txt &amp;&amp; echo &quot;✅ home.txt&quot;
+          test -f about.txt &amp;&amp; echo &quot;✅ about.txt&quot;
+          echo &quot;All checks passed!&quot;
+EOF
+$ git add .github/workflows/check-files.yml
+$ git commit -m &quot;Add CI workflow&quot;
+$ git push
+</code></pre>
+<p><strong>Verify:</strong><br />
+- Go to GitHub → <strong>Actions</strong> tab<br />
+- See green checkmark ✅</p>
+<p><strong>Why this works:</strong><br />
+- YAML files in <code>.github/workflows/</code> are automatically detected by GitHub.<br />
+- The <code>actions/checkout@v4</code> step downloads your code onto the runner.<br />
+- <code>run:</code> executes shell commands.</p>
+<hr />
+<h2 id="exercise-52-watch-ci-catch-a-bug">Exercise 5.2: Watch CI Catch a Bug</h2>
+<p><strong>Scenario:</strong> You intentionally break something and watch CI fail.</p>
+<p><strong>Task:</strong><br />
+1. Create branch <code>break-ci</code>.<br />
+2. Delete <code>about.txt</code>.<br />
+3. Commit and push.<br />
+4. Open a PR and watch CI fail ❌.<br />
+5. Close the PR without merging.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git branch break-ci
+$ git switch break-ci
+$ git rm about.txt
+$ git commit -m &quot;Remove about page (should fail CI)&quot;
+$ git push -u origin break-ci
+</code></pre>
+<p><strong>On GitHub:</strong><br />
+1. Open PR<br />
+2. CI runs automatically<br />
+3. Fails with "❌ about.txt MISSING"<br />
+4. Close PR</p>
+<p><strong>Why this works:</strong><br />
+- CI catches bugs BEFORE they reach <code>main</code>.<br />
+- Failed PRs should never be merged.</p>
+<hr />
+<h2 id="exercise-53-set-up-branch-protection">Exercise 5.3: Set Up Branch Protection</h2>
+<p><strong>Scenario:</strong> Lock <code>main</code> so no one can push directly.</p>
+<p><strong>Task:</strong><br />
+1. Add branch protection rule for <code>main</code>.<br />
+2. Require PR before merging.<br />
+3. Require status checks to pass.<br />
+4. Try direct push and verify you're blocked.</p>
+<p><strong>Solution:</strong></p>
+<p><strong>On GitHub:</strong><br />
+1. Repo → <strong>Settings</strong> → <strong>Branches</strong><br />
+2. Add rule: <code>main</code><br />
+3. Check:<br />
+   - Require pull request before merging<br />
+   - Require status checks to pass<br />
+   - Select <code>Check Files</code><br />
+4. <strong>Create</strong></p>
+<p><strong>Test in terminal:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;test&quot; &gt;&gt; home.txt
+$ git add home.txt
+$ git commit -m &quot;Test direct push&quot;
+$ git push
+</code></pre>
+<p><strong>Expected:</strong> Error — protected branch.</p>
+<p><strong>Undo test commit:</strong></p>
+<pre><code class="language-bash">$ git reset --soft HEAD~1
+$ git restore --staged home.txt
+$ git checkout -- home.txt
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- Branch protection enforces quality gates.<br />
+- No one can accidentally break production by pushing directly.</p>
+<hr />
+<hr />
+<h1 id="bonus-exercises">BONUS EXERCISES</h1>
+<hr />
+<h2 id="bonus-1-write-a-good-gitignore">Bonus 1: Write a Good <code>.gitignore</code></h2>
+<p><strong>Scenario:</strong> You never want to commit secrets, logs, or IDE files.</p>
+<p><strong>Task:</strong><br />
+1. Create <code>.gitignore</code>.<br />
+2. Add entries for <code>.env</code>, <code>*.log</code>, <code>.vscode/</code>.<br />
+3. Commit it.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ cat &gt; .gitignore &lt;&lt; 'EOF'
+# Secrets
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+EOF
+$ git add .gitignore
+$ git commit -m &quot;Add .gitignore&quot;
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>.gitignore</code> tells Git to never track matching files.<br />
+- <strong>Never commit secrets.</strong> Use <code>.gitignore</code> to protect yourself.</p>
+<hr />
+<h2 id="bonus-2-view-blame">Bonus 2: View Blame</h2>
+<p><strong>Scenario:</strong> A line of code is confusing. Who wrote it?</p>
+<p><strong>Task:</strong><br />
+1. Run <code>git blame</code> on a file.<br />
+2. Identify who wrote each line.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git blame home.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>abc1234 (Your Name  2024-01-15) Welcome to my portfolio!
+def5678 (Your Name  2024-01-16) I'm learning DevOps.
+</code></pre>
+<p><strong>Why this works:</strong><br />
+- <code>git blame</code> shows the commit and author for every line.<br />
+- Essential during incidents: "Who changed this config line?"</p>
+<hr />
+<h2 id="bonus-3-tag-a-release">Bonus 3: Tag a Release</h2>
+<p><strong>Scenario:</strong> Your portfolio is complete. Tag it as version 1.0.0.</p>
+<p><strong>Task:</strong><br />
+1. Create annotated tag <code>v1.0.0</code>.<br />
+2. Push it to GitHub.<br />
+3. View it on GitHub.</p>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash">$ git tag -a v1.0.0 -m &quot;First stable release&quot;
+$ git push origin v1.0.0
+</code></pre>
+<p><strong>Verify:</strong><br />
+- GitHub → <strong>Releases</strong> (right sidebar)<br />
+- See your tag</p>
+<p><strong>Why this works:</strong><br />
+- Tags mark specific commits as milestones.<br />
+- Semantic versioning (v1.0.0) is the industry standard.</p>
+<hr />
+<p><em>End of Student Handout — Good luck, engineer!</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

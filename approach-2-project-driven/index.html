@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approach 2: Project-Driven — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Approach 2: Project-Driven</h1>
+    
+    <h1 id="git-github-for-devops-complete-curriculum">Git &amp; GitHub for DevOps Complete Curriculum</h1>
+<h2 id="approach-2-project-driven-build-along">Approach 2: Project-Driven ("Build-Along")</h2>
+<p><em>Beginner-friendly | 5 Sessions | 1 Continuous Project | Learn by Building</em></p>
+<hr />
+<h2 id="instructor-guide">Instructor Guide</h2>
+<h3 id="philosophy">Philosophy</h3>
+<p>Students learn by <strong>building one real project from start to finish</strong>. Every session adds a feature to the project. By Session 5, they have a fully version-controlled website with CI/CD. The project IS the curriculum.</p>
+<p><strong>Magic Rule:</strong> No abstract examples — every command serves the project.</p>
+<p><strong>Pacing:</strong><br />
+- 10 min: Project status check + plan for today<br />
+- 15 min: New concept (introduced because the project needs it)<br />
+- 25 min: Hands-on building (instructor demos, students follow)<br />
+- 10 min: Extend the feature (student challenge)</p>
+<p><strong>Student prerequisites:</strong> None.</p>
+<p><strong>The Project:</strong> <code>my-devops-portfolio</code> — a simple portfolio website. By Session 5 it has:<br />
+- Multiple pages (Home, About, Projects, Contact)<br />
+- Branch-based feature development<br />
+- GitHub collaboration workflow<br />
+- Automated CI testing<br />
+- Branch protection</p>
+<h3 id="before-you-start">Before You Start</h3>
+<p>Complete Environment Setup before Session 1.</p>
+<hr />
+<h2 id="environment-setup-guide">Environment Setup Guide</h2>
+<p><em>Identical for all three approaches.</em></p>
+<h3 id="step-1-install-git">Step 1: Install Git</h3>
+<h4 id="environment-windows">Environment: Windows</h4>
+<ol>
+<li><code>https://git-scm.com/download/win</code></li>
+<li>Install with all defaults</li>
+<li>Open <strong>Git Bash</strong></li>
+<li>Verify:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.43.0.windows.1
+</code></pre>
+<h4 id="environment-mac">Environment: Mac</h4>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p>If not installed, macOS will prompt to install Developer Tools.</p>
+<h4 id="environment-linux-ubuntudebian">Environment: Linux (Ubuntu/Debian)</h4>
+<pre><code class="language-bash">$ sudo apt update &amp;&amp; sudo apt install git -y
+$ git --version
+</code></pre>
+<h4 id="environment-linux-fedora">Environment: Linux (Fedora)</h4>
+<pre><code class="language-bash">$ sudo dnf install git -y
+$ git --version
+</code></pre>
+<h3 id="step-2-configure-git">Step 2: Configure Git</h3>
+<p><strong>Environment: Any terminal</strong></p>
+<pre><code class="language-bash">$ git config --global user.name &quot;Your Full Name&quot;
+$ git config --global user.email &quot;youremail@example.com&quot;
+</code></pre>
+<h3 id="step-3-create-github-account">Step 3: Create GitHub Account</h3>
+<p><strong>Environment: Browser</strong><br />
+1. <code>https://github.com</code><br />
+2. Sign up with the same email<br />
+3. Verify email</p>
+<h3 id="step-4-ssh-keys">Step 4: SSH Keys</h3>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ ssh-keygen -t ed25519 -C &quot;youremail@example.com&quot;
+</code></pre>
+<p>Press Enter three times.</p>
+<p>Copy key:</p>
+<p><strong>Mac:</strong> <code>pbcopy &lt; ~/.ssh/id_ed25519.pub</code><br />
+<strong>Windows:</strong> <code>cat ~/.ssh/id_ed25519.pub | clip</code><br />
+<strong>Linux:</strong> <code>cat ~/.ssh/id_ed25519.pub</code> (copy manually)</p>
+<p>Add to GitHub: Settings → SSH and GPG keys → New SSH key</p>
+<p>Test:</p>
+<pre><code class="language-bash">$ ssh -T git@github.com
+</code></pre>
+<p>Type <code>yes</code>.</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Hi yourusername! You've successfully authenticated...
+</code></pre>
+<h3 id="step-5-install-vs-code">Step 5: Install VS Code</h3>
+<p>Download from <code>https://code.visualstudio.com</code>.</p>
+<hr />
+<hr />
+<h2 id="the-project-my-devops-portfolio">The Project: <code>my-devops-portfolio</code></h2>
+<p>We will build a personal portfolio website across 5 sessions. Here's the roadmap:</p>
+<table>
+<thead>
+<tr>
+<th>Session</th>
+<th>Feature Added</th>
+<th>Git Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Home page</td>
+<td>Init, add, commit, status, log</td>
+</tr>
+<tr>
+<td>2</td>
+<td>About + Projects pages</td>
+<td>Branching, merging</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Push to GitHub + Contact page</td>
+<td>Remotes, push, pull, PRs</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Fix a bug + Style updates</td>
+<td>Revert, resolve conflicts</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Auto-deploy check</td>
+<td>CI/CD with GitHub Actions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
+<h2 id="session-1-foundation-home-page-and-first-commits">Session 1: Foundation — Home Page and First Commits</h2>
+<h3 id="the-goal-today">The Goal Today</h3>
+<p>Create the project folder, initialize Git, and build the Home page. Save your progress using commits.</p>
+<h3 id="theory-what-we-need-to-know-15-minutes">Theory: What We Need to Know (15 minutes)</h3>
+<h4 id="the-analogy-building-a-house">The Analogy — Building a House</h4>
+<blockquote>
+<p><strong>Analogy:</strong> Building a project without Git is like building a house without taking photos. If the wall collapses, you have no idea what it looked like before.</p>
+<p>Git is your construction photographer. Every time you finish a room, you take a photo (commit). If the roof leaks, you can look at the photos and figure out when it started.</p>
+</blockquote>
+<h4 id="the-three-stages">The Three Stages</h4>
+<p>Think of Git like a restaurant kitchen:<br />
+1. <strong>Working Directory</strong> = The prep table (you're cutting vegetables)<br />
+2. <strong>Staging Area</strong> = The plate ready to be served (chef has arranged it)<br />
+3. <strong>Commit</strong> = The photo for the menu (permanent record)</p>
+<p>You don't take menu photos of half-chopped vegetables. You stage first, then commit.</p>
+<h3 id="practical-build-home-page-35-minutes">Practical Build: Home Page (35 minutes)</h3>
+<p><strong>Environment: Terminal</strong></p>
+<p>Create the project:</p>
+<pre><code class="language-bash">$ cd ~
+$ mkdir my-devops-portfolio
+$ cd my-devops-portfolio
+</code></pre>
+<p>Initialize Git:</p>
+<pre><code class="language-bash">$ git init
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Initialized empty Git repository in .../.git/
+</code></pre>
+<p>Create the homepage:</p>
+<pre><code class="language-bash">$ cat &gt; home.txt &lt;&lt; 'EOF'
+================================
+  MY DEVOPS PORTFOLIO
+================================
+
+Hi, I'm [Your Name]!
+
+I'm learning DevOps and this is my first Git project.
+
+Visit the About page to learn more.
+EOF
+</code></pre>
+<p>Check status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Untracked files:
+    home.txt
+</code></pre>
+<p>Stage it:</p>
+<pre><code class="language-bash">$ git add home.txt
+</code></pre>
+<p>Check status again:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Changes to be committed:
+    new file:   home.txt
+</code></pre>
+<p>Commit:</p>
+<pre><code class="language-bash">$ git commit -m &quot;Add homepage with welcome message&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main (root-commit) abc1234] Add homepage with welcome message
+ 1 file changed, 10 insertions(+)
+</code></pre>
+<p>Check history:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>abc1234 Add homepage with welcome message
+</code></pre>
+<p>Now add a navigation section:</p>
+<p><strong>Environment: Text Editor</strong></p>
+<p>Open <code>home.txt</code> and add to the bottom:</p>
+<pre><code>---
+Navigation: Home | About | Projects | Contact
+---
+</code></pre>
+<p><strong>Or via terminal:</strong></p>
+<pre><code class="language-bash">$ cat &gt;&gt; home.txt &lt;&lt; 'EOF'
+
+---
+Navigation: Home | About | Projects | Contact
+---
+EOF
+</code></pre>
+<p>Check status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>modified:   home.txt
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add home.txt
+$ git commit -m &quot;Add navigation section to homepage&quot;
+</code></pre>
+<p>View log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>def5678 Add navigation section to homepage
+abc1234 Add homepage with welcome message
+</code></pre>
+<h3 id="student-extension-challenge-10-minutes">Student Extension Challenge (10 minutes)</h3>
+<p>Add a footer to <code>home.txt</code>: <code>Built with Git</code>. Stage and commit it.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ echo &quot;&quot; &gt;&gt; home.txt
+$ echo &quot;Built with Git&quot; &gt;&gt; home.txt
+$ git add home.txt
+$ git commit -m &quot;Add footer to homepage&quot;
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+
+
+**Expected:** A third commit.
+
+</details>
+
+<hr />
+<hr />
+<h2 id="session-2-two-new-pages-branching-for-features">Session 2: Two New Pages — Branching for Features</h2>
+<h3 id="the-goal-today_1">The Goal Today</h3>
+<p>Add two new pages (About and Projects) using feature branches. Keep <code>main</code> clean and stable.</p>
+<h3 id="theory-why-branches-matter-15-minutes">Theory: Why Branches Matter (15 minutes)</h3>
+<h4 id="the-parallel-universe-analogy">The Parallel Universe Analogy</h4>
+<blockquote>
+<p><strong>Analogy:</strong> You're writing a book. The published version is <code>main</code>. You want to try a new chapter, but you're not sure if readers will like it. So you photocopy the book, write the new chapter in the copy, and show it to friends. If they like it, you paste it into the real book. If they hate it, you throw away the copy.</p>
+<p>The photocopy = a branch. The real book = <code>main</code>.</p>
+</blockquote>
+<h4 id="professional-context">Professional Context</h4>
+<p>In DevOps:<br />
+- <code>main</code> is <strong>sacred</strong> — always deployable<br />
+- Feature branches are <strong>disposable</strong> — experiment freely<br />
+- You merge only when code is tested and reviewed</p>
+<h3 id="practical-build-about-and-projects-pages-35-minutes">Practical Build: About and Projects Pages (35 minutes)</h3>
+<p><strong>Environment: Terminal</strong> (in <code>~/my-devops-portfolio</code>)</p>
+<p>Ensure you're on <code>main</code>:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* main
+</code></pre>
+<h4 id="feature-1-about-page">Feature 1: About Page</h4>
+<p>Create branch:</p>
+<pre><code class="language-bash">$ git branch feature-about-page
+$ git switch feature-about-page
+</code></pre>
+<p>Check:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* feature-about-page
+  main
+</code></pre>
+<p>Build the About page:</p>
+<pre><code class="language-bash">$ cat &gt; about.txt &lt;&lt; 'EOF'
+================================
+  ABOUT ME
+================================
+
+Name: [Your Name]
+Role: DevOps Student
+Goal: To master Git, GitHub, and CI/CD
+
+This portfolio tracks my learning journey.
+EOF
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add about.txt
+$ git commit -m &quot;Add about page with bio&quot;
+</code></pre>
+<h4 id="feature-2-projects-page">Feature 2: Projects Page</h4>
+<p>Create a second branch (from <code>main</code>, not from the about branch):</p>
+<p>First, go back to main:</p>
+<pre><code class="language-bash">$ git switch main
+</code></pre>
+<p>Create projects branch:</p>
+<pre><code class="language-bash">$ git branch feature-projects-page
+$ git switch feature-projects-page
+</code></pre>
+<p>Build the Projects page:</p>
+<pre><code class="language-bash">$ cat &gt; projects.txt &lt;&lt; 'EOF'
+================================
+  MY PROJECTS
+================================
+
+1. DevOps Portfolio (this website!)
+   - Tools: Git, GitHub, CI/CD
+   - Status: In progress
+
+More projects coming soon...
+EOF
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add projects.txt
+$ git commit -m &quot;Add projects page&quot;
+</code></pre>
+<p>Verify main is still clean:</p>
+<pre><code class="language-bash">$ git switch main
+$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>home.txt
+</code></pre>
+<p><em>(Only <code>home.txt</code> — the new pages are on branches, not main!)</em></p>
+<h4 id="merge-about-page-first">Merge About Page First</h4>
+<pre><code class="language-bash">$ git merge feature-about-page
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Fast-forward
+ about.txt | 10 ++++++++++
+</code></pre>
+<h4 id="merge-projects-page">Merge Projects Page</h4>
+<pre><code class="language-bash">$ git merge feature-projects-page
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Merge made by the 'ort' strategy.
+ projects.txt | 11 +++++++++++
+</code></pre>
+<p>Note: This may be a merge commit (not fast-forward) because <code>main</code> now has the About page.</p>
+<p>Verify all files:</p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  home.txt  projects.txt
+</code></pre>
+<p>View the merge commit in log:</p>
+<pre><code class="language-bash">$ git log --oneline --graph
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>*   merge123 Merge branch 'feature-projects-page'
+|\  
+| * proj456 Add projects page
+* | about789 Add about page with bio
+|/  
+* def5678 Add navigation section
+</code></pre>
+<p>Clean up branches:</p>
+<pre><code class="language-bash">$ git branch -d feature-about-page
+$ git branch -d feature-projects-page
+</code></pre>
+<h3 id="student-extension-challenge-10-minutes_1">Student Extension Challenge (10 minutes)</h3>
+<p>Create a <code>skills.txt</code> file on a new branch <code>feature-skills</code> with 3 skills listed. Merge it into <code>main</code> and delete the branch.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch feature-skills
+$ git switch feature-skills
+$ cat &gt; skills.txt &lt;&lt; 'EOF'
+Skills:
+- Git version control
+- GitHub collaboration
+- CI/CD pipelines
+EOF
+$ git add skills.txt
+$ git commit -m &quot;Add skills page&quot;
+$ git switch main
+$ git merge feature-skills
+$ git branch -d feature-skills
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ ls
+$ git log --oneline
+</code></pre>
+
+
+</details>
+
+<hr />
+<hr />
+<h2 id="session-3-going-online-github-and-pull-requests">Session 3: Going Online — GitHub and Pull Requests</h2>
+<h3 id="the-goal-today_2">The Goal Today</h3>
+<p>Push the portfolio to GitHub. Add a Contact page through a proper Pull Request workflow.</p>
+<h3 id="theory-sharing-with-the-world-15-minutes">Theory: Sharing with the World (15 minutes)</h3>
+<h4 id="the-library-analogy">The Library Analogy</h4>
+<blockquote>
+<p><strong>Analogy:</strong> Your local Git repo is like a diary on your desk. GitHub is like a library where you publish your diary so others can read it. You push (upload) your finished chapters. You pull (download) edits from your editor.</p>
+</blockquote>
+<h4 id="why-prs">Why PRs?</h4>
+<p>You wouldn't publish a book without an editor reading it first. A Pull Request is like handing your chapter to the editor and saying "Is this good enough for the book?"</p>
+<p>In DevOps:<br />
+- Pushing directly to <code>main</code> = editing the published book while it's in stores<br />
+- Opening a PR = submitting to the editor first</p>
+<h3 id="practical-build-contact-page-via-pr-35-minutes">Practical Build: Contact Page via PR (35 minutes)</h3>
+<p><strong>Environment: Browser + Terminal</strong></p>
+<h4 id="part-1-create-github-repo">Part 1: Create GitHub Repo</h4>
+<ol>
+<li>Go to <code>https://github.com</code></li>
+<li>Click <strong>+</strong> → <strong>New repository</strong></li>
+<li>Name: <code>my-devops-portfolio</code></li>
+<li>Public, no README</li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<h4 id="part-2-push-local-code">Part 2: Push Local Code</h4>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ git remote add origin git@github.com:YOURUSERNAME/my-devops-portfolio.git
+$ git push -u origin main
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code> * [new branch]      main -&gt; main
+</code></pre>
+<p>Refresh GitHub — your files are there!</p>
+<h4 id="part-3-contact-page-via-pr">Part 3: Contact Page via PR</h4>
+<p>Create branch:</p>
+<pre><code class="language-bash">$ git branch feature-contact-page
+$ git switch feature-contact-page
+</code></pre>
+<p>Build the page:</p>
+<pre><code class="language-bash">$ cat &gt; contact.txt &lt;&lt; 'EOF'
+================================
+  CONTACT
+================================
+
+Email: your.email@example.com
+GitHub: github.com/YOURUSERNAME
+
+Let's connect!
+EOF
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add contact.txt
+$ git commit -m &quot;Add contact page&quot;
+</code></pre>
+<p>Push:</p>
+<pre><code class="language-bash">$ git push -u origin feature-contact-page
+</code></pre>
+<p><strong>On GitHub:</strong><br />
+1. Click <strong>"Compare &amp; pull request"</strong><br />
+2. Title: <code>Add contact page</code><br />
+3. Description:<br />
+<code>- Added contact information
+   - Follows existing page style</code><br />
+4. <strong>Create pull request</strong><br />
+5. <strong>Files changed</strong> → review<br />
+6. <strong>Review changes</strong> → <strong>Approve</strong> → <strong>Submit</strong><br />
+7. <strong>Merge pull request</strong> → <strong>Confirm</strong><br />
+8. <strong>Delete branch</strong></p>
+<h4 id="part-4-sync-local-main">Part 4: Sync Local Main</h4>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git pull
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>From github.com:.../my-devops-portfolio
+ ...
+ contact.txt | 10 ++++++++++
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  contact.txt  home.txt  projects.txt  skills.txt
+</code></pre>
+<p>Clean up:</p>
+<pre><code class="language-bash">$ git branch -d feature-contact-page
+</code></pre>
+<h3 id="student-extension-challenge-10-minutes_2">Student Extension Challenge (10 minutes)</h3>
+<p>Update <code>projects.txt</code> to include a "Future Goals" section. Do it through a PR workflow: branch, edit, commit, push, PR, merge, pull.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch update-projects
+$ git switch update-projects
+</code></pre>
+
+
+**Edit `projects.txt` to add:**
+
+<pre><code>Future Goals:
+- Complete CI/CD certification
+- Contribute to open source
+- Build a cloud infrastructure project
+</code></pre>
+
+
+
+<pre><code class="language-bash">$ git add projects.txt
+$ git commit -m &quot;Add future goals to projects page&quot;
+$ git push -u origin update-projects
+</code></pre>
+
+
+**On GitHub:** Create PR, review, merge, delete branch.
+
+**Back in terminal:**
+
+<pre><code class="language-bash">$ git switch main
+$ git pull
+$ git branch -d update-projects
+</code></pre>
+
+
+</details>
+
+<hr />
+<hr />
+<h2 id="session-4-fixing-mistakes-and-handling-the-unexpected">Session 4: Fixing Mistakes and Handling The Unexpected</h2>
+<h3 id="the-goal-today_3">The Goal Today</h3>
+<p>Introduce a "bug" (wrong content), find it in history, revert it safely. Also handle a merge conflict when two branches change the same file.</p>
+<h3 id="theory-when-things-go-wrong-15-minutes">Theory: When Things Go Wrong (15 minutes)</h3>
+<h4 id="the-time-machine">The Time Machine</h4>
+<p><code>git log --oneline</code> is your time machine. It shows every snapshot. Find the bad one, then use <code>git revert</code> to undo it.</p>
+<blockquote>
+<p><strong>Key rule:</strong> We never erase history. We add to it. Revert creates a NEW commit that undoes an old one. This keeps the audit trail.</p>
+</blockquote>
+<h4 id="conflicts-are-normal">Conflicts Are Normal</h4>
+<p>When two branches touch the same line, Git asks a human to choose. It's not scary — it's just Git saying "I need help deciding."</p>
+<h3 id="practical-build-bug-fix-conflict-resolution-35-minutes">Practical Build: Bug Fix + Conflict Resolution (35 minutes)</h3>
+<h4 id="part-1-the-bug">Part 1: The Bug</h4>
+<p>Accidentally overwrite the homepage:</p>
+<p><strong>Environment: Terminal</strong> (on <code>main</code>)</p>
+<pre><code class="language-bash">$ echo &quot;Oops, this is bad content.&quot; &gt; home.txt
+$ git add home.txt
+$ git commit -m &quot;Redesign homepage (broken)&quot;
+</code></pre>
+<p>Check log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p>Find the bad commit ID (top one).</p>
+<p>Revert it:</p>
+<pre><code class="language-bash">$ git revert HEAD
+</code></pre>
+<p><em>(HEAD means "the most recent commit on current branch")</em></p>
+<p>An editor opens. Save and exit.</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main revert123] Revert &quot;Redesign homepage (broken)&quot;
+</code></pre>
+<p>Verify the file:</p>
+<pre><code class="language-bash">$ cat home.txt
+</code></pre>
+<p>The original content is restored!</p>
+<p>Push to GitHub:</p>
+<pre><code class="language-bash">$ git push
+</code></pre>
+<h4 id="part-2-the-merge-conflict">Part 2: The Merge Conflict</h4>
+<p>Create two branches that both edit <code>about.txt</code>:</p>
+<pre><code class="language-bash">$ git branch update-about-role
+$ git switch update-about-role
+</code></pre>
+<p>Change the role line:</p>
+<pre><code class="language-bash">$ cat &gt; about.txt &lt;&lt; 'EOF'
+================================
+  ABOUT ME
+================================
+
+Name: [Your Name]
+Role: DevOps Engineer (updated role)
+Goal: To master Git, GitHub, and CI/CD
+
+This portfolio tracks my learning journey.
+EOF
+$ git add about.txt
+$ git commit -m &quot;Update role on about page&quot;
+</code></pre>
+<p>Now create another branch from <code>main</code>:</p>
+<pre><code class="language-bash">$ git switch main
+$ git branch update-about-goal
+$ git switch update-about-goal
+</code></pre>
+<p>Change the goal line:</p>
+<pre><code class="language-bash">$ cat &gt; about.txt &lt;&lt; 'EOF'
+================================
+  ABOUT ME
+================================
+
+Name: [Your Name]
+Role: DevOps Student
+Goal: To become a Senior DevOps Engineer
+
+This portfolio tracks my learning journey.
+EOF
+$ git add about.txt
+$ git commit -m &quot;Update goal on about page&quot;
+</code></pre>
+<p>Merge the first branch:</p>
+<pre><code class="language-bash">$ git switch main
+$ git merge update-about-role
+</code></pre>
+<p>This works fine. Now merge the second:</p>
+<pre><code class="language-bash">$ git merge update-about-goal
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>CONFLICT (content): Merge conflict in about.txt
+Automatic merge failed
+</code></pre>
+<p>View the file:</p>
+<pre><code class="language-bash">$ cat about.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Role: DevOps Engineer (updated role)
+=======
+Goal: To become a Senior DevOps Engineer
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; update-about-goal
+</code></pre>
+<p><em>(Note: the actual conflict may include more context depending on Git version)</em></p>
+<p>Resolve by combining both changes:</p>
+<pre><code class="language-bash">$ cat &gt; about.txt &lt;&lt; 'EOF'
+================================
+  ABOUT ME
+================================
+
+Name: [Your Name]
+Role: DevOps Engineer (updated role)
+Goal: To become a Senior DevOps Engineer
+
+This portfolio tracks my learning journey.
+EOF
+</code></pre>
+<p>Mark as resolved:</p>
+<pre><code class="language-bash">$ git add about.txt
+$ git commit -m &quot;Merge about updates and resolve conflict&quot;
+</code></pre>
+<p>Clean up:</p>
+<pre><code class="language-bash">$ git branch -d update-about-role
+$ git branch -d update-about-goal
+$ git push
+</code></pre>
+<h3 id="student-extension-challenge-10-minutes_3">Student Extension Challenge (10 minutes)</h3>
+<p>Create a conflict on <code>contact.txt</code> between <code>main</code> and a new branch. Resolve it by keeping a merged version with both email and GitHub info enhanced.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ git branch contact-update-1
+$ git switch contact-update-1
+$ echo &quot;Email: my.email@example.com (preferred)&quot; &gt; contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Update email format&quot;
+
+$ git switch main
+$ git branch contact-update-2
+$ git switch contact-update-2
+$ echo &quot;GitHub: github.com/YOURUSERNAME (check out my repos!)&quot; &gt; contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Enhance GitHub link&quot;
+
+$ git switch main
+$ git merge contact-update-1
+$ git merge contact-update-2
+# (conflict)
+
+# Resolve
+$ cat &gt; contact.txt &lt;&lt; 'EOF'
+================================
+  CONTACT
+================================
+
+Email: my.email@example.com (preferred)
+GitHub: github.com/YOURUSERNAME (check out my repos!)
+
+Let's connect!
+EOF
+
+$ git add contact.txt
+$ git commit -m &quot;Merge contact updates&quot;
+$ git branch -d contact-update-1
+$ git branch -d contact-update-2
+</code></pre>
+
+
+</details>
+
+<hr />
+<hr />
+<h2 id="session-5-robots-do-the-work-cicd-with-github-actions">Session 5: Robots Do the Work — CI/CD with GitHub Actions</h2>
+<h3 id="the-goal-today_4">The Goal Today</h3>
+<p>Add a GitHub Actions workflow that automatically checks our portfolio whenever someone pushes code. Lock down <code>main</code> with branch protection.</p>
+<h3 id="theory-automation-is-devops-15-minutes">Theory: Automation is DevOps (15 minutes)</h3>
+<h4 id="the-robot-chef">The Robot Chef</h4>
+<blockquote>
+<p><strong>Analogy:</strong> Imagine a restaurant where every time a chef adds a new dish to the menu, a robot automatically:<br />
+1. Tastes the dish<br />
+2. Checks the temperature<br />
+3. Photographs it for social media<br />
+4. Either approves it for the menu or throws it away</p>
+<p>GitHub Actions is that robot. Every time you push code, it runs tests automatically.</p>
+</blockquote>
+<h4 id="why-this-matters">Why This Matters</h4>
+<table>
+<thead>
+<tr>
+<th>Manual Process</th>
+<th>Automated Process</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Developer pushes code</td>
+<td>Developer pushes code</td>
+</tr>
+<tr>
+<td>Team lead emails: "Did you test?"</td>
+<td>Robot tests immediately</td>
+</tr>
+<tr>
+<td>Bug found in production</td>
+<td>Bug caught before merge</td>
+</tr>
+<tr>
+<td>Blame and stress</td>
+<td>Confidence and speed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="practical-build-ci-workflow-35-minutes">Practical Build: CI Workflow (35 minutes)</h3>
+<h4 id="part-1-the-workflow-file">Part 1: The Workflow File</h4>
+<p><strong>Environment: Terminal</strong> (on <code>main</code>)</p>
+<pre><code class="language-bash">$ cd ~/my-devops-portfolio
+$ git switch main
+$ mkdir -p .github/workflows
+</code></pre>
+<p>Create the workflow:</p>
+<pre><code class="language-bash">$ cat &gt; .github/workflows/portfolio-ci.yml &lt;&lt; 'EOF'
+name: Portfolio CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-portfolio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check required pages exist
+        run: |
+          for file in home.txt about.txt projects.txt contact.txt; do
+            if [ -f &quot;$file&quot; ]; then
+              echo &quot;✅ $file found&quot;
+            else
+              echo &quot;❌ $file MISSING&quot;
+              exit 1
+            fi
+          done
+
+      - name: Check for navigation keywords
+        run: |
+          if grep -q &quot;Navigation&quot; home.txt; then
+            echo &quot;✅ Navigation section found&quot;
+          else
+            echo &quot;❌ Navigation section missing&quot;
+            exit 1
+          fi
+
+      - name: Report success
+        run: echo &quot;Portfolio validation complete!&quot;
+EOF
+</code></pre>
+<p>Stage, commit, push:</p>
+<pre><code class="language-bash">$ git add .github/workflows/portfolio-ci.yml
+$ git commit -m &quot;Add CI workflow for portfolio validation&quot;
+$ git push
+</code></pre>
+<p><strong>Environment: Browser</strong><br />
+1. Go to the <strong>Actions</strong> tab on GitHub<br />
+2. Watch the workflow run<br />
+3. It should be green ✅</p>
+<h4 id="part-2-test-failure">Part 2: Test Failure</h4>
+<p>Create a branch that breaks the build:</p>
+<pre><code class="language-bash">$ git branch break-nav
+$ git switch break-nav
+$ cat &gt; home.txt &lt;&lt; 'EOF'
+================================
+  MY DEVOPS PORTFOLIO
+================================
+
+Navigation removed for testing.
+EOF
+$ git add home.txt
+$ git commit -m &quot;Remove navigation (this should fail CI)&quot;
+$ git push -u origin break-nav
+</code></pre>
+<p><strong>On GitHub:</strong><br />
+- Open the PR<br />
+- The workflow runs automatically<br />
+- It FAILS ❌ because "Navigation" keyword is missing<br />
+- Show students the failed step output<br />
+- Close PR without merging</p>
+<h4 id="part-3-branch-protection">Part 3: Branch Protection</h4>
+<ol>
+<li>GitHub repo → <strong>Settings</strong> → <strong>Branches</strong></li>
+<li>Add rule: <code>main</code></li>
+<li>Check:<br />
+   - <strong>Require pull request before merging</strong><br />
+   - <strong>Require status checks to pass</strong><br />
+   - Select <code>Portfolio CI</code></li>
+<li><strong>Create</strong></li>
+</ol>
+<p>Verify by trying direct push:</p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;Direct push test&quot; &gt;&gt; home.txt
+$ git add home.txt
+$ git commit -m &quot;Test direct push&quot;
+$ git push
+</code></pre>
+<p><strong>Expected:</strong> Error — branch is protected.</p>
+<p>Undo:</p>
+<pre><code class="language-bash">$ git reset --soft HEAD~1
+$ git restore --staged home.txt
+$ git checkout -- home.txt
+</code></pre>
+<h3 id="student-extension-challenge-10-minutes_4">Student Extension Challenge (10 minutes)</h3>
+<p>Add a check to the CI that verifies <code>skills.txt</code> exists. Push it and watch it run.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+Edit `.github/workflows/portfolio-ci.yml` and add inside the `run:` block of "Check required pages exist":
+
+
+<pre><code class="language-yaml">      - name: Check required pages exist
+        run: |
+          for file in home.txt about.txt projects.txt contact.txt skills.txt; do
+            if [ -f &quot;$file&quot; ]; then
+              echo &quot;✅ $file found&quot;
+            else
+              echo &quot;❌ $file MISSING&quot;
+              exit 1
+            fi
+          done
+</code></pre>
+
+
+Or via terminal (be careful with indentation):
+
+<pre><code class="language-bash">$ git switch main
+# edit file manually in a text editor
+$ git add .github/workflows/portfolio-ci.yml
+$ git commit -m &quot;Extend CI to check skills page&quot;
+$ git push
+</code></pre>
+
+
+Watch it in the Actions tab.
+
+</details>
+
+<hr />
+<hr />
+<h2 id="final-deliverable-checklist">Final Deliverable Checklist</h2>
+<p>By the end of Session 5, every student should have:</p>
+<ul>
+<li>[ ] A GitHub repo at <code>github.com/YOURUSERNAME/my-devops-portfolio</code></li>
+<li>[ ] At least 5 text files (pages)</li>
+<li>[ ] A commit history with meaningful messages</li>
+<li>[ ] At least 2 merged pull requests</li>
+<li>[ ] A passing GitHub Actions workflow</li>
+<li>[ ] Branch protection enabled on <code>main</code></li>
+</ul>
+<p>This repo is their proof of DevOps skills for a job interview!</p>
+<hr />
+<hr />
+<h2 id="appendix-quick-reference">Appendix: Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>Start version control</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>See what's changed</td>
+</tr>
+<tr>
+<td><code>git add &lt;file&gt;</code></td>
+<td>Stage changes</td>
+</tr>
+<tr>
+<td><code>git commit -m "msg"</code></td>
+<td>Save a snapshot</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>View history</td>
+</tr>
+<tr>
+<td><code>git branch &lt;name&gt;</code></td>
+<td>Create branch</td>
+</tr>
+<tr>
+<td><code>git switch &lt;name&gt;</code></td>
+<td>Change branch</td>
+</tr>
+<tr>
+<td><code>git merge &lt;name&gt;</code></td>
+<td>Combine branches</td>
+</tr>
+<tr>
+<td><code>git push -u origin &lt;branch&gt;</code></td>
+<td>Upload branch</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Download latest</td>
+</tr>
+<tr>
+<td><code>git revert &lt;commit&gt;</code></td>
+<td>Undo safely</td>
+</tr>
+<tr>
+<td><code>git stash</code> / <code>git stash pop</code></td>
+<td>Temporary save</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of Approach 2: Project-Driven Build-Along</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About This Package — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">About This Package</h1>
+    <p class="page-subtitle">Navigation hub, quick start, and FAQ</p>
+    <h1 id="git-github-for-devops-complete-teaching-package">Git &amp; GitHub for DevOps — Complete Teaching Package</h1>
+<blockquote>
+<p><strong>A beginner-friendly, 5-year-old-understandable, production-ready curriculum and reference for teaching Git &amp; GitHub to DevOps students.</strong></p>
+</blockquote>
+<hr />
+<h2 id="what-is-this">What Is This?</h2>
+<p>This is a <strong>complete teaching package</strong> designed for DevOps instructors. It includes:</p>
+<ul>
+<li><strong>3 Complete Curricula</strong> — Choose the teaching style that fits your class</li>
+<li><strong>1 DevOps Reference Bible</strong> — A comprehensive manual for students to keep</li>
+<li><strong>Step-by-step commands</strong> with expected outputs</li>
+<li><strong>Beginner-friendly analogies</strong> that scale to professional terminology</li>
+<li><strong>Real DevOps context</strong> — Not just "how Git works" but "how DevOps teams actually use Git"</li>
+</ul>
+<hr />
+<h2 id="directory-structure">📂 Directory Structure</h2>
+<pre><code>/home/greg/learnkimchi/
+│
+├── README.md                          ← You are here (navigation &amp; quick start)
+├── git-github-devops-bible.md         ← The Reference Manual
+│
+├── approach-1-linear/
+│   └── curriculum.md                  ← Theory first, then practice
+│
+├── approach-2-project-driven/
+│   └── curriculum.md                  ← One continuous project, start to finish
+│
+└── approach-3-story-mode/
+    └── curriculum.md                  ← DevOps team onboarding story (recommended)
+</code></pre>
+<hr />
+<h2 id="quick-start-how-to-use-this-package">🎯 Quick Start — How to Use This Package</h2>
+<h3 id="for-instructors">For Instructors</h3>
+<p><strong>Step 1 — Pick your approach based on your students:</strong></p>
+<table>
+<thead>
+<tr>
+<th>If your students are...</th>
+<th>Use</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Complete beginners who need structure</td>
+<td><strong>Approach 1</strong></td>
+<td>Traditional lecture → lab → exercise format</td>
+</tr>
+<tr>
+<td>Hands-on learners who want a real result</td>
+<td><strong>Approach 2</strong></td>
+<td>Students build one portfolio website across all sessions</td>
+</tr>
+<tr>
+<td>Easily bored, need engagement/narrative</td>
+<td><strong>Approach 3</strong> <strong>(recommended)</strong></td>
+<td>Students role-play joining a DevOps team; each session is a "day at work"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 2 — Assign environment setup BEFORE class:</strong><br />
+- Students need Git, GitHub account, SSH keys, and a text editor<br />
+- This takes 20-30 minutes; don't use class time unless necessary<br />
+- See: <a href="#environment-setup">Environment Setup</a> below</p>
+<p><strong>Step 3 — Deliver the 5 sessions:</strong><br />
+- Each session = exactly 60 minutes<br />
+- Each session has: Slides → Lab → Exercise → Review<br />
+- All commands include the <strong>expected output</strong> — students know if they're on track</p>
+<p><strong>Step 4 — Hand out the Bible:</strong><br />
+- <code>git-github-devops-bible.md</code> is the reference students keep forever<br />
+- It's organized like a textbook: look up concepts, commands, or errors by topic</p>
+<h3 id="for-self-learners-students">For Self-Learners / Students</h3>
+<p><strong>Step 1 — Set up your environment (see below).</strong></p>
+<p><strong>Step 2 — Pick one approach and follow it session by session.</strong></p>
+<p><strong>Step 3 — Keep <code>git-github-devops-bible.md</code> open as your reference.</strong><br />
+- When you forget a command, look at the cheat sheet (Part 12)<br />
+- When something breaks, check the troubleshooting guide (Part 11)</p>
+<p><strong>Step 4 — Build your portfolio.</strong><br />
+- By the end, you'll have a GitHub repo with CI/CD — show it in job interviews</p>
+<hr />
+<h2 id="environment-setup-do-this-first">⚙️ Environment Setup (Do This First)</h2>
+<blockquote>
+<p><strong>Analogy:</strong> Before you can drive, you need a license and keys. This section gets you licensed.</p>
+</blockquote>
+<h3 id="step-1-install-git">Step 1: Install Git</h3>
+<h4 id="if-you-have-windows">If you have Windows</h4>
+<ol>
+<li>Go to <code>https://git-scm.com/download/win</code></li>
+<li>Download and run the installer</li>
+<li>Click <strong>Next</strong> repeatedly (defaults are fine)</li>
+<li>Open <strong>Git Bash</strong> (search Start menu)</li>
+</ol>
+<p>Check:</p>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected:</strong> <code>git version 2.43.0...</code> (or similar)</p>
+<h4 id="if-you-have-mac">If you have Mac</h4>
+<ol>
+<li>Open <strong>Terminal</strong> (Cmd+Space, type <code>terminal</code>)</li>
+<li>Run:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected:</strong> <code>git version 2.39...</code> (or similar)</p>
+<p>If it says "not installed," click <strong>Install</strong> when macOS prompts you.</p>
+<h4 id="if-you-have-linux">If you have Linux</h4>
+<pre><code class="language-bash">$ sudo apt update &amp;&amp; sudo apt install git -y   # Ubuntu/Debian
+# OR
+$ sudo dnf install git -y                      # Fedora/RHEL
+
+$ git --version
+</code></pre>
+<p><strong>Expected:</strong> <code>git version 2.34...</code> (or similar)</p>
+<h3 id="step-2-tell-git-who-you-are">Step 2: Tell Git Who You Are</h3>
+<pre><code class="language-bash">$ git config --global user.name &quot;Your Full Name&quot;
+$ git config --global user.email &quot;your.email@example.com&quot;
+</code></pre>
+<blockquote>
+<p><strong>Important:</strong> Use the SAME email for GitHub in the next step.</p>
+</blockquote>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git config --global user.name
+$ git config --global user.email
+</code></pre>
+<h3 id="step-3-create-a-github-account">Step 3: Create a GitHub Account</h3>
+<ol>
+<li>Go to <code>https://github.com</code></li>
+<li>Click <strong>Sign up</strong></li>
+<li>Use the <strong>same email</strong> as Step 2</li>
+<li>Complete verification</li>
+</ol>
+<h3 id="step-4-set-up-ssh-keys-the-secret-handshake">Step 4: Set Up SSH Keys (The Secret Handshake)</h3>
+<p>This lets your computer talk to GitHub without a password.</p>
+<pre><code class="language-bash">$ ssh-keygen -t ed25519 -C &quot;your.email@example.com&quot;
+</code></pre>
+<p>Press <strong>Enter</strong> three times (accept defaults, no password).</p>
+<p>Copy your key:<br />
+- <strong>Mac:</strong> <code>pbcopy &lt; ~/.ssh/id_ed25519.pub</code><br />
+- <strong>Windows (Git Bash):</strong> <code>cat ~/.ssh/id_ed25519.pub | clip</code><br />
+- <strong>Linux:</strong> <code>cat ~/.ssh/id_ed25519.pub</code> (select and copy)</p>
+<p>Add to GitHub:<br />
+1. <code>https://github.com</code> → <strong>Settings</strong><br />
+2. <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong><br />
+3. Title: <code>My laptop</code><br />
+4. Paste the key<br />
+5. Click <strong>Add SSH key</strong></p>
+<p>Test it:</p>
+<pre><code class="language-bash">$ ssh -T git@github.com
+</code></pre>
+<p>Type <code>yes</code> when asked.</p>
+<p><strong>Expected:</strong> <code>Hi yourusername! You've successfully authenticated...</code></p>
+<h3 id="step-5-install-a-text-editor">Step 5: Install a Text Editor</h3>
+<ul>
+<li><strong>Recommended:</strong> VS Code (<code>https://code.visualstudio.com</code>)</li>
+<li><strong>Alternatives:</strong> Notepad++ (Windows), TextEdit (Mac), Nano (Linux)</li>
+</ul>
+<hr />
+<h2 id="the-three-approaches-explained">📖 The Three Approaches Explained</h2>
+<h3 id="approach-1-linear-lecture-lab">Approach 1: Linear Lecture + Lab</h3>
+<p><strong>Style:</strong> Theory first, then practice<br />
+<strong>Best for:</strong> Students who need structure and clear boundaries</p>
+<p>Each session:<br />
+1. <strong>Lecture</strong> (20 min) — Slides and analogies<br />
+2. <strong>Guided Lab</strong> (25 min) — Instructor demos, students follow<br />
+3. <strong>Independent Exercise</strong> (10 min) — Students work alone<br />
+4. <strong>Review</strong> (5 min) — Q&amp;A</p>
+<p><strong>Topics per session:</strong><br />
+- Session 1: Git basics (init, add, commit, status, log)<br />
+- Session 2: Branching and merging<br />
+- Session 3: GitHub, push, pull, Pull Requests<br />
+- Session 4: Undoing, reverting, conflict resolution<br />
+- Session 5: CI/CD with GitHub Actions</p>
+<h3 id="approach-2-project-driven-build-along">Approach 2: Project-Driven (Build-Along)</h3>
+<p><strong>Style:</strong> One continuous project<br />
+<strong>Best for:</strong> Students who learn by building real things</p>
+<p>Students build <code>my-devops-portfolio</code> across all 5 sessions:<br />
+- Session 1: Create repo, build Home page<br />
+- Session 2: Add About + Projects pages using branches<br />
+- Session 3: Push to GitHub, add Contact page via PR<br />
+- Session 4: Fix a bug, handle a merge conflict<br />
+- Session 5: Add CI/CD pipeline that validates the site</p>
+<p><strong>By the end, every student has a portfolio repo with CI/CD.</strong></p>
+<h3 id="approach-3-story-mode-recommended">Approach 3: Story-Mode (Recommended)</h3>
+<p><strong>Style:</strong> DevOps team onboarding narrative<br />
+<strong>Best for:</strong> Students who need engagement and context to remember</p>
+<p>Students role-play joining "TechCorp" as a new DevOps engineer:<br />
+- Session 1: "Day 1 at the Company" — Set up repo, first commits<br />
+- Session 2: "Fixing Your First Bug" — Branching to fix a typo<br />
+- Session 3: "Submitting Your Work" — Push to GitHub, open first PR<br />
+- Session 4: "The Deploy Broke!" — Revert a bad commit, resolve conflicts<br />
+- Session 5: "Automating Everything" — Build a CI robot with GitHub Actions</p>
+<p><strong>Each session is a chapter in a story.</strong> Theory is introduced because the story needs it.</p>
+<hr />
+<h2 id="the-devops-bible">📚 The DevOps Bible</h2>
+<p><code>git-github-devops-bible.md</code> is your <strong>forever reference</strong>. It is organized like a textbook:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Topic</th>
+<th>When to Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Part 0</td>
+<td>Environment Setup</td>
+<td>Before you start</td>
+</tr>
+<tr>
+<td>Part 1</td>
+<td>Core Concepts</td>
+<td>If you're new to Git</td>
+</tr>
+<tr>
+<td>Part 2</td>
+<td>Essential Daily Workflow</td>
+<td>Every day — the commands you actually use</td>
+</tr>
+<tr>
+<td>Part 3</td>
+<td>Branching &amp; Merging</td>
+<td>When working with branches</td>
+</tr>
+<tr>
+<td>Part 4</td>
+<td>GitHub Workflow</td>
+<td>When pushing code or opening PRs</td>
+</tr>
+<tr>
+<td>Part 5</td>
+<td>History &amp; Undoing</td>
+<td>When you make a mistake</td>
+</tr>
+<tr>
+<td>Part 6</td>
+<td>Collaboration</td>
+<td>When working with a team</td>
+</tr>
+<tr>
+<td>Part 7</td>
+<td>DevOps Branching Patterns</td>
+<td>When designing team workflows</td>
+</tr>
+<tr>
+<td>Part 8</td>
+<td>CI/CD with GitHub Actions</td>
+<td>When automating deploys</td>
+</tr>
+<tr>
+<td>Part 9</td>
+<td>Release Management</td>
+<td>When shipping versions</td>
+</tr>
+<tr>
+<td>Part 10</td>
+<td>Advanced Topics</td>
+<td>When you're comfortable and want more</td>
+</tr>
+<tr>
+<td>Part 11</td>
+<td>Troubleshooting Guide</td>
+<td>WHEN SOMETHING BREAKS</td>
+</tr>
+<tr>
+<td>Part 12</td>
+<td>Command Cheat Sheet</td>
+<td>When you forgot the exact flag</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="common-workflows">🔧 Common Workflows</h2>
+<h3 id="the-solo-dev-workflow">The Solo Dev Workflow</h3>
+<pre><code class="language-bash"># Start of day
+$ cd my-project
+$ git switch main
+$ git pull
+
+# Create feature branch
+$ git switch -c feature/my-change
+
+# Do work... edit files...
+
+# Commit
+$ git add .
+$ git commit -m &quot;Clear description of what changed&quot;
+
+# Push
+$ git push -u origin feature/my-change
+
+# Open Pull Request on GitHub, merge, delete branch
+
+# Back to main
+$ git switch main
+$ git pull
+$ git branch -d feature/my-change
+</code></pre>
+<h3 id="the-oh-no-production-is-down-workflow">The "Oh No, Production Is Down" Workflow</h3>
+<pre><code class="language-bash"># Find the bad commit
+$ git log --oneline
+
+# Revert it
+$ git revert BAD_COMMIT_ID --no-edit
+
+# Push the fix
+$ git push
+
+# Check that it's fixed
+</code></pre>
+<h3 id="the-i-messed-up-but-havent-pushed-yet-workflow">The "I Messed Up But Haven't Pushed Yet" Workflow</h3>
+<pre><code class="language-bash"># Wrong files staged
+$ git restore --staged wrong-file.txt
+
+# Bad commit message (last commit only)
+$ git commit --amend -m &quot;Better message&quot;
+
+# Committed to wrong branch
+$ git switch -c correct-branch  # Brings the commit with you
+$ git switch wrong-branch
+$ git reset --soft HEAD~1
+</code></pre>
+<h3 id="the-my-team-has-changed-main-workflow">The "My Team Has Changed Main" Workflow</h3>
+<pre><code class="language-bash"># Download their changes
+$ git switch main
+$ git pull
+
+# Update your feature branch
+$ git switch feature/my-change
+$ git rebase main
+
+# Fix any conflicts, then push
+$ git push --force-with-lease
+</code></pre>
+<hr />
+<h2 id="faq">❓ FAQ</h2>
+<p><strong>Q: Do I need to know programming?</strong><br />
+A: No. This course assumes zero coding knowledge.</p>
+<p><strong>Q: Can I skip the environment setup?</strong><br />
+A: No. Everything else depends on it.</p>
+<p><strong>Q: Which approach is best?</strong><br />
+A: Approach 3 (Story-Mode) is the most engaging for beginners. Approach 1 is best for very structured learners. Approach 2 is best for those who want a portfolio piece at the end.</p>
+<p><strong>Q: How long does each session take?</strong><br />
+A: Exactly 60 minutes if you follow the pacing.</p>
+<p><strong>Q: Can I teach this in one day instead of five?</strong><br />
+A: You can try, but beginners need time to absorb. If you must compress, skip the extended exercises and do them as demos.</p>
+<p><strong>Q: Do students need a paid GitHub account?</strong><br />
+A: No. Everything works on free GitHub accounts.</p>
+<p><strong>Q: What if a student uses Windows and another uses Mac?</strong><br />
+A: The commands are the same. Only the terminal application differs (Git Bash vs. Terminal).</p>
+<p><strong>Q: What if a student gets stuck?</strong><br />
+A: Check Part 11 of the Bible (Troubleshooting Guide). Every common error is listed with a fix.</p>
+<p><strong>Q: Can I add my own company examples?</strong><br />
+A: Absolutely. Replace "TechCorp" in Approach 3 with your company name.</p>
+<p><strong>Q: Where do the analogies come from?</strong><br />
+A: Each analogy is designed to be understood by a 5-year-old, then mapped to the real DevOps concept.</p>
+<hr />
+<h2 id="when-something-breaks">🚨 When Something Breaks</h2>
+<p>Don't panic. Go to <strong><code>git-github-devops-bible.md</code> → Part 11: Troubleshooting Guide.</strong></p>
+<p>Common issues covered:<br />
+- "fatal: not a git repository"<br />
+- "Permission denied"<br />
+- Merge conflicts<br />
+- "Your branch has diverged"<br />
+- Accidentally committed secrets<br />
+- Failed GitHub Actions workflows</p>
+<hr />
+<h2 id="capstone-checklist">📋 Capstone Checklist</h2>
+<p>By the end of all 5 sessions, every student should be able to demonstrate:</p>
+<ul>
+<li>[ ] Created a Git repository from scratch</li>
+<li>[ ] Made commits with meaningful messages</li>
+<li>[ ] Created and merged branches</li>
+<li>[ ] Connected a local repo to GitHub</li>
+<li>[ ] Pushed and pulled code</li>
+<li>[ ] Opened and merged a Pull Request</li>
+<li>[ ] Reverted a bad commit</li>
+<li>[ ] Resolved a merge conflict</li>
+<li>[ ] Written a GitHub Actions workflow</li>
+<li>[ ] Set up branch protection</li>
+<li>[ ] Explained what CI/CD means using an analogy</li>
+</ul>
+<hr />
+<h2 id="license-usage">📄 License &amp; Usage</h2>
+<p>You are free to use, modify, and distribute these materials for teaching purposes. Attribution appreciated but not required.</p>
+<hr />
+<h2 id="need-help">🙋 Need Help?</h2>
+<p>If you're stuck:<br />
+1. Check the <strong>Bible</strong> → Part 11 (Troubleshooting)<br />
+2. Check the <strong>Bible</strong> → Part 12 (Cheat Sheet)<br />
+3. Run <code>git status</code> — it usually tells you what to do next</p>
+<hr />
+<p><em>Happy teaching. May all your commits be clean and all your pipelines green.</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>

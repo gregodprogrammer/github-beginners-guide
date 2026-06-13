@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approach 3: Story-Mode — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --text-muted: #8c959f;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --navy-light: #161b22;
+    --border: rgba(31,35,40,0.08);
+    --radius: 12px;
+    --font-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Top nav */
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.topbar-home { background: var(--accent) !important; color: white !important; }
+.topbar-home:hover { background: var(--accent-soft) !important; }
+
+/* Layout */
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title {
+    font-family: var(--font-head); font-size: 2.2rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle { color: var(--text-sec); margin-bottom: 32px; font-size: 1rem; }
+
+/* Typography */
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; }
+h1 { font-size: 1.8rem; margin: 40px 0 16px; color: var(--navy); }
+h2 { font-size: 1.4rem; margin: 32px 0 12px; color: var(--navy-light); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; margin: 24px 0 10px; color: var(--text); }
+h4 { font-size: 1rem; margin: 18px 0 8px; font-style: italic; color: var(--text-sec); }
+p { margin-bottom: 14px; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    background: #f4f4f5; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em; color: #d73a49;
+}
+pre {
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); padding: 16px;
+    border-radius: var(--radius); overflow-x: auto;
+    font-size: 0.85rem; line-height: 1.5; margin: 16px 0;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--navy); color: white; font-weight: 600; }
+tr:nth-child(even) { background: var(--bg-warm); }
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent); margin: 16px 0;
+    padding: 12px 18px; background: #f0fdf3; font-style: italic;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Details / Summary */
+details { background: #f0f5ff; border: 1px solid #dbe4f0; border-radius: var(--radius); margin: 16px 0; overflow: hidden; }
+summary {
+    padding: 12px 16px; font-weight: 600; cursor: pointer;
+    color: var(--navy-light); background: #e6edfa;
+    list-style: none;
+}
+details > *:not(summary) { padding: 16px; }
+details pre { margin: 0; border-left-color: var(--accent-purple); }
+
+/* Lists */
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* Horizontal rule */
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Image wrapper */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* Footer inside page */
+.page-footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page { padding: 24px 16px 60px; }
+    .page-title { font-size: 1.6rem; }
+    .topbar-nav { display: none; }
+    pre { font-size: 0.78rem; padding: 12px; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="./" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="./" class="topbar-home">🏠 Home</a>
+<a href="./bible/" class="">📖 Bible</a>
+<a href="./approach-1-linear/" class="">🎓 Linear</a>
+<a href="./approach-2-project-driven/" class="">🚀 Project</a>
+<a href="./approach-3-story-mode/" class="">📖 Story</a>
+<a href="./handout/" class="">📝 Exercises</a>
+<a href="./quizzes/" class="">❓ Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1 class="page-title">Approach 3: Story-Mode</h1>
+    
+    <h1 id="git-github-for-devops-complete-curriculum">Git &amp; GitHub for DevOps Complete Curriculum</h1>
+<h2 id="approach-3-story-mode-devops-team-onboarding">Approach 3: Story-Mode ("DevOps Team Onboarding")</h2>
+<p><em>Beginner-friendly | 5 Sessions | 1 Hour Each | Theory + Practical Interwoven</em></p>
+<hr />
+<h2 id="instructor-guide">Instructor Guide</h2>
+<h3 id="philosophy">Philosophy</h3>
+<p>This curriculum treats learning Git like joining a real DevOps team. Students are not memorizing abstract commands — they are living a story. Every session is a "day at work." This creates emotional context, which is how humans remember things best.</p>
+<p><strong>Magic Rule:</strong> If a 5-year-old can't understand the analogy, don't use it.</p>
+<p><strong>Pacing:</strong><br />
+- Each session is exactly 1 hour<br />
+- 15 min: Story setup + theory (slides)<br />
+- 30 min: Hands-on lab<br />
+- 10 min: Practice exercise (student does it alone)<br />
+- 5 min: Review + Q&amp;A</p>
+<p><strong>Student prerequisites:</strong> None. Absolutely none. They don't need to know what a terminal is.</p>
+<p><strong>Required environment:</strong><br />
+- Computer with internet<br />
+- Terminal access (Linux/Mac native, Git Bash on Windows)<br />
+- Git installed (see Environment Setup)<br />
+- GitHub account (free)<br />
+- Text editor (VS Code recommended, but Notepad works for Session 1)</p>
+<h3 id="before-you-start">Before You Start</h3>
+<p>Make students do the "Environment Setup" section on their own BEFORE the first session. It takes 20-30 minutes. Do NOT use class time for this unless they are on locked-down machines.</p>
+<hr />
+<h2 id="environment-setup-guide">Environment Setup Guide</h2>
+<p><em>Do this before Day 1. Every command below includes the environment where it runs.</em></p>
+<h3 id="check-your-environment">Check Your Environment</h3>
+<p>First, figure out what computer you have. It's like knowing whether you drive a car, truck, or bicycle.</p>
+<table>
+<thead>
+<tr>
+<th>If you see...</th>
+<th>You have</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A Windows logo or <code>C:\</code> drive</td>
+<td>Windows</td>
+</tr>
+<tr>
+<td>A Finder or <code>~/</code> path</td>
+<td>Mac</td>
+</tr>
+<tr>
+<td>A Penguin or <code>apt-get</code></td>
+<td>Linux</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-1-install-git">Step 1: Install Git</h3>
+<h4 id="environment-windows">Environment: Windows</h4>
+<ol>
+<li>Go to <code>https://git-scm.com/download/win</code></li>
+<li>Download the installer</li>
+<li>Run it. When it asks questions, just click <strong>Next</strong> on everything (defaults are fine for beginners)</li>
+<li>Open <strong>Git Bash</strong> (search for it in Start menu)</li>
+<li>Verify: type the command below and press Enter</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.43.0.windows.1
+</code></pre>
+<p><em>(Your number might be different — that's fine!)</em></p>
+<h4 id="environment-mac">Environment: Mac</h4>
+<ol>
+<li>Open <strong>Terminal</strong> (press Cmd+Space, type <code>terminal</code>, press Enter)</li>
+<li>Type this command:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.39.3
+</code></pre>
+<p>If it says "command not found" or asks to install "Developer Tools", click <strong>Install</strong> and wait 5 minutes. Then try again.</p>
+<h4 id="environment-linux-ubuntudebian">Environment: Linux (Ubuntu/Debian)</h4>
+<ol>
+<li>Open your terminal (Ctrl+Alt+T usually)</li>
+<li>Type:</li>
+</ol>
+<pre><code class="language-bash">$ sudo apt update &amp;&amp; sudo apt install git -y
+</code></pre>
+<ol start="3">
+<li>Verify:</li>
+</ol>
+<pre><code class="language-bash">$ git --version
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>git version 2.34.1
+</code></pre>
+<h4 id="environment-linux-fedoracentosrhel">Environment: Linux (Fedora/CentOS/RHEL)</h4>
+<pre><code class="language-bash">$ sudo dnf install git -y
+$ git --version
+</code></pre>
+<h3 id="step-2-configure-git-tell-git-who-you-are">Step 2: Configure Git (Tell Git Who You Are)</h3>
+<blockquote>
+<p><strong>Analogy:</strong> Git is like a diary. It needs to know your name so it can write "By [Your Name]" on every page.</p>
+</blockquote>
+<p>Run these commands in your terminal (Git Bash on Windows, Terminal on Mac/Linux).</p>
+<p><strong>Environment: Any terminal (Git Bash / Terminal)</strong></p>
+<pre><code class="language-bash">$ git config --global user.name &quot;Your Full Name&quot;
+$ git config --global user.email &quot;youremail@example.com&quot;
+</code></pre>
+<p><strong>Use the SAME email you will use for GitHub.</strong></p>
+<p>Verify it worked:</p>
+<pre><code class="language-bash">$ git config --global user.name
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Your Full Name
+</code></pre>
+<pre><code class="language-bash">$ git config --global user.email
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>youremail@example.com
+</code></pre>
+<h3 id="step-3-create-a-github-account">Step 3: Create a GitHub Account</h3>
+<blockquote>
+<p><strong>Analogy:</strong> GitHub is like a library where you store your diary so others can read it.</p>
+</blockquote>
+<ol>
+<li>Go to <code>https://github.com</code> in your browser</li>
+<li>Click <strong>Sign up</strong></li>
+<li>Use the SAME email you used in Step 2</li>
+<li>Create a password and username</li>
+<li>Click <strong>Create account</strong></li>
+<li>Check your email for a verification code and enter it</li>
+</ol>
+<p><strong>Done!</strong> You now have a library card.</p>
+<h3 id="step-4-set-up-ssh-keys-the-secret-handshake">Step 4: Set Up SSH Keys (The Secret Handshake)</h3>
+<blockquote>
+<p><strong>Analogy:</strong> SSH is like a secret handshake. It proves to GitHub that your computer really belongs to you, so you don't need to type your password every time.</p>
+</blockquote>
+<p><strong>Environment: Any terminal (Git Bash / Terminal)</strong></p>
+<pre><code class="language-bash">$ ssh-keygen -t ed25519 -C &quot;youremail@example.com&quot;
+</code></pre>
+<p>You will see:</p>
+<pre><code>Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/you/.ssh/id_ed25519):
+</code></pre>
+<p>Just press <strong>Enter</strong> (accept the default).</p>
+<p>Next:</p>
+<pre><code>Enter passphrase (empty for no passphrase):
+</code></pre>
+<p>Press <strong>Enter</strong> again (twice) to skip a password. This is fine for learning.</p>
+<p><strong>Expected final output:</strong></p>
+<pre><code>Your identification has been saved in /home/you/.ssh/id_ed25519
+Your public key has been saved in /home/you/.ssh/id_ed25519.pub
+</code></pre>
+<p>Now copy your public key to the clipboard:</p>
+<p><strong>Mac:</strong></p>
+<pre><code class="language-bash">$ pbcopy &lt; ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><strong>Windows (Git Bash):</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub | clip
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-bash">$ cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><em>Select the output and copy it manually.</em></p>
+<p>Now add it to GitHub:<br />
+1. Go to <code>https://github.com</code> in your browser<br />
+2. Click your profile picture (top right) → <strong>Settings</strong><br />
+3. In the left sidebar, click <strong>SSH and GPG keys</strong><br />
+4. Click <strong>New SSH key</strong><br />
+5. Title: type "My Laptop"<br />
+6. Key: paste what you copied (it starts with <code>ssh-ed25519</code>)<br />
+7. Click <strong>Add SSH key</strong></p>
+<p>Test it:</p>
+<pre><code class="language-bash">$ ssh -T git@github.com
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>The authenticity of host 'github.com (...)' can't be established...
+Are you sure you want to continue connecting?  (yes/no/[fingerprint])?
+</code></pre>
+<p>Type <code>yes</code> and press Enter.</p>
+<p><strong>Final expected output:</strong></p>
+<pre><code>Hi yourusername! You've successfully authenticated, but GitHub does not provide shell access.
+</code></pre>
+<p>🎉 <strong>Environment setup complete!</strong></p>
+<h3 id="step-5-install-a-text-editor">Step 5: Install a Text Editor</h3>
+<p><strong>Recommended:</strong> VS Code (<code>https://code.visualstudio.com</code>)<br />
+- Install it from the website<br />
+- For beginners, it's friendly and free</p>
+<p><strong>Alternative:</strong> You can use Notepad (Windows), TextEdit (Mac), or Nano/Gedit (Linux) for this course.</p>
+<hr />
+<hr />
+<h2 id="session-1-day-1-at-the-company">Session 1: "Day 1 at the Company"</h2>
+<p><em>Learning the Tools + Your First Repository</em></p>
+<h3 id="learning-objectives">Learning Objectives</h3>
+<p>By the end of this session, students will:<br />
+- Understand what version control is, using a simple analogy<br />
+- Create their first Git repository<br />
+- Make their first commit<br />
+- Read Git status like a dashboard</p>
+<h3 id="slide-outline-15-minutes">Slide Outline (15 minutes)</h3>
+<p><strong>Slide 1:</strong> Title — "Welcome to TechCorp! You're the new DevOps engineer."</p>
+<p><strong>Slide 2:</strong> The Problem — "Have you ever saved a file as <code>report_final.doc</code>, then <code>report_final2.doc</code>, then <code>report_final_ACTUAL.doc</code>?"</p>
+<p><strong>Slide 3:</strong> The Analogy — "Git is like a time machine for your files. Every time you save a version, Git can take you back to that exact moment."</p>
+<p><strong>Slide 4:</strong> DevOps Context — "In a company, 10 people edit the same files. Without Git, they'd overwrite each other. With Git, everyone has their own copy and Git merges the changes."</p>
+<p><strong>Slide 5:</strong> Key Terms (with icons)<br />
+- <strong>Repository (Repo):</strong> A project folder that Git watches<br />
+- <strong>Commit:</strong> A snapshot of your files at one moment in time<br />
+- <strong>Working Directory:</strong> Your normal files (like a messy desk)<br />
+- <strong>Staging Area:</strong> A box where you put files before taking a photo of them<br />
+- <strong>History:</strong> All the snapshots/commits you've ever made</p>
+<p><strong>Slide 6:</strong> Today's Mission — "Create your first repo and save your first snapshot."</p>
+<h3 id="theory-script-read-or-present">Theory Script (Read or Present)</h3>
+<blockquote>
+<p>"Imagine you're drawing a picture. You draw a sun, then a house, then a tree. Now your little sister draws a monster on it. You cry because your beautiful picture is ruined!</p>
+<p>What if you had a magic camera? Every time you finish something good, you take a photo. If your sister ruins it, you just say 'take me back to photo #2!' and POOF — your picture is safe again.</p>
+<p><strong>Git is that magic camera.</strong> Every photo is called a <strong>commit</strong>. The folder where you keep all your drawings AND the magic camera is called a <strong>repository</strong> (or repo for short).</p>
+<p>Today, you're joining a pretend company called TechCorp. Your boss says: 'Please set up our project folder.' You will create a repository for a simple website."</p>
+</blockquote>
+<h3 id="practical-lab-create-your-first-repo-30-minutes">Practical Lab — "Create Your First Repo" (30 minutes)</h3>
+<p><strong>Story:</strong> "TechCorp's website is just a text file right now. Your job is to put it under version control so your team can track changes."</p>
+<h4 id="step-1-create-a-folder">Step 1: Create a Folder</h4>
+<p><strong>Environment: Terminal (Git Bash / Terminal)</strong></p>
+<pre><code class="language-bash">$ cd ~
+$ mkdir techcorp-website
+$ cd techcorp-website
+</code></pre>
+<p><strong>Expected Output:</strong><br />
+<em>(No output for <code>mkdir</code> and <code>cd</code> — that's normal!)</em></p>
+<p><strong>Verify where you are:</strong></p>
+<pre><code class="language-bash">$ pwd
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>/home/you/techcorp-website
+</code></pre>
+<p><em>(Mac/Windows path will look different, but should end with <code>techcorp-website</code>)</em></p>
+<h4 id="step-2-check-git-status">Step 2: Check Git Status</h4>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>fatal: not a git repository (or any of the parent directories): .git
+</code></pre>
+<p><strong>Explain:</strong> "Git is not watching this folder yet. It's like a security guard who hasn't been hired for this building."</p>
+<h4 id="step-3-initialize-the-repository-hire-the-security-guard">Step 3: Initialize the Repository (Hire the Security Guard)</h4>
+<pre><code class="language-bash">$ git init
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Initialized empty Git repository in /home/you/techcorp-website/.git/
+</code></pre>
+<p><strong>Explain:</strong> "The <code>.git</code> folder is Git's office. It stores every photo/commit. Never delete it!"</p>
+<p>Now check status again:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+No commits yet
+nothing to commit (create/copy files and use &quot;git add&quot; to track)
+</code></pre>
+<h4 id="step-4-create-a-file">Step 4: Create a File</h4>
+<p><strong>Environment: Terminal (or use a text editor if you prefer)</strong></p>
+<pre><code class="language-bash">$ echo &quot;Welcome to TechCorp!&quot; &gt; index.txt
+</code></pre>
+<p><strong>Explain:</strong> "The <code>echo</code> command writes text into a file. The <code>&gt;</code> symbol means 'put this into that file.'"</p>
+<p>Check what's inside:</p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Welcome to TechCorp!
+</code></pre>
+<h4 id="step-5-check-git-status-again">Step 5: Check Git Status Again</h4>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+No commits yet
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+    index.txt
+</code></pre>
+<p><strong>Explain:</strong> "Git sees the file! But it says 'untracked.' That means Git knows the file exists but hasn't taken a photo of it yet. Imagine the security guard saying 'I see a painting on the floor, but I haven't recorded it in my logbook.'"</p>
+<h4 id="step-6-add-the-file-to-the-staging-area">Step 6: Add the File to the Staging Area</h4>
+<blockquote>
+<p><strong>Analogy:</strong> The staging area is like a box where you put things before you take a photo. You might put a toy in the box, then decide you don't want it in the photo, so you take it out. That's staging.</p>
+</blockquote>
+<pre><code class="language-bash">$ git add index.txt
+</code></pre>
+<p><strong>Expected Output:</strong><br />
+<em>(No output — silence means success in Git!)</em></p>
+<p>Check status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+No commits yet
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+    new file:   index.txt
+</code></pre>
+<p><strong>Explain:</strong> "Git now says 'new file: index.txt' under 'Changes to be committed.' That means the file is IN the staging box, ready for the photo."</p>
+<h4 id="step-7-take-the-photo-make-your-first-commit">Step 7: Take the Photo (Make Your First Commit)</h4>
+<pre><code class="language-bash">$ git commit -m &quot;Add homepage with welcome message&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main (root-commit) abc1234] Add homepage with welcome message
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.txt
+</code></pre>
+<p><strong>Explain what each part means:</strong><br />
+- <code>main</code> = the default branch name (like the main storyline in a video game)<br />
+- <code>root-commit</code> = the very first commit (the beginning of history)<br />
+- <code>abc1234</code> = the commit's unique ID (like a photo number)<br />
+- The message in quotes = a note you write on the back of the photo so you remember what changed</p>
+<h4 id="step-8-check-your-history">Step 8: Check Your History</h4>
+<pre><code class="language-bash">$ git log
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>commit abc1234def5678 (HEAD -&gt; main)
+Author: Your Name &lt;youremail@example.com&gt;
+Date:   [today's date]
+
+    Add homepage with welcome message
+</code></pre>
+<p><strong>Explain:</strong> "This is your time machine! <code>git log</code> shows every photo you've ever taken. HEAD → main means 'you are looking at the latest commit on the main branch.'"</p>
+<h4 id="step-9-change-the-file-and-see-git-track-it">Step 9: Change the File and See Git Track It</h4>
+<p>Let's edit the file to add a new line.</p>
+<pre><code class="language-bash">$ echo &quot;We build amazing things.&quot; &gt;&gt; index.txt
+</code></pre>
+<p><strong>Explain:</strong> <code>&gt;&gt;</code> means "add this to the end of the file." (Two arrows = append. One arrow = overwrite.)</p>
+<p>Check the file:</p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Welcome to TechCorp!
+We build amazing things.
+</code></pre>
+<p>Check Git status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+    modified:   index.txt
+</code></pre>
+<p><strong>Explain:</strong> "Git sees the file changed! It says 'modified.' But it won't take a photo until we put it back in the staging box."</p>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add index.txt
+$ git commit -m &quot;Add company description&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main def5678] Add company description
+ 1 file changed, 1 insertion(+)
+</code></pre>
+<p>Check log again:</p>
+<pre><code class="language-bash">$ git log
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>commit def5678... (HEAD -&gt; main)
+Author: Your Name ...
+Date: ...
+
+    Add company description
+
+commit abc1234...
+Author: Your Name ...
+Date: ...
+
+    Add homepage with welcome message
+</code></pre>
+<p>🎉 <strong>Session 1 Complete!</strong> You have a time machine with 2 saved states.</p>
+<h3 id="student-practice-exercise-10-minutes">Student Practice Exercise (10 minutes)</h3>
+<p><strong>Scenario:</strong> Create a file called <code>about.txt</code> with the text "Founded in 2024." Stage it and commit it with the message "Add about page."</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash">$ echo &quot;Founded in 2024.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Add about page&quot;
+</code></pre>
+
+
+**Expected Output:**
+
+<pre><code>[main ghi9012] Add about page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 about.txt
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+
+
+**Expected Output:**
+
+<pre><code>ghi9012 Add about page
+def5678 Add company description
+abc1234 Add homepage with welcome message
+</code></pre>
+
+
+</details>
+
+<h3 id="common-beginner-mistakes">Common Beginner Mistakes</h3>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why It Happens</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fatal: not a git repository</code></td>
+<td>Ran <code>git</code> commands outside of the repo</td>
+<td>Use <code>cd</code> to navigate into the folder first</td>
+</tr>
+<tr>
+<td>Commits but <code>git status</code> still shows changes</td>
+<td>Forgot <code>git add</code> before <code>git commit</code></td>
+<td>Stage first, then commit</td>
+</tr>
+<tr>
+<td>Typo in commit message</td>
+<td>Rushed</td>
+<td>It's okay! We'll learn to fix it in Session 2</td>
+</tr>
+<tr>
+<td>Can't find <code>.git</code> folder</td>
+<td>It's hidden by default</td>
+<td>Use <code>ls -la</code> (Mac/Linux) or <code>dir /a</code> (Windows)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="review-5-minutes">Review (5 minutes)</h3>
+<p>Ask the class:<br />
+1. "What is a repository?" (A folder Git watches)<br />
+2. "What is a commit?" (A snapshot/photo of your files)<br />
+3. "What's the staging area?" (A box where we prepare files before committing)<br />
+4. "What do <code>git add</code> and <code>git commit</code> do together?" (Add = put in box. Commit = take photo)</p>
+<hr />
+<hr />
+<h2 id="session-2-fixing-your-first-bug">Session 2: "Fixing Your First Bug"</h2>
+<p><em>Branching + Working on Features Without Breaking Main</em></p>
+<h3 id="learning-objectives_1">Learning Objectives</h3>
+<p>By the end of this session, students will:<br />
+- Understand what a branch is (with a simple analogy)<br />
+- Create, switch between, and merge branches<br />
+- See how branches prevent breaking the main project</p>
+<h3 id="slide-outline-15-minutes_1">Slide Outline (15 minutes)</h3>
+<p><strong>Slide 1:</strong> Title — "Oh No! The Website is Broken on Main!"</p>
+<p><strong>Slide 2:</strong> The Problem — "You need to fix a typo, but you don't want to break the live website while you're figuring out the fix."</p>
+<p><strong>Slide 3:</strong> The Analogy — "Imagine you're reading a choose-your-own-adventure book. The main story is one path. But you can bookmark a page, try a different path, and if it works, go back and rewrite the main story. A branch is a bookmarked alternate path."</p>
+<p><strong>Slide 4:</strong> DevOps Context — "In real teams, you NEVER edit the <code>main</code> branch directly. You create a feature branch, test it, then merge it back. This protects the live code."</p>
+<p><strong>Slide 5:</strong> Key Terms<br />
+- <strong>Branch:</strong> A parallel timeline (like a copy of the story)<br />
+- <strong><code>git branch</code>:</strong> Creates a new timeline<br />
+- <strong><code>git checkout</code> (or <code>git switch</code>):</strong> Jumps to a different timeline<br />
+- <strong>Merge:</strong> Combines two timelines back together</p>
+<p><strong>Slide 6:</strong> Today's Mission — "The boss says the homepage has a typo. Create a branch, fix it, and merge it back."</p>
+<h3 id="theory-script">Theory Script</h3>
+<blockquote>
+<p>"In our story, our website is 'live' on the <code>main</code> branch. Imagine <code>main</code> is the highway that real customers drive on. If you start digging up the highway to fix a pothole, cars will crash!</p>
+<p>So what do construction workers do? They close off one lane, work there, and only merge it back into the highway when it's safe.</p>
+<p>In Git, a <strong>branch</strong> is that closed-off lane. You create a branch, do your work safely, test it, and then <strong>merge</strong> it back into <code>main</code>.</p>
+<p>The magic is: your <code>main</code> branch stays safe the whole time. If you mess up on your branch, just delete it and start over. No customers were harmed."</p>
+</blockquote>
+<h3 id="practical-lab-the-typo-fix-30-minutes">Practical Lab — "The Typo Fix" (30 minutes)</h3>
+<p><strong>Story:</strong> "A customer emailed: 'Your website says "We build amaizing things" — that's not a word!' Your task: Fix the typo without touching the live site."</p>
+<h4 id="preparation">Preparation</h4>
+<p>Make sure you're in your repo from Session 1.</p>
+<p><strong>Environment: Terminal</strong> (in <code>~/techcorp-website</code>)</p>
+<pre><code class="language-bash">$ cd ~/techcorp-website
+</code></pre>
+<h4 id="step-1-check-what-branch-youre-on">Step 1: Check What Branch You're On</h4>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* main
+</code></pre>
+<p><strong>Explain:</strong> "The <code>*</code> means 'you are here.' Like a 'You Are Here' dot on a mall map."</p>
+<h4 id="step-2-create-a-new-branch">Step 2: Create a New Branch</h4>
+<pre><code class="language-bash">$ git branch fix-typo
+</code></pre>
+<p>Check branches again:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>  fix-typo
+* main
+</code></pre>
+<p><strong>Explain:</strong> "Notice: we created the lane, but we're still on the highway (<code>main</code>). The <code>*</code> is still on <code>main</code>."</p>
+<h4 id="step-3-switch-to-the-new-branch">Step 3: Switch to the New Branch</h4>
+<pre><code class="language-bash">$ git switch fix-typo
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Switched to branch 'fix-typo'
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* fix-typo
+  main
+</code></pre>
+<p><strong>Explain:</strong> "The star moved! We're now working on the closed-off lane. Any changes we make here do NOT affect <code>main</code> yet."</p>
+<h4 id="step-4-make-the-fix">Step 4: Make the Fix</h4>
+<p>Introduce a typo first (so we have something to fix):</p>
+<pre><code class="language-bash">$ echo &quot;We build amaizing things.&quot; &gt; index.txt
+</code></pre>
+<p><em>Wait — we already had good text. Let's see the real scenario. First, let's see what we have:</em></p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p>Let's say it really does have the typo. Fix it:</p>
+<pre><code class="language-bash">$ echo &quot;Welcome to TechCorp!&quot; &gt; index.txt
+$ echo &quot;We build amazing things.&quot; &gt;&gt; index.txt
+</code></pre>
+<p><strong>Better way — use a text editor:</strong><br />
+Open <code>index.txt</code> in your text editor and change "amaizing" to "amazing", then save.</p>
+<p>Check what Git sees:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch fix-typo
+Changes not staged for commit:
+    modified:   index.txt
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add index.txt
+$ git commit -m &quot;Fix typo: amaizing -&gt; amazing&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[fix-typo 123def0] Fix typo: amaizing -&gt; amazing
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+</code></pre>
+<h4 id="step-5-check-that-main-is-still-safe">Step 5: Check That Main is Still Safe</h4>
+<pre><code class="language-bash">$ git switch main
+</code></pre>
+<p>Look at the file:</p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong> (The OLD version — with the typo still there!)</p>
+<pre><code>Welcome to TechCorp!
+We build amaizing things.
+</code></pre>
+<p><strong>Explain:</strong> "HALLELUJAH! <code>main</code> is safe. Our fix is ONLY on the <code>fix-typo</code> branch. The highway is still open."</p>
+<p>Switch back:</p>
+<pre><code class="language-bash">$ git switch fix-typo
+$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong> (The fixed version)</p>
+<pre><code>Welcome to TechCorp!
+We build amazing things.
+</code></pre>
+<h4 id="step-6-merge-the-fix-back-into-main">Step 6: Merge the Fix Back Into Main</h4>
+<p>Now that we tested the fix, we merge the lane back into the highway.</p>
+<pre><code class="language-bash">$ git switch main
+$ git merge fix-typo
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Updating def5678..123def0
+Fast-forward
+ index.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+</code></pre>
+<p><strong>Explain:</strong> "Fast-forward means Git just moved the <code>main</code> pointer forward. No complicated merging needed — it was a straight line."</p>
+<p>Verify:</p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Welcome to TechCorp!
+We build amazing things.
+</code></pre>
+<h4 id="step-7-delete-the-branch-cleanup">Step 7: Delete the Branch (Cleanup)</h4>
+<p>The lane has been merged into the highway. We don't need the lane anymore.</p>
+<pre><code class="language-bash">$ git branch -d fix-typo
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Deleted branch fix-typo (was 123def0).
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>* main
+</code></pre>
+<p>Check the log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>123def0 Fix typo: amaizing -&gt; amazing
+def5678 Add company description
+abc1234 Add homepage with welcome message
+</code></pre>
+<p>🎉 <strong>Bug fixed, main is safe, history is clean!</strong></p>
+<h3 id="student-practice-exercise-10-minutes_1">Student Practice Exercise (10 minutes)</h3>
+<p><strong>Scenario:</strong> The boss wants a "Contact Us" page. Create a branch called <code>add-contact</code>. Add a file <code>contact.txt</code> with the text <code>Email: hello@techcorp.com</code>. Commit it. Switch back to <code>main</code> and verify <code>contact.txt</code> does NOT exist there. Then merge <code>add-contact</code> into <code>main</code> and verify it DOES exist. Finally, delete the branch.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash"># Create and switch to branch
+$ git branch add-contact
+$ git switch add-contact
+
+# Create file and commit
+$ echo &quot;Email: hello@techcorp.com&quot; &gt; contact.txt
+$ git add contact.txt
+$ git commit -m &quot;Add contact page&quot;
+
+# Verify main doesn't have it
+$ git switch main
+$ ls
+</code></pre>
+
+**Expected Output:** `about.txt  index.txt` (note: NO `contact.txt`)
+
+
+<pre><code class="language-bash"># Merge the branch
+$ git merge add-contact
+$ ls
+</code></pre>
+
+**Expected Output:** `about.txt  contact.txt  index.txt`
+
+
+<pre><code class="language-bash"># Cleanup
+$ git branch -d add-contact
+</code></pre>
+
+
+</details>
+
+<h3 id="common-beginner-mistakes_1">Common Beginner Mistakes</h3>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why It Happens</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edited files on <code>main</code> directly</td>
+<td>Forgot to create/switch branch</td>
+<td>Create branch from the fixed commit, or learn <code>git stash</code> (Session 4)</td>
+</tr>
+<tr>
+<td><code>git merge</code> says "Already up to date"</td>
+<td>Tried to merge in the wrong direction</td>
+<td>Make sure you're ON <code>main</code> and merging the feature branch INTO it</td>
+</tr>
+<tr>
+<td>Can't delete branch</td>
+<td>Used lowercase <code>-d</code> when branch isn't merged</td>
+<td>Use <code>-D</code> (uppercase) to force delete, or merge first</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
+<h2 id="session-3-submitting-your-work">Session 3: "Submitting Your Work"</h2>
+<p><em>GitHub Remotes, Push, Pull, and Pull Requests</em></p>
+<h3 id="learning-objectives_2">Learning Objectives</h3>
+<p>By the end of this session, students will:<br />
+- Understand what a "remote" is (with analogy)<br />
+- Push their local repo to GitHub<br />
+- Create and merge a Pull Request<br />
+- Understand the code review workflow</p>
+<h3 id="slide-outline-15-minutes_2">Slide Outline (15 minutes)</h3>
+<p><strong>Slide 1:</strong> Title — "Time to Show the Team!"</p>
+<p><strong>Slide 2:</strong> The Problem — "Your code is on your laptop. Your boss can't see it. Your teammates can't see it. How do you share?"</p>
+<p><strong>Slide 3:</strong> The Analogy — "Your laptop is like your bedroom desk. GitHub is like the school library. You do your homework at your desk, then you bring it to the library so your teacher and classmates can see it too. Pushing is 'bringing it to the library.' Pulling is 'getting the latest homework from the library.'"</p>
+<p><strong>Slide 4:</strong> DevOps Context — "In real teams, you never push directly to <code>main</code> on GitHub. You push your branch, open a Pull Request (PR), ask someone to review it, THEN merge it. This is how bugs get caught before they reach customers."</p>
+<p><strong>Slide 5:</strong> Key Terms<br />
+- <strong>Remote:</strong> A copy of your repo on another computer (usually GitHub)<br />
+- <strong>Push:</strong> Send your commits to the remote<br />
+- <strong>Pull:</strong> Download commits from the remote<br />
+- <strong>Clone:</strong> Make a copy of a remote repo on your computer<br />
+- <strong>Pull Request (PR):</strong> Asking permission to merge your branch into main</p>
+<p><strong>Slide 6:</strong> Today's Mission — "Put your repo on GitHub. Create a feature branch. Open a PR. Get it approved (by yourself for practice) and merge it."</p>
+<h3 id="theory-script_1">Theory Script</h3>
+<blockquote>
+<p>"So far, all your code is on your laptop. Imagine doing homework on your bedroom desk and never showing anyone. That's fine for practice, but in a real job, your TEAM needs to see your work.</p>
+<p><strong>GitHub</strong> is like a library. You push (upload) your code there. Your team can review it, comment on it, and suggest changes.</p>
+<p>But here's the rule at TechCorp: Nobody is allowed to change the library's master copy directly. You must open a <strong>Pull Request</strong> — it's like filling out a form that says 'I think my homework is correct. Please review it before putting it in the official folder.'</p>
+<p>Another engineer reviews your code, says 'Looks good!' and clicks merge. This is called <strong>code review</strong> and it's one of the most important practices in DevOps. It catches mistakes before they reach real customers."</p>
+</blockquote>
+<h3 id="practical-lab-first-pr-30-minutes">Practical Lab — "First PR" (30 minutes)</h3>
+<p><strong>Story:</strong> "The boss wants an FAQ page. You must add it, push it to GitHub, open a Pull Request, review it yourself, and merge it."</p>
+<h4 id="step-1-create-a-github-repository">Step 1: Create a GitHub Repository</h4>
+<p><strong>Environment: Browser (GitHub.com)</strong><br />
+1. Go to <code>https://github.com</code> and log in<br />
+2. Click the <strong>+</strong> button (top right) → <strong>New repository</strong><br />
+3. Repository name: <code>techcorp-website</code><br />
+4. Description: "TechCorp official website"<br />
+5. Choose <strong>Public</strong> (Private costs money for teams)<br />
+6. <strong>DO NOT</strong> check "Initialize this repository with a README"<br />
+7. Click <strong>Create repository</strong></p>
+<p>You will see a page with instructions. Look for the section titled <strong>"...or push an existing repository from the command line."</strong></p>
+<h4 id="step-2-connect-your-local-repo-to-github">Step 2: Connect Your Local Repo to GitHub</h4>
+<p><strong>Environment: Terminal</strong> (in <code>~/techcorp-website</code>)</p>
+<pre><code class="language-bash">$ git remote add origin git@github.com:YOURUSERNAME/techcorp-website.git
+</code></pre>
+<p><strong>Replace YOURUSERNAME with your actual GitHub username.</strong></p>
+<p>Verify it worked:</p>
+<pre><code class="language-bash">$ git remote -v
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>origin  git@github.com:YOURUSERNAME/techcorp-website.git (fetch)
+origin  git@github.com:YOURUSERNAME/techcorp-website.git (push)
+</code></pre>
+<p><strong>Explain:</strong> "<code>origin</code> is just a nickname for the remote server. Like saving a phone number as 'Mom' instead of typing the full number every time."</p>
+<h4 id="step-3-push-main-to-github">Step 3: Push Main to GitHub</h4>
+<pre><code class="language-bash">$ git push -u origin main
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+... (more lines)
+To github.com:YOURUSERNAME/techcorp-website.git
+ * [new branch]      main -&gt; main
+</code></pre>
+<p><strong>Explain:</strong> "Your code is now on GitHub! <code>-u origin main</code> tells Git: 'Remember that from now on, when I say <code>git push</code> on the <code>main</code> branch, push to <code>origin</code>.'"</p>
+<p>Refresh your GitHub page in the browser. You should see:<br />
+- <code>index.txt</code> file<br />
+- <code>about.txt</code> file<br />
+- Your commit history</p>
+<h4 id="step-4-create-a-feature-branch-for-the-faq-page">Step 4: Create a Feature Branch for the FAQ Page</h4>
+<pre><code class="language-bash">$ git branch add-faq
+$ git switch add-faq
+</code></pre>
+<h4 id="step-5-create-the-faq-file">Step 5: Create the FAQ File</h4>
+<pre><code class="language-bash">$ echo &quot;Q: What does TechCorp do?&quot; &gt; faq.txt
+$ echo &quot;A: We build amazing DevOps tools.&quot; &gt;&gt; faq.txt
+</code></pre>
+<p>Check what you made:</p>
+<pre><code class="language-bash">$ cat faq.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Q: What does TechCorp do?
+A: We build amazing DevOps tools.
+</code></pre>
+<p>Stage and commit:</p>
+<pre><code class="language-bash">$ git add faq.txt
+$ git commit -m &quot;Add FAQ page&quot;
+</code></pre>
+<h4 id="step-6-push-the-branch-to-github">Step 6: Push the Branch to GitHub</h4>
+<pre><code class="language-bash">$ git push -u origin add-faq
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code> * [new branch]      add-faq -&gt; add-faq
+</code></pre>
+<p>Refresh GitHub. You will now see a yellow banner: <strong>"add-faq had recent pushes. Compare &amp; pull request."</strong></p>
+<h4 id="step-7-open-a-pull-request">Step 7: Open a Pull Request</h4>
+<p><strong>Environment: Browser (GitHub.com)</strong><br />
+1. Click the yellow banner's <strong>"Compare &amp; pull request"</strong> button<br />
+2. Title: <code>Add FAQ page</code><br />
+3. Description:<br />
+<code>- Added FAQ page with common questions
+   - No breaking changes</code><br />
+4. Click <strong>Create pull request</strong></p>
+<h4 id="step-8-review-and-approve-the-pr">Step 8: Review and Approve the PR</h4>
+<p>Since you're practicing alone, you will review your own PR.</p>
+<ol>
+<li>Scroll down to see the "Files changed" tab or click it</li>
+<li>You should see <code>faq.txt</code> with a green <strong>+</strong> showing the new content</li>
+<li>Click the <strong>Review changes</strong> button (top right of the file)</li>
+<li>Select <strong>Approve</strong></li>
+<li>Click <strong>Submit review</strong></li>
+</ol>
+<h4 id="step-9-merge-the-pr">Step 9: Merge the PR</h4>
+<ol>
+<li>Click the <strong>Conversation</strong> tab</li>
+<li>Click the green <strong>Merge pull request</strong> button</li>
+<li>Click <strong>Confirm merge</strong></li>
+<li>Click <strong>Delete branch</strong> (cleanup)</li>
+</ol>
+<h4 id="step-10-pull-the-changes-to-your-local-main">Step 10: Pull the Changes to Your Local Main</h4>
+<p>"Your local <code>main</code> doesn't know about the merge yet. You need to pull (download) it."</p>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ git pull
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>remote: Enumerating objects: ...
+Unpacking objects: 100% ...
+From github.com:YOURUSERNAME/techcorp-website
+   123def0..789abcd  main       -&gt; origin/main
+Updating 123def0..789abcd
+Fast-forward
+ faq.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+</code></pre>
+<p>Verify locally:</p>
+<pre><code class="language-bash">$ ls
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>about.txt  faq.txt  index.txt
+</code></pre>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong> (includes the merge)</p>
+<pre><code>789abcd Add FAQ page
+... (older commits)
+</code></pre>
+<p>Delete the local branch:</p>
+<pre><code class="language-bash">$ git branch -d add-faq
+</code></pre>
+<p>🎉 <strong>Your first Pull Request is complete!</strong></p>
+<h3 id="student-practice-exercise-10-minutes_2">Student Practice Exercise (10 minutes)</h3>
+<p><strong>Scenario:</strong> Add a <code>services.txt</code> file with the text <code>Web Hosting, CI/CD, Cloud Consulting</code>. Do it all through a PR workflow:<br />
+1. Create branch <code>add-services</code><br />
+2. Create file, commit<br />
+3. Push branch, open PR, merge on GitHub<br />
+4. Pull to local main<br />
+5. Delete branch everywhere</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash"># Local work
+$ git branch add-services
+$ git switch add-services
+$ echo &quot;Web Hosting, CI/CD, Cloud Consulting&quot; &gt; services.txt
+$ git add services.txt
+$ git commit -m &quot;Add services page&quot;
+
+# Push and PR
+$ git push -u origin add-services
+</code></pre>
+
+
+**Then on GitHub:**
+- Click "Compare & pull request"
+- Create PR, review, merge, delete branch
+
+**Back in terminal:**
+
+<pre><code class="language-bash">$ git switch main
+$ git pull
+$ git branch -d add-services
+</code></pre>
+
+
+Verify:
+
+<pre><code class="language-bash">$ ls
+$ cat services.txt
+</code></pre>
+
+
+</details>
+
+<h3 id="common-beginner-mistakes_2">Common Beginner Mistakes</h3>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why It Happens</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Permission denied</code> on push</td>
+<td>SSH not set up correctly</td>
+<td>Redo the SSH setup in Environment Setup</td>
+</tr>
+<tr>
+<td>Pushed to <code>main</code> directly</td>
+<td>Forgot to create a branch</td>
+<td>Talk about branch protection rules (Session 5)</td>
+</tr>
+<tr>
+<td>PR shows way more changes than expected</td>
+<td>Branched from wrong place</td>
+<td>Always branch from the latest <code>main</code></td>
+</tr>
+<tr>
+<td><code>git pull</code> shows merge conflicts</td>
+<td>Someone else changed the same file</td>
+<td>Session 4 covers this</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
+<h2 id="session-4-the-deploy-broke">Session 4: "The Deploy Broke!"</h2>
+<p><em>Undoing, Reverting, and Handling Conflicts</em></p>
+<h3 id="learning-objectives_3">Learning Objectives</h3>
+<p>By the end of this session, students will:<br />
+- Use <code>git log</code> effectively to find old commits<br />
+- Revert a bad commit safely<br />
+- Resolve a simple merge conflict<br />
+- Understand <code>git stash</code> for emergency context switches</p>
+<h3 id="slide-outline-15-minutes_3">Slide Outline (15 minutes)</h3>
+<p><strong>Slide 1:</strong> Title — "3 AM Page: Production is Down!"</p>
+<p><strong>Slide 2:</strong> The Problem — "You just deployed code, and the website shows a white screen. The boss is calling. You need to undo the change FAST."</p>
+<p><strong>Slide 3:</strong> The Analogy — "You have a time machine (<code>git log</code>). But you can't erase the past — people might have seen it. Instead, you add a NEW commit that undoes the bad one. It's like saying 'Forget my last move' in a board game."</p>
+<p><strong>Slide 4:</strong> DevOps Context — "In DevOps, you rarely 'delete' history because audit trails matter. Instead, you <strong>revert</strong> — create a new commit that undoes an old one. This is safe, traceable, and professional."</p>
+<p><strong>Slide 5:</strong> Key Terms<br />
+- <strong><code>git log --oneline</code>:</strong> A compact history view<br />
+- <strong><code>git revert</code>:</strong> Create a new commit that undoes an old commit<br />
+- <strong>Merge Conflict:</strong> Two people changed the same line; Git needs a human to decide which version to keep<br />
+- <strong><code>git stash</code>:</strong> Put your current work in a backpack so you can do something else</p>
+<p><strong>Slide 6:</strong> Today's Mission — "Accidentally break something, find the bad commit, revert it, and handle a merge conflict."</p>
+<h3 id="theory-script_2">Theory Script</h3>
+<blockquote>
+<p>"At 3 AM, your phone rings. The website is broken. The last deploy was 20 minutes ago. You know it worked before that.</p>
+<p>Here's what you DON'T do: panic and delete files. Here's what you DO:<br />
+1. Look at the history (<code>git log --oneline</code>)<br />
+2. Find the bad commit<br />
+3. Revert it (<code>git revert BAD_COMMIT</code>)<br />
+4. Push the revert to GitHub</p>
+<p>Why revert instead of delete? Because in a real company, there might be laws (compliance) saying you can't erase history. Also, other developers might have already built on top of your bad commit. Reverting creates a NEW commit that undoes the bad one — history stays intact, but the code goes back to working.</p>
+<p>Also today: <strong>merge conflicts</strong>. Imagine you and your teammate both edited the same sentence in a document. Git sees both versions and says 'I don't know which one you want.' YOU have to tell it. We'll practice that."</p>
+</blockquote>
+<h3 id="practical-lab-part-1-the-revert-15-minutes">Practical Lab Part 1 — "The Revert" (15 minutes)</h3>
+<p><strong>Story:</strong> "Someone (you!) accidentally deleted the 'Contact Us' info and committed it. Revert that commit to restore it."</p>
+<h4 id="step-1-break-something-on-purpose">Step 1: Break Something on Purpose</h4>
+<p><strong>Environment: Terminal</strong> (in repo, on <code>main</code>)</p>
+<pre><code class="language-bash">$ cd ~/techcorp-website
+$ git switch main
+</code></pre>
+<p>Delete a line from <code>index.txt</code> and overwrite with bad info:</p>
+<pre><code class="language-bash">$ echo &quot;Oops, we deleted everything!&quot; &gt; index.txt
+$ git add index.txt
+$ git commit -m &quot;Refactor homepage&quot;
+</code></pre>
+<p>Check log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong> (something like)</p>
+<pre><code>bad1234 Refactor homepage
+789abcd Add FAQ page
+123def0 Fix typo: amaizing -&gt; amazing
+</code></pre>
+<h4 id="step-2-find-the-bad-commit">Step 2: Find the Bad Commit</h4>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>bad1234 Refactor homepage
+789abcd Add FAQ page
+</code></pre>
+<p>"The top one (<code>bad1234</code>) broke everything! We need to undo it."</p>
+<h4 id="step-3-revert-the-bad-commit">Step 3: Revert the Bad Commit</h4>
+<pre><code class="language-bash">$ git revert bad1234
+</code></pre>
+<p>An editor will open (Nano or Vim). It shows the default commit message:</p>
+<pre><code>Revert &quot;Refactor homepage&quot;
+
+This reverts commit bad1234...
+</code></pre>
+<p><strong>Save and exit:</strong><br />
+- <strong>Nano:</strong> Press Ctrl+O, then Enter, then Ctrl+X<br />
+- <strong>Vim:</strong> Press Esc, type <code>:wq</code>, press Enter</p>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main undo5678] Revert &quot;Refactor homepage&quot;
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong> (The GOOD version is back!)</p>
+<pre><code>Welcome to TechCorp!
+We build amazing things.
+</code></pre>
+<p>Check the log:</p>
+<pre><code class="language-bash">$ git log --oneline
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>undo5678 Revert &quot;Refactor homepage&quot;
+bad1234 Refactor homepage
+789abcd Add FAQ page
+</code></pre>
+<p><strong>Explain:</strong> "Notice: the bad commit (<code>bad1234</code>) is STILL in history. We didn't erase it. We ADDED a new commit (<code>undo5678</code>) that undoes it. This is the professional way."</p>
+<p>Push to GitHub:</p>
+<pre><code class="language-bash">$ git push
+</code></pre>
+<h3 id="practical-lab-part-2-the-merge-conflict-15-minutes">Practical Lab Part 2 — "The Merge Conflict" (15 minutes)</h3>
+<p><strong>Story:</strong> "You and a teammate both tried to update the homepage headline. Git can't decide which version is right. You must choose."</p>
+<h4 id="step-1-simulate-two-people-changing-the-same-file">Step 1: Simulate Two People Changing the Same File</h4>
+<p>Create a conflict manually. First, change <code>index.txt</code> on <code>main</code>:</p>
+<pre><code class="language-bash">$ echo &quot;Welcome to SUPER TechCorp!&quot; &gt; index.txt
+$ git add index.txt
+$ git commit -m &quot;Update headline on main&quot;
+</code></pre>
+<p>Create a branch from BEFORE that commit:</p>
+<pre><code class="language-bash">$ git branch conflict-branch HEAD~1
+$ git switch conflict-branch
+</code></pre>
+<p><strong>Explain:</strong> <code>HEAD~1</code> means "one commit before the latest." Like saying "the previous photo."</p>
+<p>Now make a DIFFERENT change to the same file:</p>
+<pre><code class="language-bash">$ echo &quot;Welcome to TechCorp Inc.&quot; &gt; index.txt
+$ git add index.txt
+$ git commit -m &quot;Update headline on branch&quot;
+</code></pre>
+<h4 id="step-2-try-to-merge">Step 2: Try to Merge</h4>
+<pre><code class="language-bash">$ git switch main
+$ git merge conflict-branch
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Auto-merging index.txt
+CONFLICT (content): Merge conflict in index.txt
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+<p>🚨 <strong>Conflict!</strong></p>
+<h4 id="step-3-see-what-git-did">Step 3: See What Git Did</h4>
+<pre><code class="language-bash">$ cat index.txt
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Welcome to SUPER TechCorp!
+=======
+Welcome to TechCorp Inc.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; conflict-branch
+</code></pre>
+<p><strong>Explain the markers:</strong><br />
+- <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> = "This is what <code>main</code> has"<br />
+- <code>=======</code> = "Separator"<br />
+- <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; conflict-branch</code> = "This is what the branch has"</p>
+<h4 id="step-4-fix-the-conflict">Step 4: Fix the Conflict</h4>
+<p>Edit <code>index.txt</code> to say what you want. Let's combine them nicely:</p>
+<pre><code class="language-bash">$ echo &quot;Welcome to SUPER TechCorp Inc.!&quot; &gt; index.txt
+</code></pre>
+<p><strong>Important:</strong> Remove the conflict markers! If you use <code>echo</code> to overwrite, they're automatically gone. If you use a text editor, manually delete <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> lines.</p>
+<h4 id="step-5-tell-git-its-fixed">Step 5: Tell Git It's Fixed</h4>
+<pre><code class="language-bash">$ git add index.txt
+$ git commit -m &quot;Merge branch 'conflict-branch' and resolve headline conflict&quot;
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>[main merge9012] Merge branch 'conflict-branch' and resolve headline conflict
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">$ git log --oneline
+$ cat index.txt
+</code></pre>
+<p>🎉 <strong>Conflict resolved professionally!</strong></p>
+<h4 id="step-6-git-stash-bonus-tool">Step 6: Git Stash (Bonus Tool)</h4>
+<pre><code class="language-bash">$ git switch main
+</code></pre>
+<p>Make a quick change but don't commit:</p>
+<pre><code class="language-bash">$ echo &quot;Under construction&quot; &gt;&gt; index.txt
+</code></pre>
+<p>Check status:</p>
+<pre><code class="language-bash">$ git status
+</code></pre>
+<p>"Oh no! The boss calls and says fix something on <code>main</code> immediately, but you're not done with this change."</p>
+<p><strong>Stash it (put it in a backpack):</strong></p>
+<pre><code class="language-bash">$ git stash
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>Saved working directory and index state ...
+</code></pre>
+<p>"Your messy desk is now clean, but your work is saved in a backpack."</p>
+<p>Do your urgent fix, then restore your work:</p>
+<pre><code class="language-bash">$ git stash pop
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>On branch main
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+    modified:   index.txt
+</code></pre>
+<p>"Your backpack is unpacked and your work is back on the desk!"</p>
+<h3 id="student-practice-exercise-10-minutes_3">Student Practice Exercise (10 minutes)</h3>
+<p><strong>Scenario:</strong> <br />
+1. Add an emoji to <code>about.txt</code> and commit it on <code>main</code><br />
+2. Create branch <code>better-about</code> from BEFORE that commit<br />
+3. On <code>better-about</code>, change the SAME LINE to something different<br />
+4. Merge <code>better-about</code> into <code>main</code> — you'll get a conflict<br />
+5. Resolve it by keeping the best parts of both<br />
+6. Stash a pretend "work in progress" on <code>index.txt</code>, then pop it</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+
+<pre><code class="language-bash"># Step 1
+$ echo &quot;Founded in 2024! 🚀&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Add emoji to about&quot;
+
+# Step 2 &amp; 3
+$ git branch better-about HEAD~1
+$ git switch better-about
+$ echo &quot;Founded in 2024 — Excellence since day one.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Improve about page text&quot;
+
+# Step 4
+$ git switch main
+$ git merge better-about
+# (conflict happens)
+
+# Step 5
+$ cat about.txt
+# (see conflict markers)
+$ echo &quot;Founded in 2024! 🚀 Excellence since day one.&quot; &gt; about.txt
+$ git add about.txt
+$ git commit -m &quot;Resolve about page conflict&quot;
+
+# Step 6
+$ echo &quot;WIP: redesigning everything&quot; &gt;&gt; index.txt
+$ git stash
+$ git stash pop
+</code></pre>
+
+
+</details>
+
+<h3 id="common-beginner-mistakes_3">Common Beginner Mistakes</h3>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why It Happens</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edited conflict markers but didn't <code>git add</code></td>
+<td>Thought editing was enough</td>
+<td>Must stage (<code>git add</code>) and commit after fixing</td>
+</tr>
+<tr>
+<td>Left conflict markers in the file</td>
+<td>Didn't clean up completely</td>
+<td>Search for <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> in the file</td>
+</tr>
+<tr>
+<td><code>git revert</code> on the wrong commit</td>
+<td>Didn't read <code>git log --oneline</code> carefully</td>
+<td>Use <code>git show COMMIT_ID</code> to preview a commit</td>
+</tr>
+<tr>
+<td><code>git stash</code> and forgot where it went</td>
+<td>Stashed too many things</td>
+<td><code>git stash list</code> shows all stashes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
+<h2 id="session-5-automating-everything">Session 5: "Automating Everything"</h2>
+<p><em>GitHub Actions: Continuous Integration for DevOps</em></p>
+<h3 id="learning-objectives_4">Learning Objectives</h3>
+<p>By the end of this session, students will:<br />
+- Understand what CI/CD means with a simple analogy<br />
+- Create a GitHub Actions workflow file<br />
+- See a workflow run automatically on <code>push</code><br />
+- Understand how Git events trigger automation</p>
+<h3 id="slide-outline-15-minutes_4">Slide Outline (15 minutes)</h3>
+<p><strong>Slide 1:</strong> Title — "Robots Do the Boring Work"</p>
+<p><strong>Slide 2:</strong> The Problem — "Every time someone pushes code, the boss wants: 'Did it break anything? Does it build? Can we deploy it?' Manually checking this is exhausting."</p>
+<p><strong>Slide 3:</strong> The Analogy — "Imagine every time you put a letter in the mailbox, a robot automatically opens it, checks the spelling, rewrites it if needed, photocopies it, and puts it on everyone's desk. That's CI/CD — robots doing checks every time you change code."</p>
+<p><strong>Slide 4:</strong> DevOps Context — "CI/CD is the HEART of DevOps. <strong>Continuous Integration</strong> = automatically test code when it's pushed. <strong>Continuous Deployment</strong> = automatically deploy if tests pass. Today we build a simple CI pipeline."</p>
+<p><strong>Slide 5:</strong> Key Terms<br />
+- <strong>CI/CD:</strong> Continuous Integration / Continuous Deployment<br />
+- <strong>Workflow:</strong> A recipe that tells GitHub what to do<br />
+- <strong>Trigger:</strong> An event that starts the workflow (like <code>push</code>, <code>pull_request</code>)<br />
+- <strong>Runner:</strong> A computer that GitHub rents to run your recipe<br />
+- <strong>YAML:</strong> The language used to write the recipe (it's like a shopping list)</p>
+<p><strong>Slide 6:</strong> Today's Mission — "Build a robot that automatically checks our <code>index.txt</code> exists every time we push code."</p>
+<h3 id="theory-script_3">Theory Script</h3>
+<blockquote>
+<p>"In a real DevOps job, your team pushes code 50 times a day. You can't have a human check every single one. That's where <strong>robots</strong> come in.</p>
+<p><strong>GitHub Actions</strong> is a robot factory. You write a recipe in a special language called YAML. The recipe says: 'When someone pushes code, do these steps.'</p>
+<p>A typical recipe looks like:<br />
+1. Get a fresh computer (runner)<br />
+2. Install the tools we need<br />
+3. Check out our code<br />
+4. Run tests (or, for our simple example, verify files exist)<br />
+5. Report PASS or FAIL</p>
+<p>If the robot reports FAIL, the developer knows they broke something without anyone else having to tell them. This saves HOURS every day.</p>
+<p>YAML looks scary but it's just indented lists. Like a recipe in a cookbook:<br />
+<code>Recipe: Chocolate Cake
+  Steps:
+    - Preheat oven to 350
+    - Mix flour and sugar</code><br />
+That's it. That's YAML."</p>
+</blockquote>
+<h3 id="practical-lab-build-your-first-robot-30-minutes">Practical Lab — "Build Your First Robot" (30 minutes)</h3>
+<p><strong>Story:</strong> "TechCorp wants a robot that automatically checks: 'Does our website have at least index.txt and about.txt?' Every time someone pushes code, the robot runs and reports green (pass) or red (fail)."</p>
+<h4 id="step-1-create-the-workflow-file">Step 1: Create the Workflow File</h4>
+<p><strong>Environment: Terminal</strong> (in repo, on <code>main</code>)</p>
+<pre><code class="language-bash">$ cd ~/techcorp-website
+$ git switch main
+</code></pre>
+<p>GitHub Actions looks for workflow files in a special folder: <code>.github/workflows/</code></p>
+<p>Create it:</p>
+<pre><code class="language-bash">$ mkdir -p .github/workflows
+</code></pre>
+<p>Create the workflow file:</p>
+<pre><code class="language-bash">$ cat &gt; .github/workflows/check-files.yml &lt;&lt; 'EOF'
+name: Check Website Files
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          if [ ! -f &quot;index.txt&quot; ]; then
+            echo &quot;ERROR: index.txt is missing!&quot;
+            exit 1
+          fi
+          if [ ! -f &quot;about.txt&quot; ]; then
+            echo &quot;ERROR: about.txt is missing!&quot;
+            exit 1
+          fi
+          echo &quot;All required files present!&quot;
+EOF
+</code></pre>
+<p><strong>Explain what each line does:</strong><br />
+- <code>name:</code> = What the robot job is called (shows up in GitHub)<br />
+- <code>on:</code> = When does the robot wake up? (on <code>push</code> to <code>main</code> or on <code>pull_request</code>)<br />
+- <code>jobs:</code> = The list of tasks<br />
+- <code>runs-on: ubuntu-latest</code> = "Use a fresh Linux computer"<br />
+- <code>uses: actions/checkout@v4</code> = "Download our code onto that computer"<br />
+- <code>run: |</code> = "Run these shell commands"</p>
+<h4 id="step-2-commit-and-push">Step 2: Commit and Push</h4>
+<pre><code class="language-bash">$ git add .github/workflows/check-files.yml
+$ git commit -m &quot;Add CI workflow to check required files&quot;
+$ git push
+</code></pre>
+<h4 id="step-3-watch-the-robot-work">Step 3: Watch the Robot Work</h4>
+<p><strong>Environment: Browser (GitHub.com)</strong><br />
+1. Go to your repo on GitHub<br />
+2. Click the <strong>Actions</strong> tab (next to Pull requests)<br />
+3. You should see your workflow running!<br />
+4. Click on the yellow dot → it turns green ✅</p>
+<p>If you click inside, you'll see each step:<br />
+- <code>Checkout code</code> → ✅<br />
+- <code>Check required files exist</code> → ✅ with "All required files present!"</p>
+<h4 id="step-4-break-something-and-see-it-fail">Step 4: Break Something and See It Fail</h4>
+<p>Create a branch and intentionally delete a required file:</p>
+<p><strong>Environment: Terminal</strong></p>
+<pre><code class="language-bash">$ git branch break-ci
+$ git switch break-ci
+$ git rm about.txt
+$ git commit -m &quot;Remove about page (this should fail CI)&quot;
+$ git push -u origin break-ci
+</code></pre>
+<p><strong>Environment: Browser (GitHub.com)</strong><br />
+1. Open the Pull Request for <code>break-ci</code><br />
+2. GitHub will run the workflow automatically<br />
+3. It will show a red X ❌ next to the commit<br />
+4. Inside Actions, you'll see:<br />
+<code>ERROR: about.txt is missing!</code></p>
+<p><strong>Explain:</strong> "The robot caught the mistake BEFORE anyone merged it! This is the power of CI."</p>
+<p>Don't merge this PR. Close it (click <strong>Close pull request</strong>) to keep your repo clean.</p>
+<h4 id="step-5-view-the-workflow-file-in-context">Step 5: View the Workflow File in Context</h4>
+<p><strong>Environment: Terminal</strong></p>
+<p>Show what's in your <code>.github/workflows</code> folder:</p>
+<pre><code class="language-bash">$ ls .github/workflows/
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>check-files.yml
+</code></pre>
+<p>Show all CI workflows in GitHub via command line:</p>
+<pre><code class="language-bash">$ gh workflow list
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>NAME               STATE   ID    
+Check Website Files active  12345678
+</code></pre>
+<p><em>(Requires <code>gh</code> CLI installed — optional for class, but cool to show.)</em></p>
+<h4 id="step-6-branch-protection-the-safety-lock">Step 6: Branch Protection (The Safety Lock)</h4>
+<p><strong>Environment: Browser (GitHub.com)</strong><br />
+1. Go to your repo → <strong>Settings</strong> tab<br />
+2. In the left sidebar, click <strong>Branches</strong><br />
+3. Under "Branch protection rules," click <strong>Add rule</strong><br />
+4. Branch name pattern: <code>main</code><br />
+5. Check: <strong>Require a pull request before merging</strong><br />
+6. Check: <strong>Require status checks to pass before merging</strong><br />
+   - Search for and select: <code>Check Website Files</code><br />
+7. Click <strong>Create</strong></p>
+<p><strong>Explain:</strong> "Now the <code>main</code> branch is LOCKED. Nobody can push directly to it. Every change must go through a PR, AND the robot must give a green checkmark. This is how real DevOps teams protect production."</p>
+<p><strong>Test it:</strong></p>
+<pre><code class="language-bash">$ git switch main
+$ echo &quot;Direct push test&quot; &gt;&gt; index.txt
+$ git add index.txt
+$ git commit -m &quot;Try to push directly&quot;
+$ git push
+</code></pre>
+<p><strong>Expected Output:</strong></p>
+<pre><code>remote: error: GH006: Protected branch update failed...
+remote: error: At least 1 approving review is required...
+</code></pre>
+<p>"BLOCKED! The safety lock works."</p>
+<p>Revert that commit locally:</p>
+<pre><code class="language-bash">$ git reset --soft HEAD~1
+$ git restore --staged index.txt
+$ git checkout -- index.txt
+</code></pre>
+<p><em>(Don't worry about understanding these commands perfectly — just know they undo the last commit and restore the file.)</em></p>
+<h3 id="student-practice-exercise-10-minutes_4">Student Practice Exercise (10 minutes)</h3>
+<p><strong>Scenario:</strong> Add a second workflow (or extend the first one) that checks <code>services.txt</code> also exists. Commit it, push it, and verify it runs in the Actions tab.</p>
+<details>
+<summary><strong>✅ Solution</strong></summary>
+
+Edit `.github/workflows/check-files.yml` and add another check:
+
+
+<pre><code class="language-bash">$ cat &gt;&gt; .github/workflows/check-files.yml &lt;&lt; 'EOF'
+      - name: Check services file
+        run: |
+          if [ ! -f &quot;services.txt&quot; ]; then
+            echo &quot;ERROR: services.txt is missing!&quot;
+            exit 1
+          fi
+          echo &quot;services.txt is present!&quot;
+EOF
+</code></pre>
+
+
+Oops — that appends to the file but may mess up indentation. Better to use a text editor to add this block INSIDE the `steps:` section, keeping the same indentation.
+
+Then:
+
+<pre><code class="language-bash">$ git add .github/workflows/check-files.yml
+$ git commit -m &quot;Extend CI to check services.txt&quot;
+$ git push
+</code></pre>
+
+
+Watch it run in the Actions tab on GitHub.
+
+</details>
+
+<h3 id="capstone-wrap-up-your-devops-journey">Capstone Wrap-Up: Your DevOps Journey</h3>
+<p><strong>Environment: Browser + Terminal</strong></p>
+<p>Have each student demonstrate:<br />
+1. Show their GitHub repo with all files<br />
+2. Show the commit history (<code>git log --oneline</code>)<br />
+3. Show a closed PR<br />
+4. Show a passing GitHub Action<br />
+5. Show branch protection on <code>main</code></p>
+<p>This is their portfolio piece: "I set up version control and CI for a project."</p>
+<h3 id="common-beginner-mistakes_4">Common Beginner Mistakes</h3>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why It Happens</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YAML indentation errors</td>
+<td>Copied code without proper spaces</td>
+<td>YAML uses 2 spaces (not tabs). Use an editor that shows spaces</td>
+</tr>
+<tr>
+<td>Workflow doesn't appear</td>
+<td>File in wrong folder</td>
+<td>MUST be <code>.github/workflows/</code> (case sensitive)</td>
+</tr>
+<tr>
+<td>Action fails immediately</td>
+<td>Typo in <code>uses:</code> line</td>
+<td>Double-check <code>actions/checkout@v4</code></td>
+</tr>
+<tr>
+<td>Branch protection too strict</td>
+<td>Required checks not running yet</td>
+<td>Make sure the workflow name matches exactly</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
+<h2 id="appendix-a-quick-reference-card">Appendix A: Quick Reference Card</h2>
+<h3 id="essential-commands">Essential Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What It Does</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>Start Git in a folder</td>
+<td>Beginning of a new project</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>Check what's happening</td>
+<td>ALL THE TIME. Before every commit.</td>
+</tr>
+<tr>
+<td><code>git add filename</code></td>
+<td>Put file in staging box</td>
+<td>When a file is ready to be committed</td>
+</tr>
+<tr>
+<td><code>git commit -m "message"</code></td>
+<td>Take a snapshot</td>
+<td>After staging</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>See compact history</td>
+<td>When you need to find an old commit</td>
+</tr>
+<tr>
+<td><code>git branch name</code></td>
+<td>Create a new branch</td>
+<td>Starting a new feature</td>
+</tr>
+<tr>
+<td><code>git switch name</code></td>
+<td>Change branches</td>
+<td>Moving between features</td>
+</tr>
+<tr>
+<td><code>git merge name</code></td>
+<td>Combine branches</td>
+<td>Finishing a feature</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>Upload to GitHub</td>
+<td>Sharing your work</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Download from GitHub</td>
+<td>Getting the latest team code</td>
+</tr>
+<tr>
+<td><code>git revert COMMIT</code></td>
+<td>Undo a commit safely</td>
+<td>Fixing a mistake in history</td>
+</tr>
+<tr>
+<td><code>git stash</code></td>
+<td>Save temporary work</td>
+<td>Switching tasks urgently</td>
+</tr>
+<tr>
+<td><code>git stash pop</code></td>
+<td>Restore stashed work</td>
+<td>Coming back to your task</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-git-workflow-visual">The Git Workflow (Visual)</h3>
+<pre><code>[Working Directory]  --git add--&gt;  [Staging Area]  --git commit--&gt;  [Local Repo]  --git push--&gt;  [GitHub Remote]
+     (messy desk)                   (prep box)          (snapshots)                 (library)
+</code></pre>
+<h3 id="common-file-statuses-in-git-status">Common File Statuses in <code>git status</code></h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Untracked</td>
+<td>Git sees it but isn't tracking</td>
+<td><code>git add</code></td>
+</tr>
+<tr>
+<td>Modified</td>
+<td>File changed, not staged</td>
+<td><code>git add</code></td>
+</tr>
+<tr>
+<td>Staged</td>
+<td>Ready to commit</td>
+<td><code>git commit</code></td>
+</tr>
+<tr>
+<td>Clean/Committed</td>
+<td>Everything matches</td>
+<td>Nothing!</td>
+</tr>
+</tbody>
+</table>
+<h3 id="trouble-undo">Trouble? Undo!</h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Staged wrong file</td>
+<td><code>git restore --staged filename</code></td>
+</tr>
+<tr>
+<td>Made bad edit, not staged</td>
+<td><code>git restore filename</code></td>
+</tr>
+<tr>
+<td>Bad commit, not pushed</td>
+<td><code>git reset --soft HEAD~1</code></td>
+</tr>
+<tr>
+<td>Bad commit, already pushed</td>
+<td><code>git revert HEAD</code></td>
+</tr>
+<tr>
+<td>Forgot what you did</td>
+<td><code>git log --oneline</code> or <code>git diff</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="appendix-b-instructor-timing-cheatsheet">Appendix B: Instructor Timing Cheatsheet</h2>
+<table>
+<thead>
+<tr>
+<th>Session</th>
+<th>Slides</th>
+<th>Lab</th>
+<th>Exercise</th>
+<th>Review</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1: First Repo</td>
+<td>15 min</td>
+<td>30 min</td>
+<td>10 min</td>
+<td>5 min</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>2: Bug Fix</td>
+<td>15 min</td>
+<td>30 min</td>
+<td>10 min</td>
+<td>5 min</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>3: GitHub PR</td>
+<td>15 min</td>
+<td>30 min</td>
+<td>10 min</td>
+<td>5 min</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>4: Revert + Conflict</td>
+<td>15 min</td>
+<td>30 min</td>
+<td>10 min</td>
+<td>5 min</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>5: CI/CD Actions</td>
+<td>15 min</td>
+<td>30 min</td>
+<td>10 min</td>
+<td>5 min</td>
+<td>60 min</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ways-to-shorten-if-running-late">Ways to Shorten if Running Late</h3>
+<ul>
+<li>Skip the <code>git stash</code> bonus in Session 4 (saves 5 min)</li>
+<li>Skip branch protection demo in Session 5 (saves 5 min)</li>
+<li>Do Session 3's PR exercise as a demo instead of hands-on (saves 10 min)</li>
+<li>Combine Session 1 and 2 if students are very technical (advanced groups only)</li>
+</ul>
+<hr />
+<h2 id="appendix-c-glossary-from-5-year-old-to-professional">Appendix C: Glossary (From 5-Year-Old to Professional)</h2>
+<table>
+<thead>
+<tr>
+<th>Simple Term</th>
+<th>Professional Term</th>
+<th>What It Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Folder</td>
+<td>Repository</td>
+<td>A project that Git watches</td>
+</tr>
+<tr>
+<td>Photo</td>
+<td>Commit</td>
+<td>A saved snapshot of files</td>
+</tr>
+<tr>
+<td>Prep box</td>
+<td>Staging Area</td>
+<td>Files waiting to be committed</td>
+</tr>
+<tr>
+<td>Time machine</td>
+<td>Version Control</td>
+<td>System that saves and restores history</td>
+</tr>
+<tr>
+<td>Library</td>
+<td>Remote / Origin</td>
+<td>Server copy of the repo (GitHub)</td>
+</tr>
+<tr>
+<td>Closed lane</td>
+<td>Branch</td>
+<td>A parallel line of development</td>
+</tr>
+<tr>
+<td>Combine lanes</td>
+<td>Merge</td>
+<td>Joining two branches</td>
+</tr>
+<tr>
+<td>Permission form</td>
+<td>Pull Request</td>
+<td>Asking to merge code into main</td>
+</tr>
+<tr>
+<td>Robot</td>
+<td>CI/CD Workflow</td>
+<td>Automatic checks on code</td>
+</tr>
+<tr>
+<td>Recipe</td>
+<td>YAML file</td>
+<td>Instructions for the robot</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of Approach 3: Story-Mode Curriculum</em></p>
+    <div class="page-footer">
+        <p>© Git & GitHub for DevOps Teaching Package — Free to use and share</p>
+    </div>
+</main>
+</body>
+</html>
