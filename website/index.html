@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git & GitHub for DevOps — Complete Teaching Package</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Floating navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m-8-10H2m20 0h-2"/><circle cx="12" cy="12" r="10"/><path d="m18 6-3 3"/><path d="m6 18 3-3"/></svg>
+            <span>DevOps<span class="accent">Git</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#curricula">Curricula</a>
+            <a href="#resources">Resources</a>
+            <a href="#get-started">Start</a>
+            <a href="https://github.com/gregodprogrammer/github-beginners-guide" class="nav-cta" target="_blank">GitHub</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-particles" aria-hidden="true"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                Beginner · Friendly · Production · Ready
+            </div>
+            <h1 class="hero-title">
+                Learn <span class="gradient-text">Git & GitHub</span><br>
+                Like a Real DevOps Engineer
+            </h1>
+            <p class="hero-subtitle">
+                A complete 5-session teaching package designed for DevOps students. <br>
+                So simple a 5-year-old could understand it. So thorough a senior engineer would use it.
+            </p>
+            <div class="hero-buttons">
+                <a href="#get-started" class="btn btn-primary">
+                    Start Learning
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#curricula" class="btn btn-secondary">
+                    Browse Curricula
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Sessions</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Approaches</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">Files</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Free</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Introduction -->
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-text">
+                    <span class="section-label">What is this?</span>
+                    <h2>Three teaching styles.<br>One rock-solid foundation.</h2>
+                    <p>This isn't just another Git tutorial. It's a complete <strong>lecture-ready package</strong> built for DevOps educators who teach total beginners.</p>
+                    <p>Every session includes slides, speaker notes, hands-on labs, student exercises with solutions, quizzes, and a 300-page reference manual.</p>
+                    <div class="intro-features">
+                        <div class="feature-item">
+                            <div class="feature-icon teal">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span>Expected output for every command</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon coral">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            </div>
+                            <span>Timed for exactly 60-minute sessions</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon gold">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            </div>
+                            <span>5-year-old analogies + professional context</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-visual">
+                    <div class="code-card floating">
+                        <div class="code-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span class="code-title">terminal</span>
+                        </div>
+                        <div class="code-body">
+                            <div class="code-line"><span class="code-prompt">$</span> git init</div>
+                            <div class="code-line"><span class="code-comment">Initialized empty Git repo</span></div>
+                            <div class="code-line"><span class="code-prompt">$</span> echo "Hello DevOps!" > readme.txt</div>
+                            <div class="code-line"><span class="code-prompt">$</span> git add readme.txt</div>
+                            <div class="code-line"><span class="code-prompt">$</span> git commit -m "<span class="code-string">First commit</span>"</div>
+                            <div class="code-line"><span class="code-output">[main abc1234] First commit</span></div>
+                            <div class="code-line blink"><span class="code-cursor">_</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curricula Cards -->
+    <section class="curricula-section" id="curricula">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Choose Your Path</span>
+                <h2>Three Ways to Teach the Same Thing</h2>
+                <p>Pick the approach that matches your students. Or use all three for different cohorts.</p>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 1 -->
+                <div class="card card-linear">
+                    <div class="card-top">
+                        <div class="card-number">01</div>
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Linear Lecture + Lab</h3>
+                        <p class="card-desc">Theory first, then practice. Classic classroom structure with clear boundaries and predictable pacing.</p>
+                        <div class="card-meta">
+                            <span class="tag">Structured</span>
+                            <span class="tag">Modular</span>
+                        </div>
+                        <div class="card-sessions">
+                            <div class="session">S1: Git Basics</div>
+                            <div class="session">S2: Branching</div>
+                            <div class="session">S3: GitHub & PRs</div>
+                            <div class="session">S4: Undoing</div>
+                            <div class="session">S5: CI/CD</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="../approach-1-linear/curriculum.md" class="card-link">
+                            View Curriculum
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card card-project">
+                    <div class="card-top">
+                        <div class="card-number">02</div>
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Project-Driven</h3>
+                        <p class="card-desc">Build one continuous project from start to finish. Students create a real portfolio with CI/CD by Session 5.</p>
+                        <div class="card-meta">
+                            <span class="tag">Hands-On</span>
+                            <span class="tag">Portfolio</span>
+                        </div>
+                        <div class="card-sessions">
+                            <div class="session">S1: Home Page</div>
+                            <div class="session">S2: About + Projects</div>
+                            <div class="session">S3: Contact via PR</div>
+                            <div class="session">S4: Fix Conflicts</div>
+                            <div class="session">S5: Add CI Robot</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="../approach-2-project-driven/curriculum.md" class="card-link">
+                            View Curriculum
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3 (Featured) -->
+                <div class="card card-story featured">
+                    <div class="featured-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        Recommended
+                    </div>
+                    <div class="card-top">
+                        <div class="card-number">03</div>
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Story-Mode</h3>
+                        <p class="card-desc">Role-play joining a DevOps team. Each session is a "day at work." The most engaging for beginners.</p>
+                        <div class="card-meta">
+                            <span class="tag">Engaging</span>
+                            <span class="tag">Narrative</span>
+                        </div>
+                        <div class="card-sessions">
+                            <div class="session">Day 1: First Repo</div>
+                            <div class="session">Day 2: Fix a Bug</div>
+                            <div class="session">Day 3: Submit Work</div>
+                            <div class="session">Day 4: Deploy Broke</div>
+                            <div class="session">Day 5: Automate All</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="../approach-3-story-mode/curriculum.md" class="card-link">
+                            View Curriculum
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bible Section -->
+    <section class="bible-section">
+        <div class="container">
+            <div class="bible-grid">
+                <div class="bible-content">
+                    <span class="section-label">The Reference</span>
+                    <h2>The DevOps Bible</h2>
+                    <p>A 12-part reference manual your students keep forever. From absolute beginner to production-grade engineer.</p>
+                    <div class="bible-parts">
+                        <div class="part"><span class="part-num">1</span>Core Concepts</div>
+                        <div class="part"><span class="part-num">2</span>Daily Workflow</div>
+                        <div class="part"><span class="part-num">3</span>Branching</div>
+                        <div class="part"><span class="part-num">4</span>GitHub Workflow</div>
+                        <div class="part"><span class="part-num">5</span>History & Undo</div>
+                        <div class="part"><span class="part-num">6</span>Collaboration</div>
+                        <div class="part"><span class="part-num">7</span>DevOps Patterns</div>
+                        <div class="part"><span class="part-num">8</span>CI/CD Actions</div>
+                        <div class="part"><span class="part-num">9</span>Releases</div>
+                        <div class="part"><span class="part-num">10</span>Advanced</div>
+                        <div class="part"><span class="part-num">11</span>Troubleshooting</div>
+                        <div class="part"><span class="part-num">12</span>Cheat Sheet</div>
+                    </div>
+                    <a href="../git-github-devops-bible.md" class="btn btn-primary">
+                        Open the Bible
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+                <div class="bible-visual">
+                    <div class="bible-book">
+                        <div class="book-spine"></div>
+                        <div class="book-cover">
+                            <div class="book-title">Git & GitHub</div>
+                            <div class="book-subtitle">for DevOps</div>
+                            <div class="book-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Grid -->
+    <section class="resources-section" id="resources">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Everything You Need</span>
+                <h2>Supporting Materials</h2>
+                <p>Print them, share them, or project them.</p>
+            </div>
+
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <div class="resource-icon teal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                    </div>
+                    <h4>Slide Decks</h4>
+                    <p>Ready-to-present slides for all 3 approaches. Speaker notes included.</p>
+                    <a href="../slides/">Browse slides →</a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon coral">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <h4>Student Handout</h4>
+                    <p>Every exercise with solutions, explanations, and expected output.</p>
+                    <a href="../student-handout-with-solutions.md">View handout →</a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon gold">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <h4>Quizzes & Exams</h4>
+                    <p>5 session quizzes + a final exam with answer keys and scoring guide.</p>
+                    <a href="../quizzes-and-assessments.md">View quizzes →</a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon purple">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                    <h4>Repo Template</h4>
+                    <p>Fork-ready template with a working CI workflow and starter files.</p>
+                    <a href="../repo-template/">View template →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section" id="get-started">
+        <div class="container">
+            <div class="download-card">
+                <div class="download-content">
+                    <span class="section-label accent-light">Download Everything</span>
+                    <h2>Your Complete Package,<br>One Click Away</h2>
+                    <p>Master PDF, Word documents, and individual files. Everything is ready to print, share, or project.</p>
+
+                    <div class="download-files">
+                        <div class="download-file">
+                            <div class="file-icon pdf">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                            </div>
+                            <div class="file-info">
+                                <span class="file-name">Complete Package</span>
+                                <span class="file-size">PDF · 513 KB</span>
+                            </div>
+                            <a href="../downloads/Git-and-GitHub-for-DevOps-Complete-Package.pdf" class="file-download" download>Download</a>
+                        </div>
+
+                        <div class="download-file">
+                            <div class="file-icon docx">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            </div>
+                            <div class="file-info">
+                                <span class="file-name">Complete Package</span>
+                                <span class="file-size">DOCX · 104 KB</span>
+                            </div>
+                            <a href="../downloads/Git-and-GitHub-for-DevOps-Complete-Package.docx" class="file-download" download>Download</a>
+                        </div>
+                    </div>
+
+                    <div class="download-individual">
+                        <p>Or download individual files:</p>
+                        <div class="individual-links">
+                            <a href="../downloads/" class="individual-link">All PDFs</a>
+                            <a href="../downloads/" class="individual-link">All DOCX</a>
+                            <a href="../downloads/" class="individual-link">Curriculum (PDF)</a>
+                            <a href="../downloads/" class="individual-link">Bible (PDF)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="download-palette" aria-hidden="true">
+                    <div class="palette-swatch swatch-1"></div>
+                    <div class="palette-swatch swatch-2"></div>
+                    <div class="palette-swatch swatch-3"></div>
+                    <div class="palette-swatch swatch-4"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="currentColor"></path></svg>
+        </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m-8-10H2m20 0h-2"/><circle cx="12" cy="12" r="10"/><path d="m18 6-3 3"/><path d="m6 18 3-3"/></svg>
+                    <span>DevOps<span class="accent">Git</span></span>
+                </div>
+                <p class="footer-text">Built for DevOps educators who believe beginners deserve beautiful, thorough, and empowering materials.</p>
+                <div class="footer-links">
+                    <a href="https://github.com/gregodprogrammer/github-beginners-guide" target="_blank">GitHub Repo</a>
+                    <span class="footer-dot">·</span>
+                    <a href="../README.md">Instructor Guide</a>
+                    <span class="footer-dot">·</span>
+                    <a href="../git-github-devops-bible.md">Reference Manual</a>
+                </div>
+                <p class="footer-copy">Free to use, modify, and teach. No attribution required.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
