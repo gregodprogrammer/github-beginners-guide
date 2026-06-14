@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Repository Template — Git & GitHub for DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-warm: #f6f8fa;
+    --text: #1f2328;
+    --text-sec: #656d76;
+    --accent: #2dba4e;
+    --accent-soft: #3fb950;
+    --navy: #0d1117;
+    --border: rgba(31,35,40,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+}
+.topbar {
+    position: sticky; top:0; z-index:1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Space Grotesk', monospace; font-size: 1.1rem; font-weight: 700;
+    color: var(--text); text-decoration: none;
+}
+.topbar-brand span { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topbar-nav a {
+    color: var(--text-sec); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 6px 12px; border-radius: 100px;
+    background: var(--bg-warm); transition: 0.2s;
+}
+.topbar-nav a:hover { color: var(--text); background: #eef1f4; }
+.page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+h1 { font-family: 'Space Grotesk', monospace; font-size: 2rem; margin-bottom: 8px; }
+h2 { font-size: 1.3rem; margin: 32px 0 12px; color: var(--navy); }
+p { margin-bottom: 14px; }
+ul { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+.card {
+    background: var(--bg-warm);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+}
+code {
+    font-family: 'SF Mono', monospace;
+    background: #f4f4f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+}
+.file-list { list-style: none; padding: 0; }
+.file-list li {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+}
+.file-list li:last-child { border-bottom: none; }
+.file-icon { margin-right: 8px; }
+</style>
+</head>
+<body>
+<nav class="topbar">
+    <a href="../" class="topbar-brand">DevOps<span>Git</span></a>
+    <div class="topbar-nav">
+        <a href="../">Home</a>
+        <a href="../git-github-devops-bible/">Bible</a>
+        <a href="../approach-1-linear/">Linear</a>
+        <a href="../approach-2-project-driven/">Project</a>
+        <a href="../approach-3-story-mode/">Story</a>
+        <a href="../student-handout-with-solutions/">Exercises</a>
+        <a href="../quizzes-and-assessments/">Quizzes</a>
+    </div>
+</nav>
+<main class="page">
+    <h1>Student Repository Template</h1>
+    <p>A ready-to-use GitHub repository template for students to track their learning journey.</p>
+
+    <h2>Template Contents</h2>
+    <ul class="file-list">
+        <li><span class="file-icon">📁</span> <code>.github/</code> — GitHub configuration</li>
+        <li><span class="file-icon">📄</span> <code>.gitignore</code> — Ignore patterns</li>
+        <li><span class="file-icon">📄</span> <code>README.md</code> — Template readme</li>
+        <li><span class="file-icon">📄</span> <code>about.txt</code> — About section content</li>
+        <li><span class="file-icon">📄</span> <code>home.txt</code> — Home page content</li>
+    </ul>
+
+    <h2>How to Use</h2>
+    <div class="card">
+        <p><strong>1.</strong> Click "Use this template" on GitHub to create your own copy</p>
+        <p><strong>2.</strong> Clone the repository to your local machine</p>
+        <p><strong>3.</strong> Edit the files to personalize your learning journal</p>
+        <p><strong>4.</strong> Push changes and explore version control concepts</p>
+    </div>
+</main>
+</body>
+</html>

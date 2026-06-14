@@ -150,12 +150,12 @@ img { max-width: 100%; height: auto; border-radius: var(--radius); }
 # Navigation mapping for topbar (label, relative_url)
 NAV_LINKS = [
     ("🏠 Home", "/"),
-    ("📖 Bible", "/bible/"),
+    ("📖 Bible", "/git-github-devops-bible/"),
     ("🎓 Linear", "/approach-1-linear/"),
     ("🚀 Project", "/approach-2-project-driven/"),
     ("📖 Story", "/approach-3-story-mode/"),
-    ("📝 Exercises", "/handout/"),
-    ("❓ Quizzes", "/quizzes/"),
+    ("📝 Exercises", "/student-handout-with-solutions/"),
+    ("❓ Quizzes", "/quizzes-and-assessments/"),
 ]
 
 def discover_md_files(base: Path):
@@ -189,8 +189,9 @@ def compute_url(slug: str):
 
 def compute_depth(rel_url: str):
     """How many ../ needed to reach root."""
-    depth = rel_url.strip("/").count("/")
-    return depth
+    # Count actual directory segments by splitting on /
+    parts = rel_url.split("/")
+    return len([p for p in parts if p])
 
 def relative_root(depth: int):
     if depth <= 0:
@@ -205,14 +206,9 @@ def topbar_html(depth: int):
             href = root
             cls = 'topbar-home'
         else:
-            # Build relative path from current depth to target
+            # Build relative path: go up 'depth' levels to root, then down to target
             parts = url.strip("/").split("/")
-            target_depth = len(parts)
-            diff = depth - target_depth
-            if diff >= 0:
-                href = "../" * diff + "/".join(parts) + "/"
-            else:
-                href = root + "/".join(parts) + "/"
+            href = "../" * depth + "/".join(parts) + "/"
             cls = ''
         links.append(f'<a href="{href}" class="{cls}">{label}</a>')
     return '\n'.join(links)
